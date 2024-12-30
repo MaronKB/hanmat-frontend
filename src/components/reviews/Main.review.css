@@ -1,0 +1,183 @@
+.main-container {
+  padding: 20px;
+}
+
+.main-title {
+     background-color: #e5ecf7;
+     padding: 30px;
+     height: 100px;
+     margin-left: 250px;
+     width: 800px;
+     border: 1px solid;
+     /* border: solid; */
+     text-align: center;
+     margin-bottom: 20px;
+}
+
+.main-controls {
+     background-color: #e5ecf7;
+     padding: 10px;
+     height: 60px;
+     margin-left: 250px;
+     width: 800px;
+     border: 1px solid;
+     display: flex;
+     margin-bottom: 20px;
+}
+
+.button-rv {
+  margin-right: 10px;
+  margin-left: 200px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 전환 */
+}
+
+.button-rv:hover {
+  background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+.button-rv:active {
+  background-color: #003d80; /* 클릭 시 색상 변경 */
+  transform: scale(0.95); /* 클릭 시 살짝 축소 효과 */
+}
+
+
+.button-cn {
+  margin-right: 50px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+   transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 전환 */
+}
+
+
+.button-cn:hover {
+  background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+.button-cn:active {
+  background-color: #003d80; /* 클릭 시 색상 변경 */
+  transform: scale(0.95); /* 클릭 시 살짝 축소 효과 */
+}
+
+.select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+
+/*모달창*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button i {
+  font-size: 18px;
+}
+
+.close-modal-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-left: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-buttons button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-buttons button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+/* 별점 스타일링 */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.star-rating .fa-star {
+  font-size: 30px;
+  color: #ccc; /* 기본 색은 회색 */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.star-rating .fa-star.filled {
+  color: gold; /* 선택된 별은 금색으로 표시 */
+}
+
+.star-rating .fa-star:hover {
+  color: #f1c40f; /* 마우스를 올렸을 때 색 변화 */
+}
+
+
