@@ -1,18 +1,26 @@
 import i18n, {Resource} from "i18next";
 import {initReactI18next} from "react-i18next";
+
 import headerEn from "./en/header.json";
 import headerKo from "./ko/header.json";
 import headerJp from "./jp/header.json";
 
+import homeEn from "./en/home.json";
+import homeKo from "./ko/home.json";
+import homeJp from "./jp/home.json";
+
 const resources: Resource = {
     en: {
-        header: { ...headerEn }
+        header: { ...headerEn },
+        home: { ...homeEn }
     },
     ko: {
-        header: { ...headerKo }
+        header: { ...headerKo },
+        home: { ...homeKo }
     },
     jp: {
-        header: { ...headerJp }
+        header: { ...headerJp },
+        home: { ...homeJp }
     },
 } as const;
 

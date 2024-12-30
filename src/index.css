@@ -54,10 +54,13 @@ body.dark {
 }
 
 main {
+    position: relative;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto;
+    background-size: cover;
+    background-position: center;
     padding: 40px;
+    margin: 0 auto;
 }
 
 a {
