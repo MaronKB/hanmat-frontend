@@ -12,7 +12,7 @@ const Login = () => {
     return (
         <div className={styles.loginPage}>
             <div className={styles.loginContainer}>
-                {/* <img src={logo} alt="HANMAT Logo" className={styles.logo} /> */}
+                {/*<img src={logo} alt="HANMAT Logo" className={styles.logo} /> */}
                 <h1 className={styles.title}>HANMAT</h1>
                 <p className={styles.welcomeMessage}>Welcome</p>
                 <p className={styles.loginPrompt}>Log in to HANMAT to continue to HANMAT FIND.</p>
