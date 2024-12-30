@@ -9,13 +9,18 @@ const Main: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false); // 모달 상태 관리
   const [newReview, setNewReview] = useState<string>(''); // 새 리뷰 내용 상태 관리
   const [rating, setRating] = useState<number>(0); // 별점 상태 관리
+  const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 목록 상태 관리
 
   // 새 리뷰 추가 핸들러
   const handleAddReview = () => {
     if (newReview.trim()) {
       console.log('새 리뷰 등록:', newReview, '별점:', rating);
+      if (images.length > 0) {
+        console.log('업로드된 이미지:', images.map((image) => image.name));
+      }
       setNewReview(''); // 입력 초기화
       setRating(0); // 별점 초기화
+      setImages([]); // 이미지 초기화
       setShowModal(false); // 모달 닫기
     }
   };
@@ -23,6 +28,26 @@ const Main: React.FC = () => {
   // 별점을 선택하는 함수
   const handleRating = (index: number) => {
     setRating(index + 1); // 클릭한 별을 포함해 그 이하 별들을 선택된 것으로 설정
+  };
+
+  // 이미지 업로드 핸들러
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages = Array.from(files);
+      setImages((prevImages) => [...prevImages, ...newImages].slice(0, 3)); // 최대 3개 이미지만 선택
+    }
+  };
+
+  // 이미지 미리보기 URL을 생성하는 함수
+  const generateImagePreview = (file: File) => {
+    return URL.createObjectURL(file);
+  };
+
+  // 이미지 삭제 핸들러
+  const handleDeleteImage = (index: number) => {
+    const updatedImages = images.filter((_, i) => i !== index); // 삭제된 이미지를 제외한 나머지 이미지만 남김
+    setImages(updatedImages);
   };
 
   return (
@@ -61,19 +86,59 @@ const Main: React.FC = () => {
                 <i className="fa fa-search"></i>
               </button>
               <button className="close-modal-button" onClick={() => setShowModal(false)}>
-                Close
+                <i className="fa fa-times"></i> {/* x 모양 아이콘 */}
               </button>
             </div>
 
             {/* 별점 영역 */}
-            <div className="star-rating">
-              {[...Array(5)].map((_, index) => (
-                <i
-                  key={index}
-                  className={`fa fa-star ${index < rating ? 'filled' : ''}`}
-                  onClick={() => handleRating(index)}
-                ></i>
-              ))}
+           <div className="star-rating-container">
+             <div className="star-rating">
+               {[...Array(5)].map((_, index) => (
+                 <i
+                   key={index}
+                   className={`fa fa-star ${index < rating ? 'filled' : ''}`}
+                   onMouseEnter={() => setRating(index + 1)} // 마우스 올릴 때 미리보기 효과
+                   onMouseLeave={() => setRating(0)} // 마우스 나가면 초기화
+                   onClick={() => handleRating(index)}
+                 ></i>
+               ))}
+             </div>
+             <span className={`rating-instruction ${rating > 0 ? 'highlight' : ''}`}>
+               {rating > 0 ? `You selected ${rating} star${rating > 1 ? 's' : ''}!` : 'Please select a rating!'}
+             </span>
+           </div>
+
+
+            {/* 사진 업로드 영역 */}
+            <div className="image-upload">
+              <div className="image-preview">
+                {images.map((image, index) => (
+                  <div key={index} className="image-thumbnail-container">
+                    <img
+                      src={generateImagePreview(image)}
+                      alt={`preview ${index}`}
+                      className="image-thumbnail"
+                    />
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteImage(index)}
+                    >
+                      <i className="fa fa-times"></i> {/* x 아이콘 */}
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <label htmlFor="file-upload" className="upload-label">
+                <i className="fa fa-plus"></i> {/* + 아이콘 */}
+              </label>
+              <input
+                type="file"
+                id="file-upload"
+                className="file-input"
+                onChange={handleImageUpload}
+                accept="image/*"
+                multiple
+              />
             </div>
 
             {/* 리뷰 내용 입력 */}
@@ -83,8 +148,8 @@ const Main: React.FC = () => {
               placeholder="Write your review here..."
             />
             <div className="modal-buttons">
-              <button onClick={handleAddReview}>Submit</button>
               <button onClick={() => setShowModal(false)}>Cancel</button>
+               <button onClick={handleAddReview}>Submit</button>
             </div>
           </div>
         </div>
