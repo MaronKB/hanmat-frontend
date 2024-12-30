@@ -20,6 +20,9 @@ export default function Nav() {
         document.body.classList.toggle("dark", checked);
         localStorage.setItem("dark", checked ? "true" : "false");
     }
+    const setLang = () => {
+        localStorage.setItem("lang", i18n.language);
+    }
 
     useEffect(() => {
         setColorScheme();
@@ -48,9 +51,9 @@ export default function Nav() {
                     </label>
                 </div>
                 <div className={styles.lang}>
-                    <button onClick={() => i18n.changeLanguage("en")} className={i18n.language === "en" ? styles.active : ""}><img src={us_flag} alt={"EN"}/></button>
-                    <button onClick={() => i18n.changeLanguage("ko")} className={i18n.language === "ko" ? styles.active : ""}><img src={kr_flag} alt={"KR"}/></button>
-                    <button onClick={() => i18n.changeLanguage("jp")} className={i18n.language === "jp" ? styles.active : ""}><img src={jp_flag} alt={"JP"}/></button>
+                    <button onClick={() => i18n.changeLanguage("en", setLang)} className={i18n.language === "en" ? styles.active : ""}><img src={us_flag} alt={"EN"}/></button>
+                    <button onClick={() => i18n.changeLanguage("ko", setLang)} className={i18n.language === "ko" ? styles.active : ""}><img src={kr_flag} alt={"KR"}/></button>
+                    <button onClick={() => i18n.changeLanguage("jp", setLang)} className={i18n.language === "jp" ? styles.active : ""}><img src={jp_flag} alt={"JP"}/></button>
                 </div>
                 <Link to="/login" className={styles.login}>{t('header:login')}</Link>
             </header>
