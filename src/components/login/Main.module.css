@@ -1,0 +1,115 @@
+.loginPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 45px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    max-width: 450px;
+    width: 100%;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #546e7a 0%, #3f51b5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Pacifico', cursive;
+}
+
+.welcomeMessage {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.loginPrompt {
+    text-align: center;
+    color: #555;
+    line-height: 1.5;
+}
+
+.separator {
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    margin: 30px 0;
+}
+
+.googleLoginButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #fff;
+    color: #757575;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    transition: all 0.3s ease;
+}
+
+.googleLoginButton:hover {
+    background-color: #f8f8f8;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+.googleIcon {
+    width: 24px;
+    height: 24px;
+    margin-right: 15px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg');
+    background-size: cover;
+}
+
+.buttonText {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.backButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #7e57c2 0%, #2196f3 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    align-self: flex-end;
+    margin-right: 50px;
+    margin-top: 100px;
+}
+
+.backButton:hover {
+    opacity: 0.8;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
