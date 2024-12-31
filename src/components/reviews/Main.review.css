@@ -3,24 +3,23 @@
 }
 
 .main-title {
-     background-color: #e5ecf7;
+     background-color: #dadada;;
      padding: 30px;
      height: 100px;
      margin-left: 250px;
      width: 800px;
-     border: 1px solid;
      /* border: solid; */
      text-align: center;
      margin-bottom: 20px;
 }
 
 .main-controls {
-     background-color: #e5ecf7;
+     background-color: #cbcbcb;
      padding: 10px;
      height: 60px;
      margin-left: 250px;
      width: 800px;
-     border: 1px solid;
+     border: 1px solid #gray;
      display: flex;
      margin-bottom: 20px;
 }
@@ -341,6 +340,23 @@ textarea {
   border-radius: 50%;
   cursor: pointer;
 }
+
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 150px; /* 기본 세로 크기를 150px로 설정 */
+  resize: vertical; /* 사용자가 세로 크기 조정 가능 */
+  overflow-y: auto; /* 세로로 스크롤을 추가 */
+  box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
+}
+
+
+
 
 /* 업로드 버튼 스타일 */
 .upload-label {

@@ -1,0 +1,30 @@
+.review-list-container {
+  background-color: #dadada;
+  margin-left: 250px;
+  width: 800px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5개의 열 */
+  gap: 16px; /* 카드 간격 */
+  padding: 16px;
+}
+
+.review-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.review-card p {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
