@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Modal.css';
+import './FindModal.css';
 import axios from 'axios';
 
 function Modal({ type, onClose, storeId }) {
