@@ -12,11 +12,16 @@ export default function Taste() {
     const lang = localStorage.getItem("lang") || "en";
 
     const getMenus = async () => {
-        //const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/all/${lang}`);
-        const response = await fetch(`http://localhost:8080/hanmat/api/food/all/${lang}`);
+        //todo: change to production url
+        //const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/${lang}`);
+        const response = await fetch(`http://localhost:8080/hanmat/api/food/${lang}`);
         const data = await response.json();
+        console.log(lang);
+        console.log(data.data);
         setMenus(shuffle(data.data));
         setTotalPage(Math.ceil(data.data.length / 12));
+
+        return null;
     }
 
     const shuffle = (array:[]) => {
@@ -42,7 +47,7 @@ export default function Taste() {
     }, []);
 
     useEffect(() => {
-        setList(menus.slice(page * 12 + 1, page * 12 + 13));
+        setList(menus.slice((page - 1) * 12, page * 12));
     }, [menus, page]);
 
     return (

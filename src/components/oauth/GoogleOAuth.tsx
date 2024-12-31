@@ -3,6 +3,7 @@ import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
 
 export default function GoogleOAuth() {
+    //todo: change to production url
     //const url = "https://portfolio.mrkb.kr";
     const url = "http://localhost:8080";
     const callback = async (response: CredentialResponse) => {
