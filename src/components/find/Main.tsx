@@ -13,6 +13,7 @@ export default function Main() {
     }, []);
 
     useEffect(() => {
+        getNearbyRestaurants();
     }, [userLocation]);
 
     const getMyLocation = () => {
@@ -25,6 +26,22 @@ export default function Main() {
             console.log(pos);
         });
     };
+
+    const getNearbyRestaurants = async () => {
+        //todo: change to production url
+        const response = await fetch(`http://localhost:8080/hanmat/api/restaurant/nearby`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userLocation),
+        });
+
+        const data = await response.json();
+        const restaurants = data.data;
+        console.log(restaurants);
+    }
+
     return (
         <NavermapsProvider ncpClientId={"d2682gqz4u&language=" + lang}>
             <main className={"max " + styles.main}>
