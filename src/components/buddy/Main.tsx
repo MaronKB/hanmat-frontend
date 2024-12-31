@@ -44,12 +44,36 @@ const usersData: UserData[] = [
         distance: "12km",
         time: "19hr ago",
         imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+    },
+    {
+        name: "김혜민",
+        distance: "4km",
+        time: "4hr ago",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+    },
+    {
+        name: "문진배",
+        distance: "6km",
+        time: "8hr ago",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+    },
+    {
+        name: "신희철",
+        distance: "8km",
+        time: "11hr ago",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+    },
+    {
+        name: "전지훈",
+        distance: "12km",
+        time: "19hr ago",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
     }
 ];
 
-function User({ name, time, distance, imageUrl }: UserData) {
+function User({ name, time, distance, imageUrl, isClicked }: { name: string; time: string; distance: string; imageUrl: string, isClicked: boolean }) {
     return (
-        <div className={styles.wrapper}>
+        <div className={`${styles.wrapper} ${isClicked ? styles.clicked : ''}`}>
             <div className={styles.imageContainer}>
                 <img src={imageUrl} className={styles.image} alt="프로필 사진" />
             </div>
@@ -65,12 +89,25 @@ function User({ name, time, distance, imageUrl }: UserData) {
     );
 }
 
-function UserList({users, onUserClick }: { users: UserData[]; onUserClick: (user: UserData) => void }) {
+function UserList({ users, onUserClick }: { users: UserData[]; onUserClick: (user: UserData) => void }) {
+    const [clickedUserIndex, setClickedUserIndex] = useState<number | null>(null);
+
+    const handleClick = (user: UserData, index: number) => {
+        onUserClick(user);
+        setClickedUserIndex(index);
+    };
+
     return (
         <div className={styles.userListContainer}>
             {users.map((user, index) => (
-                <div key={index} onClick={() => onUserClick(user)}>
-                    <User name={user.name} time={user.time} distance={user.distance} imageUrl={user.imageUrl} />
+                <div key={index} onClick={() => handleClick(user, index)}>
+                    <User
+                        name={user.name}
+                        time={user.time}
+                        distance={user.distance}
+                        imageUrl={user.imageUrl}
+                        isClicked={clickedUserIndex === index}
+                    />
                 </div>
             ))}
         </div>
@@ -140,7 +177,6 @@ export default function Main() {
                     </div>
                 </div>
             </div>
-            <div className={styles.footer}>Footer</div>
         </div>
     );
 }
