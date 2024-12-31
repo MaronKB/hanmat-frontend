@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Main.review.css';
+import './Main.review.css'; // 스타일을 적용할 CSS 파일
 import ReviewList from './ReviewList';
 import Pagination from './Pagination';
 
@@ -11,6 +11,17 @@ const Main: React.FC = () => {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number | null>(null); // 별점 미리보기
   const [images, setImages] = useState<File[]>([]);
+
+ //모달 열기 함수
+     const openModal = () => {
+       setNewReview(''); // 리뷰 내용 초기화
+       setRating(0); // 별점 초기화
+       setHoverRating(null); // 별점 미리보기 초기화
+       setImages([]); // 업로드된 이미지 초기화
+       setShowModal(true); // 모달 열기
+     };
+
+
 
   // 새 리뷰 추가 핸들러
   const handleAddReview = () => {
@@ -61,7 +72,7 @@ const Main: React.FC = () => {
       <h2 className="main-title">Review of the Month</h2>
       <div className="main-controls">
         <button className="button-rv">My Reviews</button>
-        <button className="button-cn" onClick={() => setShowModal(true)}>
+        <button className="button-cn" onClick={openModal}>
           Create New
         </button>
         <select
@@ -71,6 +82,7 @@ const Main: React.FC = () => {
         >
           <option value="NEW">Sort: New</option>
           <option value="OLD">Sort: Old</option>
+           <option value="LIKES">Sort: likes</option>
         </select>
       </div>
 
@@ -80,6 +92,7 @@ const Main: React.FC = () => {
         totalPages={5}
         onPageChange={(page) => setCurrentPage(page)}
       />
+
 
       {showModal && (
         <div className="modal">
@@ -148,11 +161,14 @@ const Main: React.FC = () => {
             </div>
 
             {/* 리뷰 내용 입력 */}
-            <textarea
-              value={newReview}
-              onChange={(e) => setNewReview(e.target.value)}
-              placeholder="Write your review here..."
+           <textarea
+             value={newReview}
+             onChange={(e) => setNewReview(e.target.value)}
+             placeholder="Write your review here..."
+             rows={5}  /* 기본적인 높이를 설정 */
+             style={{resize: "vertical"}} /* 세로 조정 가능 */
             />
+
             <div className="modal-buttons">
               <button onClick={() => setShowModal(false)}>Cancel</button>
               <button onClick={handleAddReview}>Submit</button>
