@@ -118,11 +118,11 @@ const AdminReviews: React.FC = () => {
 
     const handleDelete = () => {
         if (selectedRestaurants.length === 0) {
-            alert('삭제할 식당을 선택해주세요.');
+            alert('삭제할 리뷰를 선택해주세요.');
             return;
         }
 
-        if (!confirm('식당을 삭제하시겠습니까?')) {
+        if (!confirm('해당 리뷰를 삭제하시겠습니까?')) {
             return;
         }
 
