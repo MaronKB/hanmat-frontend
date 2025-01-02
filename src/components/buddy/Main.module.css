@@ -6,7 +6,7 @@
     margin: 80px auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    /*gap: 20px;*/
     position: relative;
     transition: all 0.5s ease;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
@@ -69,6 +69,7 @@
     box-shadow: 2px 6px 8px rgba(0, 0, 0, 0.1);
 }
 
+
 .clicked {
     background-color: #007bff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -126,6 +127,43 @@
     font-size: 13px;
 }
 
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 22px;
+}
+
+.tabButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px 25px 0 0;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.2s ease;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabButton:hover {
+    background-color: #e0e0e0;
+}
+
+.activeTab {
+    background-color: #f8f8f8;
+    color: #007bff;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* 더 뚜렷한 탭 상단 그림자 */
+}
+
+.emptyChatList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #999;
+}
+
 
 .chatContainer {
     width: 0;
@@ -152,8 +190,8 @@
 
 .closeButton {
     position: absolute;
-    top: 25px;
-    left: 845px;
+    top: 70px;
+    left: 855px;
     background: none;
     border: none;
     font-size: 1.2rem;
@@ -162,6 +200,10 @@
     z-index: 11;
 }
 
+.closeButton:hover {
+    color: #007bff;
+    font-weight: bold;
+}
 
 .userInfo {
     display: flex;
