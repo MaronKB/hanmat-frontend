@@ -1,0 +1,260 @@
+.container {
+    padding: 30px;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom right, #f5f5f5, #e0e0e0);
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+
+.searchContainer {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.selectBox {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    cursor: pointer;
+}
+
+.inputBox {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    flex-grow: 1;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.searchBtn {
+    padding: 10px 20px;
+    background: linear-gradient(to right, #007bff, #0062cc);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.searchBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.restaurantTable {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.restaurantTable th,
+.restaurantTable td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.restaurantTable th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+    color: #333;
+}
+
+.restaurantTable tbody tr:hover {
+    background-color: #fafafa;
+}
+
+
+.checkboxCell {
+    width: 60px;
+}
+
+.idCell {
+    width: 60px;
+}
+
+.restaurantNameCell {
+    width: 180px;
+}
+
+.titleCell {
+    width: 250px;
+}
+
+.contentCell {
+    width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.imageCell {
+    width: 100px;
+}
+
+.regDateCell {
+    width: 130px;
+}
+
+.hiddenCell {
+    width: 90px;
+}
+
+.reportCell {
+    width: 90px;
+}
+
+.editCell {
+    width: 80px;
+}
+
+.restaurantImage {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 10px;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pageBtn {
+    padding: 8px 14px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 15px;
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.pageBtn.active {
+    background: linear-gradient(to right, #007bff, #0062cc);
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.pageBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.deleteBtn {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.deleteBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #c82333;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+}
+
+.closeButton {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #555;
+}
+
+.modalTitle {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.modalLabel {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.saveBtn {
+    padding: 12px 25px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.saveBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #218838;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination {
+    margin-left: 500px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
