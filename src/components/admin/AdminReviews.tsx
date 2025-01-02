@@ -352,7 +352,7 @@ const AdminReviews: React.FC = () => {
             <span className={styles.closeButton} onClick={handleCloseModal}>
               &times;
             </span>
-                        <h2 className={styles.modalTitle}>식당 정보 수정</h2>
+                        <h2 className={styles.modalTitle}>리뷰 수정</h2>
                         <label className={styles.modalLabel}>
                             번호:
                             <input
