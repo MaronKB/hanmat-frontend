@@ -12,9 +12,7 @@ export default function Taste() {
     const lang = localStorage.getItem("lang") || "en";
 
     const getMenus = async () => {
-        //todo: change to production url
-        //const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/${lang}`);
-        const response = await fetch(`http://localhost:8080/hanmat/api/food/${lang}`);
+        const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/${lang}`);
         const data = await response.json();
         console.log(lang);
         console.log(data.data);
