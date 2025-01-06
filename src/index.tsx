@@ -7,6 +7,8 @@ import Taste from './components/taste/Main.tsx';
 import Reviews from './components/reviews/Main.tsx';
 import Buddy from './components/buddy/Main.tsx';
 import MyPage from './components/mypage/Main.tsx';
+import AdminReviews from "./components/admin/AdminReviews.tsx";
+import AdminRestaurants from "./components/admin/AdminRestaurants.tsx";
 import './index.css'
 import "./locales/i18n.ts";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
@@ -14,14 +16,18 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <Routes>
-            <Route element={<Nav />}>
-                <Route path="/" element={<Home />} />
+            <Route element={<Nav alwaysNarrow={true} />}>
                 <Route path="/find" element={<Find />} />
+            </Route>
+            <Route element={<Nav alwaysNarrow={false}/>}>
+                <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/taste" element={<Taste />} />
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/buddy" element={<Buddy />} />
                 <Route path="/mypage" element={<MyPage />} />
+                <Route path={"/adminReviews"} element={<AdminReviews />} />
+                <Route path={"/adminRestaurants"} element={<AdminRestaurants />} />
             </Route>
         </Routes>
     </BrowserRouter>

@@ -17,6 +17,7 @@
     font-style: normal;
 }
 
+/* todo: 고딕 폰트가 한자 일부 지원 안함, 전체적으로 생긴게 좀 구림 */
 :root {
     --font-heading: 'ChosunBg', sans-serif;
     --font-minjo: 'Gyeonggi_Batang_Regular', serif;

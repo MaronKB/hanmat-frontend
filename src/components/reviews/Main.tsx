@@ -11,17 +11,26 @@ const Main: React.FC = () => {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number | null>(null); // 별점 미리보기
   const [images, setImages] = useState<File[]>([]);
+  const [reviews, setReviews] = useState<
+    Array<{ id: number; title: string; content: string; rating: number; images: File[] }>
+  >([
+    {
+      id: 1,
+      title: 'Sample Review 1',
+      content: 'This is a sample review.',
+      rating: 4,
+      images: [],
+    },
+  ]);
 
- //모달 열기 함수
-     const openModal = () => {
-       setNewReview(''); // 리뷰 내용 초기화
-       setRating(0); // 별점 초기화
-       setHoverRating(null); // 별점 미리보기 초기화
-       setImages([]); // 업로드된 이미지 초기화
-       setShowModal(true); // 모달 열기
-     };
-
-
+  // 모달 열기 함수
+  const openModal = () => {
+    setNewReview(''); // 리뷰 내용 초기화
+    setRating(0); // 별점 초기화
+    setHoverRating(null); // 별점 미리보기 초기화
+    setImages([]); // 업로드된 이미지 초기화
+    setShowModal(true); // 모달 열기
+  };
 
   // 새 리뷰 추가 핸들러
   const handleAddReview = () => {
@@ -34,17 +43,20 @@ const Main: React.FC = () => {
       return;
     }
 
-    console.log('New Review Submitted:', { review: newReview, rating, images });
-    alert('Your review has been submitted successfully!');
+    const newReviewData = {
+      id: reviews.length + 1,
+      title: `Review ${reviews.length + 1}`,
+      content: newReview,
+      rating,
+      images,
+    };
 
-    // 초기화
-    setNewReview('');
-    setRating(0);
-    setImages([]);
-    setShowModal(false);
+    setReviews((prevReviews) => [newReviewData, ...prevReviews]);
+    alert('Your review has been submitted successfully!');
+    setShowModal(false); // 모달 닫기
   };
 
-  // 별점을 선택하는 함수
+  // 별점 선택 함수
   const handleRating = (index: number) => {
     setRating(index + 1);
   };
@@ -64,7 +76,6 @@ const Main: React.FC = () => {
     setImages(updatedImages);
   };
 
-  // 별점 미리보기 및 선택 상태 결정
   const currentRating = hoverRating ?? rating;
 
   return (
@@ -82,100 +93,107 @@ const Main: React.FC = () => {
         >
           <option value="NEW">Sort: New</option>
           <option value="OLD">Sort: Old</option>
-           <option value="LIKES">Sort: likes</option>
+          <option value="LIKES">Sort: Likes</option>
         </select>
       </div>
 
-      <ReviewList sortOption={sortOption} currentPage={currentPage} />
+      <ReviewList reviews={reviews} sortOption={sortOption} currentPage={currentPage} />
       <Pagination
         currentPage={currentPage}
-        totalPages={5}
+        totalPages={Math.ceil(reviews.length / 10)}
         onPageChange={(page) => setCurrentPage(page)}
       />
 
+     {showModal && (
+         <div className="modal">
+           <div className="modal-content">
+             {/* 모달 헤더: 검색창 + 닫기 버튼 */}
+             <div className="modal-header">
+               <div className="search-input-container">
+                 <i className="fa fa-search search-icon"></i>
+                 <input
+                   type="text"
+                   placeholder="Search store or review title..."
+                   className="search-input"
+                 />
+               </div>
+               <button className="close-modal-button" onClick={() => setShowModal(false)}>
+                 <i className="fa fa-times"></i>
+               </button>
+             </div>
 
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <div className="search-container">
-              <input type="text" placeholder="Search..." className="search-input" />
-              <button className="search-button">
-                <i className="fa fa-search"></i>
-              </button>
-              <button className="close-modal-button" onClick={() => setShowModal(false)}>
-                <i className="fa fa-times"></i>
-              </button>
-            </div>
+           {/* 별점 영역 */}
+           <div className="star-rating-container">
+             <div className="star-rating">
+               {[...Array(5)].map((_, index) => (
+                 <i
+                   key={index}
+                   className={`fa fa-star ${index < currentRating ? 'filled' : ''}`}
+                   onMouseEnter={() => setHoverRating(index + 1)}
+                   onMouseLeave={() => setHoverRating(null)}
+                   onClick={() => handleRating(index)}
+                 ></i>
+               ))}
+             </div>
+             <span className="rating-instruction">
+               {rating > 0
+                 ? `You selected ${rating} star${rating > 1 ? 's' : ''}!`
+                 : 'Please select a rating!'}
+             </span>
+           </div>
 
-            {/* 별점 영역 */}
-            <div className="star-rating-container">
-              <div className="star-rating">
-                {[...Array(5)].map((_, index) => (
-                  <i
-                    key={index}
-                    className={`fa fa-star ${index < currentRating ? 'filled' : ''}`}
-                    onMouseEnter={() => setHoverRating(index + 1)}
-                    onMouseLeave={() => setHoverRating(null)}
-                    onClick={() => handleRating(index)}
-                  ></i>
-                ))}
-              </div>
-              <span className="rating-instruction">
-                {rating > 0
-                  ? `You selected ${rating} star${rating > 1 ? 's' : ''}!`
-                  : 'Please select a rating!'}
-              </span>
-            </div>
+           {/* 이미지 업로드 및 미리보기 */}
+           <div className="image-upload">
+             <div className="image-preview-grid">
+               {images.map((image, index) => (
+                 <div key={index} className="image-thumbnail-container">
+                   <img
+                     src={URL.createObjectURL(image)}
+                     alt={`Preview ${index}`}
+                     className="image-thumbnail"
+                     onLoad={() => URL.revokeObjectURL(image)}
+                   />
+                   <button
+                     className="delete-button"
+                     onClick={() => handleDeleteImage(index)}
+                   >
+                     <i className="fa fa-times"></i>
+                   </button>
+                 </div>
+               ))}
+             </div>
+             <label htmlFor="file-upload" className="upload-label">
+               <i className="fa fa-plus"></i>
+             </label>
+             <input
+               type="file"
+               id="file-upload"
+               className="file-input"
+               onChange={handleImageUpload}
+               accept="image/*"
+               multiple
+             />
+           </div>
 
-            {/* 이미지 업로드 */}
-            <div className="image-upload">
-              <div className="image-preview">
-                {images.map((image, index) => (
-                  <div key={index} className="image-thumbnail-container">
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`preview ${index}`}
-                      className="image-thumbnail"
-                      onLoad={() => URL.revokeObjectURL(image)}
-                    />
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDeleteImage(index)}
-                    >
-                      <i className="fa fa-times"></i>
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <label htmlFor="file-upload" className="upload-label">
-                <i className="fa fa-plus"></i>
-              </label>
-              <input
-                type="file"
-                id="file-upload"
-                className="file-input"
-                onChange={handleImageUpload}
-                accept="image/*"
-                multiple
-              />
-            </div>
 
-            {/* 리뷰 내용 입력 */}
+           {/* 텍스트 영역 */}
            <textarea
              value={newReview}
              onChange={(e) => setNewReview(e.target.value)}
              placeholder="Write your review here..."
-             rows={5}  /* 기본적인 높이를 설정 */
-             style={{resize: "vertical"}} /* 세로 조정 가능 */
-            />
+             rows={5}
+             style={{ resize: 'vertical' }}
+           />
 
-            <div className="modal-buttons">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button onClick={handleAddReview}>Submit</button>
-            </div>
-          </div>
-        </div>
-      )}
+           {/* 모달 하단 버튼 */}
+           <div className="modal-buttons">
+             <button onClick={() => setShowModal(false)}>Cancel</button>
+             <button onClick={handleAddReview}>Submit</button>
+           </div>
+         </div>
+       </div>
+     )}
+
     </div>
   );
 };
