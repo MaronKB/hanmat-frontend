@@ -7,6 +7,7 @@ export default function Main() {
     if (lang === "jp") lang = "ja";
 
     const [userLocation, setUserLocation] = useState({lat: 37.5665, lng: 126.9780});
+    const [restaurants, setRestaurants] = useState([]);
 
     useEffect(() => {
         getMyLocation();
@@ -18,6 +19,7 @@ export default function Main() {
 
     const getMyLocation = () => {
         navigator.geolocation.getCurrentPosition((pos) => {
+            console.log(pos);
             const coords = {
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude
@@ -29,17 +31,22 @@ export default function Main() {
 
     const getNearbyRestaurants = async () => {
         //todo: change to production url
+        const locationDTO = {
+            city: "Seoul",
+            latitude: userLocation.lat,
+            longitude: userLocation.lng
+        }
         const response = await fetch(`http://localhost:8080/hanmat/api/restaurant/nearby`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(userLocation),
+            body: JSON.stringify(locationDTO),
         });
 
         const data = await response.json();
-        const restaurants = data.data;
-        console.log(restaurants);
+        console.log(data.data);
+        setRestaurants(data.data);
     }
 
     return (
@@ -47,6 +54,9 @@ export default function Main() {
             <main className={"max " + styles.main}>
                 <MapDiv style={{width: "100%", height: "100%"}}>
                     <NaverMap defaultCenter={userLocation} zoom={18}>
+                        {restaurants.map((restaurant: {id: string, name: string, latitude: number, longitude: number}) => (
+                            <Marker key={restaurant.id} position={{lat: restaurant.latitude, lng: restaurant.longitude}}/>
+                        ))}
                         <Marker defaultPosition={userLocation}/>
                     </NaverMap>
                 </MapDiv>

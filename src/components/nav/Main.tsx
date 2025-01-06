@@ -8,6 +8,8 @@ import jp_flag from "../../assets/jp-flag.png";
 import us_flag from "../../assets/us-flag.png";
 import {useEffect, useState} from "react";
 import MainNavLink from "./MainNavLink.tsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 export default function Nav() {
     const {t} = useTranslation("header");
@@ -23,9 +25,23 @@ export default function Nav() {
     const setLang = () => {
         localStorage.setItem("lang", i18n.language);
     }
+    const controlHeader = () => {
+        document.body.classList.toggle(styles.narrow, window.innerWidth <= 1200);
+    }
+    const toggleMenu = (force: boolean = false) => {
+        const header = document.querySelector(`.${styles.header}`);
+        if (header) {
+            if (force) {
+                header.classList.add(`${styles.active}`);
+            } else
+            header.classList.toggle(`${styles.active}`);
+        }
+    }
 
     useEffect(() => {
         setColorScheme();
+        controlHeader();
+        window.addEventListener("resize", controlHeader);
     }, []);
     useEffect(() => {
         changeColorScheme(isDark)
@@ -33,6 +49,9 @@ export default function Nav() {
 
     return (
         <>
+            <button type={"button"} className={styles.menu} onClick={() => toggleMenu()}>
+                <FontAwesomeIcon icon={faBars}/>
+            </button>
             <header className={styles.header}>
                 <Link to={"/"} className={styles.logo}>
                     <img src={logo} alt="HANMAT"/>
