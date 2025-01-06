@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 import './Main.css';
 
 const MyPage: React.FC = () => {
-  const [bio, setBio] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const [isBuddyVisible, setIsBuddyVisible] = useState(true);
   const [isAutoTranslate, setIsAutoTranslate] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [radius, setRadius] = useState('5km');
   const [favoriteStores, setFavoriteStores] = useState(['식당 1', '식당 2', '식당 3', '식당 4']);
   const [myReviews, setMyReviews] = useState(['리뷰 1', '리뷰 2', '리뷰 3', '리뷰 4']);
+  const [postImg, setPostImg] = useState([]);
 
-  const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => setBio(e.target.value);
+  const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) => setIntroduce(e.target.value);
   const toggleBuddyVisibility = () => setIsBuddyVisible(!isBuddyVisible);
   const toggleAutoTranslate = () => setIsAutoTranslate(!isAutoTranslate);
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
@@ -49,7 +50,7 @@ const MyPage: React.FC = () => {
           id="profileImg"
           />
         </form>
-        <input type="text" value={bio} onChange={handleBioChange} placeholder="자기소개를 입력하세요" />
+        <input type="text" value={introduce} onChange={handleIntroduceChange} placeholder="자기소개를 입력하세요" />
         <button>등록</button>
       </div>
       <div className="section">
@@ -84,7 +85,7 @@ const MyPage: React.FC = () => {
         <h3>나의 리뷰 목록</h3>
         <ul>
           {myReviews.map((review, index) => (
-            <li key={index}>{review} <button onClick={() => editReview(index)}>수정</button></li>
+            <li key={index}>{review} <button className={'modal-close-btn'} onClick={() => editReview(index)}>수정</button></li>
           ))}
         </ul>
       </div>
