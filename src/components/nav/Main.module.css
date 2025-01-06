@@ -60,6 +60,7 @@
     transition: 0.3s;
 }
 .color {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,9 +70,9 @@
 }
 .dark + label {
     position: relative;
-    width: 50px;
-    height: 30px;
-    border-radius: 15px;
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
     background: #e0e0e0;
     display: flex;
     align-items: center;
@@ -80,10 +81,10 @@
 .dark + label > span {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateX(-10px);
-    width: 20px;
-    height: 20px;
+    left: 5px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: white;
     transition: 0.3s;
@@ -92,7 +93,37 @@
     background: #646cff;
 }
 .dark:checked + label > span {
-    transform: translate(-50%, -50%) translateX(10px);
+    left: calc(100% - 35px);
+}
+.icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    opacity: 0.6;
+    z-index: 1;
+    pointer-events: none;
+}
+.icon > svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    color: black;
+    margin: auto;
+}
+.dark:not(:checked) + label + .icon > svg:first-child,
+.dark:checked + label + .icon > svg:last-child {
+    color: black;
+}
+.dark:checked + label + .icon > svg:first-child,
+.dark:not(:checked) + label + .icon > svg:last-child {
+    color: white;
 }
 .lang {
     flex: none;
@@ -106,7 +137,7 @@
     width: 30px;
     height: 30px;
     border-radius: 10px;
-    filter: brightness(0.8);
+    filter: brightness(0.8) grayscale(1);
     overflow: hidden;
 }
 .lang > button.active,
@@ -131,7 +162,7 @@
 }
 .login {
     flex: none;
-    width: 100px;
+    width: 140px;
     height: 36px;
     display: flex;
     justify-content: center;

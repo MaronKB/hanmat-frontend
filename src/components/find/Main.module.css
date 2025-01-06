@@ -1,4 +1,5 @@
 .main {
+    position: relative;
     max-width: unset;
     height: 100vh;
     display: flex;
@@ -6,4 +7,91 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+    overflow: hidden;
+}
+.sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: var(--background-color);
+    padding: 10px;
+    transition: right 0.3s;
+    mix-blend-mode: multiply;
+    backdrop-filter: blur(10px) grayscale(0.5);
+}
+.sidebar.closed {
+    right: -300px;
+}
+.restaurants {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    overflow: scroll;
+}
+.restaurant {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-color);
+    background: var(--background-color);
+    padding: 20px;
+    border-radius: 5px;
+    user-select: none;
+}
+.restaurant:hover {
+    background: var(--background-color-sub);
+}
+.restaurant.highlight {
+    background: var(--background-color-sub);
+}
+.fold-container {
+    position: absolute;
+    top: 0;
+    left: -50px;
+    width: 50px;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: linear-gradient(270deg, #0002, transparent);
+}
+.fold {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    background: var(--background-color);
+    border-radius: 10px 0 0 10px;
+}
+.fold > svg {
+    z-index: 1;
+    transition: transform 0.3s;
+}
+.sidebar.closed .fold > svg {
+    transform: rotate(180deg);
+}
+.fold-background {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 200px;
+    background: var(--background-color);
+    border-radius: 5px 0 0 5px;
+    z-index: 0;
 }

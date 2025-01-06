@@ -1,0 +1,36 @@
+.marker {
+    position: relative;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+}
+.marker:hover {
+    transform: scale(1.2);
+    z-index: 1;
+}
+
+.title {
+    position: absolute;
+    top: -30px;
+    width: 100px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+    background: var(--background-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+}
+
+.marker > img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+}

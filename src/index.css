@@ -75,9 +75,11 @@ a:hover {
     color: #535bf2;
 }
 
-h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), sans-serif;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
 }
 
 button {

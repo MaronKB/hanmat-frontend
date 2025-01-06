@@ -16,9 +16,11 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <Routes>
-            <Route element={<Nav />}>
-                <Route path="/" element={<Home />} />
+            <Route element={<Nav alwaysNarrow={true} />}>
                 <Route path="/find" element={<Find />} />
+            </Route>
+            <Route element={<Nav alwaysNarrow={false}/>}>
+                <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/taste" element={<Taste />} />
                 <Route path="/reviews" element={<Reviews />} />
