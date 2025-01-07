@@ -456,12 +456,15 @@ const AdminRestaurants: React.FC = () => {
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch('/restaurant/all');
+                // todo: replace with actual API endpoint
+                // const response = await fetch("https://portfolio.mrkb.kr/hanmat/api/restaurant/all");
+                const response = await fetch('http://localhost:8080/hanmat/api/restaurant/all');
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Raw data from backend:', data);
+                    setTotalPages(data.data.totalPages);
 
-                    const restaurantDTOs: RestaurantDTO[] = data.data;
+                    const restaurantDTOs: RestaurantDTO[] = data.data.items;
 
                     const transformedRestaurants: Restaurant[] = restaurantDTOs.map(
                         (dto) => ({
