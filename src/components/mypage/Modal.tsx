@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import './Modal.css';
+import "./Modal.css";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -71,7 +71,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                 accept="image/*"
                 ref={fileInputRef}
                 onChange={handleImageUpload}
-                style={{ display: 'none' }}
+                style={{ display: 'none'}}
               />
             </div>
           )}

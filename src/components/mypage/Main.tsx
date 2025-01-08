@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
-import './Main.css';
+import "./Main.css";
 import Modal from './Modal';
 
 const MyPage: React.FC = () => {
+    const [image, setImage] = useState('/default-profile.png');
+  const fileInputRef = useRef(null); // 파일 입력 요소 참조
   const [introduce, setIntroduce] = useState('');
   const [isBuddyVisible, setIsBuddyVisible] = useState(true);
   const [isAutoTranslate, setIsAutoTranslate] = useState(true);
@@ -42,19 +44,54 @@ const MyPage: React.FC = () => {
       alert('탈퇴 처리되었습니다.');
     }
   };
-
+  // 파일 입력 클릭 핸들러
+  const handleImageClick = () => {
+      fileInputRef.current.click(); // 숨겨진 파일 입력 클릭
+  };
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <div className={`mypage-container ${isDarkMode ? 'dark' : ''}`}>
       {/* 이미지 업로드 */}
       <div className="section">
-        <form>
-          <input
-            className="signup-profileImg-input"
-            type="file"
-            accept="image/*"
-            id="profileImg"
-          />
-        </form>
+        <div
+                onClick={handleImageClick}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: '2px solid #ccc',
+                  margin: '0 auto'
+                }}
+              >
+                <img
+                  src={image}
+                  alt="Profile Preview"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
+              </div>
+              {/* 숨겨진 파일 입력 */}
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
         <input
           type="text"
           value={introduce}
