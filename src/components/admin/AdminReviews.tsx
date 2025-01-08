@@ -349,9 +349,6 @@ const AdminReviews: React.FC = () => {
             {showModal && editRestaurant && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-            <span className={styles.closeButton} onClick={handleCloseModal}>
-              &times;
-            </span>
                         <h2 className={styles.modalTitle}>리뷰 수정</h2>
                         <label className={styles.modalLabel}>
                             번호:
@@ -459,9 +456,14 @@ const AdminReviews: React.FC = () => {
                                 <option value="false">미신고</option>
                             </select>
                         </label>
-                        <button onClick={handleSaveEdit} className={styles.saveBtn}>
-                            저장
-                        </button>
+                        <div className={styles.modalButtons}>
+                            <button onClick={handleSaveEdit} className={styles.saveBtn}>
+                                저장
+                            </button>
+                            <button onClick={handleCloseModal} className={styles.closeBtn}>
+                                닫기
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

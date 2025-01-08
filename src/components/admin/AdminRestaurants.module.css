@@ -1,10 +1,10 @@
 .container {
     padding: 30px;
-    font-family: 'Roboto', 'Noto Sans KR', sans-serif; /* 폰트 변경 */
-    background-color: #f8f9fa; /* 밝은 회색 배경 */
-    border-radius: 10px; /* 둥근 모서리 감소 */
-    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1); /* 그림자 조정 */
-    max-width: 1200px; /* 최대 너비 증가 */
+    font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
     margin: 50px auto;
 }
 
@@ -18,60 +18,60 @@
 
 .selectBox {
     padding: 10px 15px;
-    border: 1px solid #ced4da; /* 테두리 추가 */
-    border-radius: 5px; /* 둥근 모서리 감소 */
+    border: 1px solid #ced4da;
+    border-radius: 5px;
     font-size: 1rem;
     background-color: #fff;
     appearance: none;
     cursor: pointer;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease; /* 트랜지션 변경 */
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .selectBox:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5); /* 포커스 효과 변경 */
-    border-color: #82a0c7; /* 포커스 테두리 색상 변경 */
+    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5);
+    border-color: #82a0c7;
 }
 
 .inputBox {
     padding: 10px 15px;
-    border: 1px solid #ced4da; /* 테두리 추가 */
-    border-radius: 5px; /* 둥근 모서리 감소 */
+    border: 1px solid #ced4da;
+    border-radius: 5px;
     font-size: 1rem;
     flex-grow: 1;
     background-color: #fff;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease; /* 트랜지션 변경 */
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .inputBox:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5); /* 포커스 효과 변경 */
-    border-color: #82a0c7; /* 포커스 테두리 색상 변경 */
+    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5);
+    border-color: #82a0c7;
 }
 
 .searchBtn {
     padding: 8px 16px;
-    background-color: #4267b2; /* 어두운 파란색으로 변경 */
+    background-color: #4267b2;
     color: #fff;
     border: none;
-    border-radius: 5px; /* 둥근 모서리 감소 */
+    border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease; /* 트랜지션 조정 */
+    transition: all 0.2s ease;
 }
 
 .searchBtn:hover {
-    background-color: #365899; /* 호버 시 더 어두운 파란색 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 조정 */
+    background-color: #365899;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .restaurantTable {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* 테이블 그림자 조정 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     background-color: #fff;
-    border-radius: 8px; /* 둥근 모서리 감소 */
+    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -79,19 +79,19 @@
 .restaurantTable td {
     padding: 15px 20px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0; /* 구분선 색상 변경 */
+    border-bottom: 1px solid #e0e0e0;
     font-size: 0.95rem;
 }
 
 .restaurantTable th {
-    background-color: #4b6584; /* 헤더 배경색 변경 */
-    color: #e8e8e8; /* 헤더 텍스트 색상 변경 */
+    background-color: #4b6584;
+    color: #e8e8e8;
     font-weight: 600;
-    border-bottom: 2px solid #4b6584; /* 헤더 하단 테두리 강조 */
+    border-bottom: 2px solid #4b6584;
 }
 
 .restaurantTable tbody tr:hover {
-    background-color: #f5f5f5; /* 호버 효과 조정 */
+    background-color: #f5f5f5;
 }
 
 .checkboxCell {
@@ -136,23 +136,23 @@
 .pageBtn {
     padding: 8px 15px;
     margin: 0 5px;
-    border: 1px solid #ced4da; /* 테두리 추가 */
-    border-radius: 5px; /* 둥근 모서리 감소 */
+    border: 1px solid #ced4da;
+    border-radius: 5px;
     background-color: #fff;
     cursor: pointer;
     font-size: 0.95rem;
-    transition: all 0.2s ease; /* 트랜지션 조정 */
+    transition: all 0.2s ease;
 }
 
 .pageBtn.active {
-    background-color: #4267b2; /* 활성 페이지 버튼 색상 변경 */
+    background-color: #4267b2;
     color: #fff;
-    border-color: #4267b2; /* 활성 페이지 버튼 테두리 색상 변경 */
+    border-color: #4267b2;
 }
 
 .pageBtn:hover {
-    background-color: #f0f0f0; /* 호버 효과 조정 */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 추가 */
+    background-color: #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .deleteBtn {
@@ -189,26 +189,10 @@
 .modalContent {
     background-color: #fff;
     padding: 30px;
-    border-radius: 8px; /* 둥근 모서리 감소 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 모달 그림자 조정 */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     max-width: 600px;
     width: 100%;
-}
-
-.closeButton {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    background: none;
-    border: none;
-    font-size: 1.8rem;
-    cursor: pointer;
-    color: #7f8c8d; /* 닫기 버튼 색상 변경 */
-    transition: color 0.2s ease;
-}
-
-.closeButton:hover {
-    color: #606c71; /* 닫기 버튼 호버 색상 변경 */
 }
 
 .modalTitle {
@@ -224,23 +208,44 @@
     font-size: 1rem;
     color: #333;
 }
-
+.modalButtons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
 .saveBtn {
     padding: 12px 25px;
-    background-color: #4b6584; /* 저장 버튼 색상 변경 */
+    background-color: #4b6584;
     color: #fff;
     border: none;
-    border-radius: 5px; /* 둥근 모서리 감소 */
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-size: 1rem;
-    transition: all 0.2s ease; /* 트랜지션 조정 */
+    transition: all 0.2s ease;
+    margin-left: 160px;
 }
 
 .saveBtn:hover {
-    background-color: #364766; /* 저장 버튼 호버 색상 변경 */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 조정 */
+    background-color: #364766;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+.closeBtn {
+    padding: 12px 25px;
+    background-color: #7f8c8d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    margin-right: 160px;
+}
+
+.closeBtn:hover {
+    background-color: #606c71;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .controls {
@@ -268,7 +273,7 @@
     border: 1px solid #ced4da;
     border-radius: 5px;
     font-size: 0.95rem;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 입력 필드 내부 그림자 추가 */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .modal input:focus,

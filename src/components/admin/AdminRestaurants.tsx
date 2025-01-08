@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AdminRestaurants.module.css';
 
-// 백엔드 RestaurantDTO와 구조를 맞춘 인터페이스 정의
 interface RestaurantDTO {
     id: number;
     name: string;
@@ -108,7 +107,6 @@ const AdminRestaurants: React.FC = () => {
         }
     };
 
-    // ... (handleDelete, handleSearch, handleEdit, handleCloseModal, handleSaveEdit  함수는 이전과 동일) ...
     const handleDelete = () => {
         if (selectedRestaurants.length === 0) {
             alert('삭제할 식당을 선택해주세요.');
@@ -153,7 +151,6 @@ const AdminRestaurants: React.FC = () => {
     const createPagination = () => {
         const pageButtons = [];
 
-        // ... (페이지네이션 버튼 생성 로직은 이전과 동일)
 
         return pageButtons;
     };
@@ -260,9 +257,6 @@ const AdminRestaurants: React.FC = () => {
             {showModal && editRestaurant && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-                <span className={styles.closeButton} onClick={handleCloseModal}>
-                  &times;
-                </span>
                         <h2 className={styles.modalTitle}>식당 정보 수정</h2>
                         <label className={styles.modalLabel}>
                             번호:
@@ -340,9 +334,14 @@ const AdminRestaurants: React.FC = () => {
                                 <option value="폐업">폐업</option>
                             </select>
                         </label>
-                        <button onClick={handleSaveEdit} className={styles.saveBtn}>
-                            저장
-                        </button>
+                        <div className={styles.modalButtons}>
+                            <button onClick={handleSaveEdit} className={styles.saveBtn}>
+                                저장
+                            </button>
+                            <button onClick={handleCloseModal} className={styles.closeBtn}>
+                                닫기
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
