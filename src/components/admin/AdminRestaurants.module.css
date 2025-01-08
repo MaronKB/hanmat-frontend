@@ -1,194 +1,176 @@
 .container {
-    padding: 25px;
-    font-family: 'Noto Sans KR', sans-serif;
-    background: linear-gradient(135deg, #e8e8e8, #ffffff);
-    border-radius: 25px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
-    max-width: 1100px;
-    margin: 40px auto;
+    padding: 30px;
+    font-family: 'Roboto', 'Noto Sans KR', sans-serif; /* 폰트 변경 */
+    background-color: #f8f9fa; /* 밝은 회색 배경 */
+    border-radius: 10px; /* 둥근 모서리 감소 */
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1); /* 그림자 조정 */
+    max-width: 1200px; /* 최대 너비 증가 */
+    margin: 50px auto;
 }
 
 .searchContainer {
     display: flex;
-    gap: 7px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 20px;
     align-items: center;
-    width: 37%;
+    width: 50%;
 }
 
 .selectBox {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 18px;
-    font-size: 0.9rem;
+    padding: 10px 15px;
+    border: 1px solid #ced4da; /* 테두리 추가 */
+    border-radius: 5px; /* 둥근 모서리 감소 */
+    font-size: 1rem;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     appearance: none;
     cursor: pointer;
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease; /* 트랜지션 변경 */
 }
 
 .selectBox:focus {
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5); /* 포커스 효과 변경 */
+    border-color: #82a0c7; /* 포커스 테두리 색상 변경 */
 }
 
 .inputBox {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 18px;
-    font-size: 0.9rem;
+    padding: 10px 15px;
+    border: 1px solid #ced4da; /* 테두리 추가 */
+    border-radius: 5px; /* 둥근 모서리 감소 */
+    font-size: 1rem;
     flex-grow: 1;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease; /* 트랜지션 변경 */
 }
 
 .inputBox:focus {
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(82, 108, 145, 0.5); /* 포커스 효과 변경 */
+    border-color: #82a0c7; /* 포커스 테두리 색상 변경 */
 }
 
 .searchBtn {
-    padding: 8px 10px;
-    background: linear-gradient(to right, #3498db, #2980b9);
+    padding: 8px 16px;
+    background-color: #4267b2; /* 어두운 파란색으로 변경 */
     color: #fff;
     border: none;
-    border-radius: 18px;
+    border-radius: 5px; /* 둥근 모서리 감소 */
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease; /* 트랜지션 조정 */
 }
 
 .searchBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #365899; /* 호버 시 더 어두운 파란색 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 조정 */
 }
 
 .restaurantTable {
     width: 100%;
     border-collapse: collapse;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* 테이블 그림자 조정 */
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 8px; /* 둥근 모서리 감소 */
     overflow: hidden;
 }
 
 .restaurantTable th,
 .restaurantTable td {
-    padding: 12px 15px;
+    padding: 15px 20px;
     text-align: left;
-    border-bottom: 1px solid #eee;
-    font-size: 0.9rem;
+    border-bottom: 1px solid #e0e0e0; /* 구분선 색상 변경 */
+    font-size: 0.95rem;
 }
 
 .restaurantTable th {
-    background-color: #f2f2f2;
-    font-weight: 500;
-    color: #333;
+    background-color: #4b6584; /* 헤더 배경색 변경 */
+    color: #e8e8e8; /* 헤더 텍스트 색상 변경 */
+    font-weight: 600;
+    border-bottom: 2px solid #4b6584; /* 헤더 하단 테두리 강조 */
 }
 
 .restaurantTable tbody tr:hover {
-    background-color: #fafafa;
+    background-color: #f5f5f5; /* 호버 효과 조정 */
 }
-
 
 .checkboxCell {
     width: 45px;
 }
 
 .idCell {
-    width: 60px;
+    width: 67px;
 }
 
 .restaurantNameCell {
-    width: 150px;
+    width: 180px;
 }
 
-.titleCell {
-    width: 200px;
+.locationCell {
+    width: 220px;
 }
 
-.contentCell {
-    width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.imageCell {
-    width: 80px;
+.roadAddressCell {
+    width: 270px;
 }
 
 .regDateCell {
     width: 115px;
 }
 
-.hiddenCell {
-    width: 85px;
-}
-
-.reportCell {
-    width: 85px;
+.closedCell {
+    width: 103px;
 }
 
 .editCell {
     width: 75px;
 }
 
-.restaurantImage {
-    max-width: 70px;
-    max-height: 70px;
-    border-radius: 8px;
-}
-
-
 .pagination {
     display: flex;
     justify-content: center;
     margin-left: 470px;
+    margin-top: 20px;
 }
 
 .pageBtn {
-    padding: 6px 12px;
-    margin: 0 3px;
-    border: none;
-    border-radius: 15px;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: 1px solid #ced4da; /* 테두리 추가 */
+    border-radius: 5px; /* 둥근 모서리 감소 */
     background-color: #fff;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease; /* 트랜지션 조정 */
 }
 
 .pageBtn.active {
-    background: linear-gradient(to right, #3498db, #2980b9);
+    background-color: #4267b2; /* 활성 페이지 버튼 색상 변경 */
     color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    border-color: #4267b2; /* 활성 페이지 버튼 테두리 색상 변경 */
 }
 
 .pageBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0; /* 호버 효과 조정 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 추가 */
 }
 
 .deleteBtn {
-    padding: 8px 15px;
-    background-color: #e74c3c;
+    padding: 10px 20px;
+    background-color: #f8543b;
     color: #fff;
     border: none;
-    border-radius: 18px;
+    border-radius: 5px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
 
 .deleteBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    background-color: #c0392b;
+    background-color: #c3402c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
 }
 
 .modal {
@@ -206,67 +188,66 @@
 
 .modalContent {
     background-color: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 550px;
+    padding: 30px;
+    border-radius: 8px; /* 둥근 모서리 감소 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 모달 그림자 조정 */
+    max-width: 600px;
     width: 100%;
 }
 
 .closeButton {
     position: absolute;
-    right: 18px;
-    top: 12px;
+    right: 20px;
+    top: 15px;
     background: none;
     border: none;
-    font-size: 2rem;
+    font-size: 1.8rem;
     cursor: pointer;
-    color: #555;
+    color: #7f8c8d; /* 닫기 버튼 색상 변경 */
     transition: color 0.2s ease;
 }
 
 .closeButton:hover {
-    color: #333;
+    color: #606c71; /* 닫기 버튼 호버 색상 변경 */
 }
 
 .modalTitle {
-    margin-bottom: 18px;
-    font-size: 1.4rem;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #333;
 }
 
 .modalLabel {
     display: block;
-    margin-bottom: 12px;
-    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-size: 1rem;
     color: #333;
 }
 
 .saveBtn {
-    padding: 10px 20px;
-    background-color: #28a745;
+    padding: 12px 25px;
+    background-color: #4b6584; /* 저장 버튼 색상 변경 */
     color: #fff;
     border: none;
-    border-radius: 18px;
+    border-radius: 5px; /* 둥근 모서리 감소 */
     cursor: pointer;
-    margin-top: 18px;
+    margin-top: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    transition: all 0.2s ease; /* 트랜지션 조정 */
 }
 
 .saveBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    background-color: #218838;
+    background-color: #364766; /* 저장 버튼 호버 색상 변경 */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 조정 */
 }
 
 .controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .buttons {
@@ -275,38 +256,40 @@
 }
 
 .restaurantTable td {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .modal input[type="text"],
 .modal input[type="email"],
 .modal select {
-    width: calc(100% - 24px);
-    padding: 8px 12px;
+    width: calc(100% - 30px);
+    padding: 10px 15px;
     margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 18px;
-    font-size: 0.9rem;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 입력 필드 내부 그림자 추가 */
 }
 
 .modal input:focus,
 .modal select:focus {
     outline: none;
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #4b6584;
+    box-shadow: 0 0 5px rgba(75, 101, 132, 0.5);
 }
 
 .editBtn {
-    background-color: #4ee34e;
+    background-color: #7f8c8d;
     color: #ffffff;
     border-radius: 5px;
     border: none;
-    padding: 5px 5px;
-    font-size: 0.8rem;
+    padding: 3px 5px;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
 }
 
 .editBtn:hover {
-    background-color: #39a639;
+    background-color: #606c71;
     font-weight: bold;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
