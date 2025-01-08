@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AdminRestaurants.module.css';
 
+
 interface RestaurantDTO {
     id: number;
     name: string;
@@ -107,6 +108,7 @@ const AdminRestaurants: React.FC = () => {
         }
     };
 
+    // ... (handleDelete, handleSearch, handleEdit, handleCloseModal, handleSaveEdit  함수는 이전과 동일) ...
     const handleDelete = () => {
         if (selectedRestaurants.length === 0) {
             alert('삭제할 식당을 선택해주세요.');
@@ -150,8 +152,6 @@ const AdminRestaurants: React.FC = () => {
 
     const createPagination = () => {
         const pageButtons = [];
-
-
         return pageButtons;
     };
 
@@ -258,15 +258,6 @@ const AdminRestaurants: React.FC = () => {
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <h2 className={styles.modalTitle}>식당 정보 수정</h2>
-                        <label className={styles.modalLabel}>
-                            번호:
-                            <input
-                                type="text"
-                                value={editRestaurant.id}
-                                disabled
-                                className={styles.inputBox}
-                            />
-                        </label>
                         <label className={styles.modalLabel}>
                             식당이름:
                             <input

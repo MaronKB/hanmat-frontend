@@ -351,15 +351,6 @@ const AdminReviews: React.FC = () => {
                     <div className={styles.modalContent}>
                         <h2 className={styles.modalTitle}>리뷰 수정</h2>
                         <label className={styles.modalLabel}>
-                            번호:
-                            <input
-                                type="text"
-                                value={editRestaurant.id}
-                                disabled
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
                             식당이름:
                             <input
                                 type="text"

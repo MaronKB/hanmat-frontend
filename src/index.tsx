@@ -9,6 +9,7 @@ import Buddy from './components/buddy/Main.tsx';
 import MyPage from './components/mypage/Main.tsx';
 import AdminReviews from "./components/admin/AdminReviews.tsx";
 import AdminRestaurants from "./components/admin/AdminRestaurants.tsx";
+import AdminUsers from "./components/admin/AdminUsers.tsx";
 import './index.css'
 import "./locales/i18n.ts";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/mypage" element={<MyPage />} />
                 <Route path={"/adminReviews"} element={<AdminReviews />} />
                 <Route path={"/adminRestaurants"} element={<AdminRestaurants />} />
+                <Route path={"/adminUsers"} element={<AdminUsers />} />
             </Route>
         </Routes>
     </BrowserRouter>
