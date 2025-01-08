@@ -2,14 +2,20 @@ import { Socket, io } from "socket.io-client";
 import styles from "./Main.module.css";
 import UserList from "./UserList";
 import Chat from "./Chat.tsx";
+import {useEffect, useState} from "react";
 
 export default function Main() {
     const socket: Socket = io('ws://localhost:3001');
+
+    const [targetUser, setTargetUser] = useState<string>('');
+    useEffect(() => {
+        console.log(targetUser);
+    }, [targetUser]);
     return (
-        <main>
+        <main className={styles.main + " max"}>
             <section className={styles.container}>
-                <UserList />
-                <Chat socket={socket} />
+                <UserList set={setTargetUser}/>
+                <Chat socket={socket} target={targetUser}/>
             </section>
         </main>
     );
