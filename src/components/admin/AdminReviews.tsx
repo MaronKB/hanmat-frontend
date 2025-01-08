@@ -19,7 +19,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집1',
         title: '리뷰1 제목',
         content: '리뷰1 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-01-01',
         isHidden: false,
         isReported: false,
@@ -29,7 +29,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집2',
         title: '리뷰2 제목',
         content: '리뷰2 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-02-15',
         isHidden: true,
         isReported: true,
@@ -39,7 +39,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집2',
         title: '리뷰3 제목',
         content: '리뷰3 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-02-15',
         isHidden: true,
         isReported: true,
@@ -49,7 +49,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집2',
         title: '리뷰4 제목',
         content: '리뷰4 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-02-15',
         isHidden: true,
         isReported: true,
@@ -59,7 +59,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집2',
         title: '리뷰5 제목',
         content: '리뷰5 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-02-15',
         isHidden: true,
         isReported: true,
@@ -69,7 +69,7 @@ const initialRestaurants: Restaurant[] = [
         restaurantName: '맛집2',
         title: '리뷰6 제목',
         content: '리뷰6 내용',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'https://via.placeholder.com/50x50',
         registrationDate: '2023-02-15',
         isHidden: true,
         isReported: true,
@@ -349,19 +349,7 @@ const AdminReviews: React.FC = () => {
             {showModal && editRestaurant && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-            <span className={styles.closeButton} onClick={handleCloseModal}>
-              &times;
-            </span>
                         <h2 className={styles.modalTitle}>리뷰 수정</h2>
-                        <label className={styles.modalLabel}>
-                            번호:
-                            <input
-                                type="text"
-                                value={editRestaurant.id}
-                                disabled
-                                className={styles.inputBox}
-                            />
-                        </label>
                         <label className={styles.modalLabel}>
                             식당이름:
                             <input
@@ -459,9 +447,14 @@ const AdminReviews: React.FC = () => {
                                 <option value="false">미신고</option>
                             </select>
                         </label>
-                        <button onClick={handleSaveEdit} className={styles.saveBtn}>
-                            저장
-                        </button>
+                        <div className={styles.modalButtons}>
+                            <button onClick={handleSaveEdit} className={styles.saveBtn}>
+                                저장
+                            </button>
+                            <button onClick={handleCloseModal} className={styles.closeBtn}>
+                                닫기
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
