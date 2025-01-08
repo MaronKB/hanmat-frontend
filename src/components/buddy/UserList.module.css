@@ -1,3 +1,10 @@
+.list {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .user {
     display: flex;
     justify-content: left;
@@ -5,13 +12,20 @@
     gap: 10px;
     padding: 10px;
     box-shadow: 0 0 5px var(--background-color-sub);
+    user-select: none;
+}
+.user:hover {
+    background: var(--background-color-sub);
+    cursor: pointer;
+}
+.user.active {
+    background: var(--background-color-sub);
 }
 .profile {
     flex: none;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    margin-right: 10px;
     overflow: hidden;
 }
 .image {

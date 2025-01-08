@@ -2,6 +2,13 @@ import {GoogleOAuthProvider, CredentialResponse} from "@react-oauth/google";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
 
+export interface AuthData {
+    email: string;
+    nickname: string;
+    profileImage: string;
+    isAdmin: boolean;
+}
+
 export default function GoogleOAuth() {
     //todo: change to production url
     //const url = "https://portfolio.mrkb.kr";
@@ -28,7 +35,14 @@ export default function GoogleOAuth() {
                 console.log(data.error);
                 return;
             }
-            localStorage.setItem("token", data.data);
+            const token = {
+                email: email,
+                nickname: data.data.nickname,
+                profileImage: data.data.profileImage,
+                isAdmin: data.data.isAdmin
+            };
+
+            localStorage.setItem("token", JSON.stringify(token));
             window.location.href = "/";
         }
     }
