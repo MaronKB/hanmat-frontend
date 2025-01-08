@@ -99,7 +99,7 @@
 }
 
 .idCell {
-    width: 67px;
+    width: 68px;
 }
 
 .restaurantNameCell {
@@ -247,7 +247,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .buttons {
