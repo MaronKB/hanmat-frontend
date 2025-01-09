@@ -5,7 +5,8 @@ import Chat from "./Chat.tsx";
 import {useEffect, useState} from "react";
 
 export default function Main() {
-    const socket: Socket = io('ws://localhost:3001');
+    // const socket: Socket = io('ws://localhost:3000');
+    const socket: Socket = io('wss://portfolio.mrkb.kr');
 
     const [targetUser, setTargetUser] = useState<string>('');
     useEffect(() => {
