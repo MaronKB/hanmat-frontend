@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './AdminUsers.module.css';
+
+interface UserDTO {
+    id: number;
+    email: string;
+    nickname: string;
+    profileImageUrl: string;
+    introduction: string;
+    registrationDate: string;
+    isDeleted: boolean;
+}
 
 interface User {
     id: number;
@@ -12,47 +22,93 @@ interface User {
 }
 
 // 임시 데이터
-const initialUsers: User[] = [
-    {
-        id: 1,
-        email: 'user1@example.com',
-        nickname: '사용자1',
-        profileImageUrl: 'https://via.placeholder.com/50x50',
-        introduction: '안녕하세요! 사용자1입니다.',
-        registrationDate: '2023-01-01',
-        isDeleted: false,
-    },
-    {
-        id: 2,
-        email: 'user2@example.com',
-        nickname: '사용자2',
-        profileImageUrl: 'https://via.placeholder.com/50x50',
-        introduction: '반갑습니다! 사용자2입니다.',
-        registrationDate: '2023-01-02',
-        isDeleted: true,
-    },
-    {
-        id: 3,
-        email: 'user3@example.com',
-        nickname: '사용자3',
-        profileImageUrl: 'https://via.placeholder.com/50x50',
-        introduction: '안녕하세요! 사용자3입니다.',
-        registrationDate: '2023-01-03',
-        isDeleted: false,
-    },
-];
+// const initialUsers: User[] = [
+//     {
+//         id: 1,
+//         email: 'user1@example.com',
+//         nickname: '사용자1',
+//         profileImageUrl: 'https://via.placeholder.com/50x50',
+//         introduction: '안녕하세요! 사용자1입니다.',
+//         registrationDate: '2023-01-01',
+//         isDeleted: false,
+//     },
+//     {
+//         id: 2,
+//         email: 'user2@example.com',
+//         nickname: '사용자2',
+//         profileImageUrl: 'https://via.placeholder.com/50x50',
+//         introduction: '반갑습니다! 사용자2입니다.',
+//         registrationDate: '2023-01-02',
+//         isDeleted: true,
+//     },
+//     {
+//         id: 3,
+//         email: 'user3@example.com',
+//         nickname: '사용자3',
+//         profileImageUrl: 'https://via.placeholder.com/50x50',
+//         introduction: '안녕하세요! 사용자3입니다.',
+//         registrationDate: '2023-01-03',
+//         isDeleted: false,
+//     },
+// ];
 
 const AdminUsers: React.FC = () => {
-    const [users, setUsers] = useState<User[]>(initialUsers);
+    const [users, setUsers] = useState<User[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(Math.ceil(initialUsers.length / 20));
+    const [totalPages, setTotalPages] = useState<number>(1);
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
     const [searchCategory, setSearchCategory] = useState<string>('email');
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
     const [editUser, setEditUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const rowsPerPage = 20;
+    const rowsPerPage = 10;
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await fetch('http://localhost:8080/hanmat/api/user/all');
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Raw data from backend:', data);
+                    setTotalPages(data.data.totalPages);
+
+                    const userDTOs: UserDTO[] = data.data.items;
+
+                    const transformedUsers: User[] = userDTOs.map(
+                        (dto) => ({
+                            id: dto.id,
+                            email: dto.email,
+                            nickname: dto.nickname,
+                            profileImageUrl: dto.profileImageUrl,
+                            introduction: dto.introduction,
+                            registrationDate: dto.registrationDate,
+                            isDeleted: dto.isDeleted,
+                        })
+                    );
+                    console.log('Transformed data:', transformedUsers);
+
+                    setUsers(transformedUsers);
+                    setTotalPages(Math.ceil(transformedUsers.length / rowsPerPage));
+                } else {
+                    console.error('Failed to fetch users');
+                    setError('데이터를 불러오는데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                setError('데이터를 불러오는 중 오류가 발생했습니다.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, userId: number) => {
         if (event.target.checked) {
@@ -93,23 +149,23 @@ const AdminUsers: React.FC = () => {
             return;
         }
 
-        const filteredUsers = initialUsers.filter((user) => {
-            const keyword = searchKeyword.toLowerCase();
-            switch (searchCategory) {
-                case 'email':
-                    return user.email.toLowerCase().includes(keyword);
-                case 'nickname':
-                    return user.nickname.toLowerCase().includes(keyword);
-                case 'introduction':
-                    return user.introduction.toLowerCase().includes(keyword);
-                default:
-                    return true;
-            }
-        });
+        // const filteredUsers = initialUsers.filter((user) => {
+        //     const keyword = searchKeyword.toLowerCase();
+        //     switch (searchCategory) {
+        //         case 'email':
+        //             return user.email.toLowerCase().includes(keyword);
+        //         case 'nickname':
+        //             return user.nickname.toLowerCase().includes(keyword);
+        //         case 'introduction':
+        //             return user.introduction.toLowerCase().includes(keyword);
+        //         default:
+        //             return true;
+        //     }
+        // });
 
-        setUsers(filteredUsers);
-        setTotalPages(Math.ceil(filteredUsers.length / rowsPerPage));
-        setCurrentPage(1);
+        // setUsers(filteredUsers);
+        // setTotalPages(Math.ceil(filteredUsers.length / rowsPerPage));
+        // setCurrentPage(1);
     };
 
     const handleEdit = (user: User) => {
@@ -198,7 +254,7 @@ const AdminUsers: React.FC = () => {
                     className={styles.inputBox}
                 />
                 <button onClick={handleSearch} className={styles.searchBtn}>
-                    검색
+                    조회
                 </button>
             </div>
 
@@ -237,18 +293,10 @@ const AdminUsers: React.FC = () => {
                         <td className={styles.idCell}>{user.id}</td>
                         <td className={styles.emailCell}>{user.email}</td>
                         <td className={styles.nicknameCell}>{user.nickname}</td>
-                        <td className={styles.profileCell}>
-                            <img
-                                src={user.profileImageUrl}
-                                alt="프로필"
-                                className={styles.profileImage}
-                            />
-                        </td>
+                        <td className={styles.profileCell}><img src={user.profileImageUrl} alt="프로필" className={styles.profileImage}/></td>
                         <td className={styles.introductionCell}>{user.introduction}</td>
                         <td className={styles.regDateCell}>{user.registrationDate}</td>
-                        <td className={styles.deletedCell}>
-                            {user.isDeleted ? '탈퇴' : '정상'}
-                        </td>
+                        <td className={styles.deletedCell}>{user.isDeleted ? '탈퇴' : '정상'}</td>
                         <td className={styles.editCell}>
                             <button
                                 onClick={() => handleEdit(user)}
