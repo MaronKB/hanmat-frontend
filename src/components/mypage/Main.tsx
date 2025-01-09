@@ -59,7 +59,7 @@ const MyPage: React.FC = () => {
     }
   };
   return (
-    <div className={`mypage-container ${isDarkMode ? 'dark' : ''}`}>
+    <div className="mypage-container">
       {/* 이미지 업로드 */}
       <div className="section">
         <div
@@ -98,7 +98,7 @@ const MyPage: React.FC = () => {
           onChange={handleIntroduceChange}
           placeholder="자기소개를 입력하세요"
         />
-        <button>등록</button>
+        <button type="submit" className="submit-btn">등록</button>
       </div>
 
       {/* 설정 섹션 */}
@@ -128,7 +128,7 @@ const MyPage: React.FC = () => {
         <h3>관심 가게 목록</h3>
         <ul>
           {favoriteStores.map((store, index) => (
-            <li key={index}>{store} <button onClick={() => removeFavoriteStore(index)}>삭제</button></li>
+            <li key={index}>{store} <button className="remove-btn" onClick={() => removeFavoriteStore(index)}>삭제</button></li>
           ))}
         </ul>
       </div>
@@ -140,7 +140,7 @@ const MyPage: React.FC = () => {
           {myReviews.map((review, index) => (
             <li key={index}>
               {review}
-              <button onClick={() => editReview(index)}>수정</button>
+              <button className="fix-btn" onClick={() => editReview(index)}>수정</button>
             </li>
           ))}
         </ul>
