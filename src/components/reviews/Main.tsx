@@ -118,7 +118,7 @@ const Main: React.FC = () => {
         const newReviewData = {
             title: `Review ${reviews.length + 1}`,
             content: newReview,
-            rating,
+            rating, //별점
             author: 'system@hanmat.com', // 로그인된 사용자 이메일
             restaurantId: 20, // 레스토랑 임시 ID
             image1: "", // 이미지 URL
@@ -156,10 +156,11 @@ const Main: React.FC = () => {
     // 별점 선택 함수
     const handleRating = (index: number) => {
         setRating(index + 1);
+        console.log('Selected Rating:', index + 1); // 사용자가 선택한 값 출력
     };
 
     // 이미지 업로드 핸들러
-    /*
+
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
@@ -167,7 +168,7 @@ const Main: React.FC = () => {
             setImages((prevImages) => [...prevImages, ...newImages].slice(0, 3)); // 최대 3개
         }
     };
-    */
+
 
     // 이미지 삭제 핸들러
     const handleDeleteImage = (index: number) => {
@@ -281,7 +282,7 @@ const Main: React.FC = () => {
                                 type="file"
                                 id="file-upload"
                                 className="file-input"
-                                // onChange={handleImageUpload}
+                                 onChange={handleImageUpload}
                                 accept="image/*"
                                 multiple
                             />
