@@ -132,6 +132,10 @@ const Main: React.FC = () => {
             isDeleted: "N"
         };
 
+        // 여기에 데이터를 출력하여 rating 값 확인
+            console.log('Review Data being sent:', newReviewData);
+
+
         try {
             const response = await fetch('http://localhost:8080/hanmat/api/post/save', {  // 올바른 백엔드 URL
                 method: 'POST',

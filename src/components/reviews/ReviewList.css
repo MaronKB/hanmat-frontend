@@ -1,60 +1,154 @@
+.main-container {
+  margin-left: 150px;
+  padding: 20px;
+  background-color: #f8f9fa; /* 밝은 중성 배경 */
+  font-family: 'Arial', sans-serif; /* 현대적 폰트 */
+}
+
+.main-title {
+  margin-top: 20px;
+  background: linear-gradient(to right, #007bff, #0056b3); /* 네온 느낌의 반짝이는 배경 */
+  color: white;
+  padding: 30px;
+  height: auto;
+  border-radius: 10px;
+  width: 1100px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 깔끔한 그림자 효과 */
+}
+
+.main-controls {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  width: 1100px;
+  display: flex;
+  justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 깔끔한 그림자 효과 */
+  margin-bottom: 20px;
+}
+
+.button-rv,
+.button-cn {
+  padding: 10px 20px;
+  background: linear-gradient(to right, #17a2b8, #007bff); /* 버튼 배경 */
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-rv:hover,
+.button-cn:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.button-rv:active,
+.button-cn:active {
+  background: #003d80;
+  transform: scale(0.98);
+}
+
+.select {
+  margin-right:300px;
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  background-color: #f1f3f5;
+  font-size: 1rem;
+}
+
+.select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 .review-list-container {
-  background-color: #dadada;
-  margin-left: 250px;
-  width: 800px;
+margin-left:250px;
+  width:1100px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 카드 크기 최소화 */
-  gap: 16px; /* 카드 간격 */
-  padding: 16px;
+  grid-template-columns: repeat(5, 1fr); /* 한 줄에 5 컬럼 */
+  gap: 15px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .review-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background: linear-gradient(#ffffff, #f8f9fa);
+  padding: 20px;
   border-radius: 8px;
-  padding: 16px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  overflow: hidden; /* 카드 크기를 넘는 내용 숨김 */
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  height: 240px; /* 고정된 높이 */
+  overflow: hidden; /* 내용 넘침 방지 */
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .review-card h3 {
-  margin: 0 0 8px;
-  font-size: 1.2rem;
-  color: #333;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #343a40;
+  text-overflow: ellipsis; /* 제목 초과 시 ... 처리를 위해 */
+  white-space: nowrap; /* 한 줄로 유지 */
+  overflow: hidden;
 }
 
 .review-card p {
-  margin: 0;
   font-size: 0.9rem;
-  color: #666;
-  height: 50px; /* 텍스트 영역 고정 */
-  overflow: hidden; /* 텍스트 넘침 숨김 */
+  color: #868e96;
+  margin-bottom: 8px;
+  line-height: 1.4; /* 줄 간격 */
+  overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 두 줄로 제한 */
+  -webkit-line-clamp: 3; /* 3줄까지만 표시 */
   -webkit-box-orient: vertical;
 }
 
 .review-rating {
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
   color: #007bff;
+  margin-top: auto; /* 별점은 항상 하단에 배치 */
 }
 
 .review-images {
   display: flex;
-  gap: 5px;
-  max-height: 80px; /* 이미지 컨테이너 최대 높이 */
-  overflow-x: auto; /* 수평 스크롤 */
-  overflow-y: hidden;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .review-images img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover; /* 비율 유지하며 이미지 조정 */
-  border-radius: 4px;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  transition: transform 0.3s ease;
+}
+
+.review-images img:hover {
+  transform: scale(1.1);
+  border-color: #007bff;
 }
