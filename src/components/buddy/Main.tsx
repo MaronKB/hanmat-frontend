@@ -5,12 +5,12 @@ import Chat from "./Chat.tsx";
 import {useEffect, useState} from "react";
 
 export default function Main() {
-    const socket: Socket = io('ws://localhost:3001');
-
-    const [targetUser, setTargetUser] = useState<string>('');
-    useEffect(() => {
-        console.log(targetUser);
-    }, [targetUser]);
+//     const socket: Socket = io('ws://localhost:3001');
+//
+//     const [targetUser, setTargetUser] = useState<string>('');
+//     useEffect(() => {
+//         console.log(targetUser);
+//     }, [targetUser]);
     return (
         <main className={styles.main + " max"}>
             <section className={styles.container}>
