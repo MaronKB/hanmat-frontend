@@ -9,7 +9,7 @@ interface RestaurantDTO {
     roadAddr: string;
     latitude: number;
     longitude: number;
-    regDate: string; // 또는 Date, 백엔드와 협의
+    regDate: string;
     closed: boolean;
 }
 
@@ -19,7 +19,7 @@ interface Restaurant {
     location: string;
     roadAddress: string;
     registrationDate: string;
-    isClosed: string; // 화면 표시용 (폐업 / 영업 중)
+    isClosed: string;
 }
 
 const AdminRestaurants: React.FC = () => {
@@ -34,7 +34,7 @@ const AdminRestaurants: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const rowsPerPage = 20;
+    const rowsPerPage = 10;
 
     useEffect(() => {
         const fetchRestaurants = async () => {

@@ -21,37 +21,6 @@ interface User {
     isDeleted: boolean;
 }
 
-// 임시 데이터
-// const initialUsers: User[] = [
-//     {
-//         id: 1,
-//         email: 'user1@example.com',
-//         nickname: '사용자1',
-//         profileImageUrl: 'https://via.placeholder.com/50x50',
-//         introduction: '안녕하세요! 사용자1입니다.',
-//         registrationDate: '2023-01-01',
-//         isDeleted: false,
-//     },
-//     {
-//         id: 2,
-//         email: 'user2@example.com',
-//         nickname: '사용자2',
-//         profileImageUrl: 'https://via.placeholder.com/50x50',
-//         introduction: '반갑습니다! 사용자2입니다.',
-//         registrationDate: '2023-01-02',
-//         isDeleted: true,
-//     },
-//     {
-//         id: 3,
-//         email: 'user3@example.com',
-//         nickname: '사용자3',
-//         profileImageUrl: 'https://via.placeholder.com/50x50',
-//         introduction: '안녕하세요! 사용자3입니다.',
-//         registrationDate: '2023-01-03',
-//         isDeleted: false,
-//     },
-// ];
-
 const AdminUsers: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -149,23 +118,23 @@ const AdminUsers: React.FC = () => {
             return;
         }
 
-        // const filteredUsers = initialUsers.filter((user) => {
-        //     const keyword = searchKeyword.toLowerCase();
-        //     switch (searchCategory) {
-        //         case 'email':
-        //             return user.email.toLowerCase().includes(keyword);
-        //         case 'nickname':
-        //             return user.nickname.toLowerCase().includes(keyword);
-        //         case 'introduction':
-        //             return user.introduction.toLowerCase().includes(keyword);
-        //         default:
-        //             return true;
-        //     }
-        // });
+        const filteredUsers = users.filter((user) => {
+            const keyword = searchKeyword.toLowerCase();
+            switch (searchCategory) {
+                case 'email':
+                    return user.email.toLowerCase().includes(keyword);
+                case 'nickname':
+                    return user.nickname.toLowerCase().includes(keyword);
+                case 'introduction':
+                    return user.introduction.toLowerCase().includes(keyword);
+                default:
+                    return true;
+            }
+        });
 
-        // setUsers(filteredUsers);
-        // setTotalPages(Math.ceil(filteredUsers.length / rowsPerPage));
-        // setCurrentPage(1);
+        setUsers(filteredUsers);
+        setTotalPages(Math.ceil(filteredUsers.length / rowsPerPage));
+        setCurrentPage(1);
     };
 
     const handleEdit = (user: User) => {
@@ -336,7 +305,7 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.nickname}
                                 onChange={(e) =>
-                                    setEditUser({ ...editUser, nickname: e.target.value })
+                                    setEditUser({...editUser, nickname: e.target.value})
                                 }
                                 className={styles.inputBox}
                             />
@@ -347,7 +316,7 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.profileImageUrl}
                                 onChange={(e) =>
-                                    setEditUser({ ...editUser, profileImageUrl: e.target.value })
+                                    setEditUser({...editUser, profileImageUrl: e.target.value})
                                 }
                                 className={styles.inputBox}
                             />
@@ -358,8 +327,17 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.introduction}
                                 onChange={(e) =>
-                                    setEditUser({ ...editUser, introduction: e.target.value })
+                                    setEditUser({...editUser, introduction: e.target.value})
                                 }
+                                className={styles.inputBox}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            가입일:
+                            <input
+                                type="text"
+                                value={editUser.registrationDate}
+                                disabled
                                 className={styles.inputBox}
                             />
                         </label>
@@ -389,6 +367,7 @@ const AdminUsers: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
             )}
         </div>
     );

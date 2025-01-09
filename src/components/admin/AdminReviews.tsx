@@ -1,123 +1,110 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './AdminReviews.module.css';
 
-interface Restaurant {
+interface ReviewDTO {
     id: number;
     restaurantName: string;
     title: string;
     content: string;
     imageUrl: string;
-    registrationDate: string;
+    regDate: string;
     isHidden: boolean;
     isReported: boolean;
 }
 
-// 임시
-const initialRestaurants: Restaurant[] = [
-    {
-        id: 1,
-        restaurantName: '맛집1',
-        title: '리뷰1 제목',
-        content: '리뷰1 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-01-01',
-        isHidden: false,
-        isReported: false,
-    },
-    {
-        id: 2,
-        restaurantName: '맛집2',
-        title: '리뷰2 제목',
-        content: '리뷰2 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-02-15',
-        isHidden: true,
-        isReported: true,
-    },
-    {
-        id: 3,
-        restaurantName: '맛집2',
-        title: '리뷰3 제목',
-        content: '리뷰3 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-02-15',
-        isHidden: true,
-        isReported: true,
-    },
-    {
-        id: 4,
-        restaurantName: '맛집2',
-        title: '리뷰4 제목',
-        content: '리뷰4 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-02-15',
-        isHidden: true,
-        isReported: true,
-    },
-    {
-        id: 5,
-        restaurantName: '맛집2',
-        title: '리뷰5 제목',
-        content: '리뷰5 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-02-15',
-        isHidden: true,
-        isReported: true,
-    },
-    {
-        id: 6,
-        restaurantName: '맛집2',
-        title: '리뷰6 제목',
-        content: '리뷰6 내용',
-        imageUrl: 'https://via.placeholder.com/50x50',
-        registrationDate: '2023-02-15',
-        isHidden: true,
-        isReported: true,
-    },
-
-];
+interface Review {
+    id: number;
+    restaurantName: string;
+    title: string;
+    content: string;
+    imageUrl: string;
+    regDate: string;
+    isHidden: boolean;
+    isReported: boolean;
+}
 
 const AdminReviews: React.FC = () => {
-    const [restaurants, setRestaurants] = useState<Restaurant[]>(initialRestaurants);
+    const [reviews, setReviews] = useState<Review[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(
-        Math.ceil(initialRestaurants.length / 20)
-    );
-    const [selectedRestaurants, setSelectedRestaurants] = useState<number[]>([]);
+    const [totalPages, setTotalPages] = useState<number>(1);
+    const [selectedReviews, setSelectedReviews] = useState<number[]>([]);
     const [searchCategory, setSearchCategory] = useState<string>('restaurantName');
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [editRestaurant, setEditRestaurant] = useState<Restaurant | null>(null);
+    const [editReview, setEditReview] = useState<Review | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const rowsPerPage = 20;
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await fetch('http://localhost:8080/hanmat/api/post/all');
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Raw data from backend:', data);
+                    setTotalPages(data.data.totalPages);
+
+                    const reviewDTOs: ReviewDTO[] = data.data.items;
+
+                    const transformedReviews: Review[] = reviewDTOs.map(
+                        (dto) => ({
+                            id: dto.id,
+                            restaurantName: dto.restaurantName,
+                            title: dto.title,
+                            content: dto.content,
+                            imageUrl: dto.imageUrl,
+                            regDate: dto.regDate,
+                            isHidden: dto.isHidden,
+                            isReported: dto.isReported,
+                        })
+                    );
+                    console.log('Transformed data:', transformedReviews);
+
+                    setReviews(transformedReviews);
+                    setTotalPages(Math.ceil(transformedReviews.length / rowsPerPage));
+                } else {
+                    console.error('Failed to fetch reviews');
+                    setError('데이터를 불러오는데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                setError('데이터를 불러오는 중 오류가 발생했습니다.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchReviews();
+    }, []);
 
     const handleCheckboxChange = (
         event: React.ChangeEvent<HTMLInputElement>,
-        restaurantId: number
+        reviewId: number
     ) => {
         if (event.target.checked) {
-            setSelectedRestaurants([...selectedRestaurants, restaurantId]);
+            setSelectedReviews([...selectedReviews, reviewId]);
         } else {
-            setSelectedRestaurants(
-                selectedRestaurants.filter((id) => id !== restaurantId)
+            setSelectedReviews(
+                selectedReviews.filter((id) => id !== reviewId)
             );
         }
     };
 
-
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const allRestaurantIds = restaurants.map((restaurant) => restaurant.id);
-            setSelectedRestaurants(allRestaurantIds);
+            const allReviewIds = reviews.map((review) => review.id);
+            setSelectedReviews(allReviewIds);
         } else {
-            setSelectedRestaurants([]);
+            setSelectedReviews([]);
         }
     };
 
-
     const handleDelete = () => {
-        if (selectedRestaurants.length === 0) {
+        if (selectedReviews.length === 0) {
             alert('삭제할 리뷰를 선택해주세요.');
             return;
         }
@@ -126,15 +113,13 @@ const AdminReviews: React.FC = () => {
             return;
         }
 
-
-        const updatedRestaurants = restaurants.filter(
-            (restaurant) => !selectedRestaurants.includes(restaurant.id)
+        const updatedReviews = reviews.filter(
+            (review) => !selectedReviews.includes(review.id)
         );
-        setRestaurants(updatedRestaurants);
-        setSelectedRestaurants([]);
-        setTotalPages(Math.ceil(updatedRestaurants.length / rowsPerPage));
+        setReviews(updatedReviews);
+        setSelectedReviews([]);
+        setTotalPages(Math.ceil(updatedReviews.length / rowsPerPage));
     };
-
 
     const handleSearch = () => {
         if (!searchKeyword.trim()) {
@@ -142,63 +127,55 @@ const AdminReviews: React.FC = () => {
             return;
         }
 
-
-        const filteredRestaurants = initialRestaurants.filter((restaurant) => {
+        const filteredReviews = reviews.filter((review) => {
             const keyword = searchKeyword.toLowerCase();
             switch (searchCategory) {
                 case 'restaurantName':
-                    return restaurant.restaurantName.toLowerCase().includes(keyword);
+                    return review.restaurantName.toLowerCase().includes(keyword);
                 case 'title':
-                    return restaurant.title.toLowerCase().includes(keyword);
+                    return review.title.toLowerCase().includes(keyword);
                 case 'content':
-                    return restaurant.content.toLowerCase().includes(keyword);
+                    return review.content.toLowerCase().includes(keyword);
                 case 'isReported':
-                    return restaurant.isReported.toString().includes(keyword);
+                    return review.isReported.toString().includes(keyword);
                 default:
                     return true;
             }
         });
 
-        setRestaurants(filteredRestaurants);
-        setTotalPages(Math.ceil(filteredRestaurants.length / rowsPerPage));
+        setReviews(filteredReviews);
+        setTotalPages(Math.ceil(filteredReviews.length / rowsPerPage));
         setCurrentPage(1);
     };
 
-
-    const handleEdit = (restaurant: Restaurant) => {
-        setEditRestaurant(restaurant);
+    const handleEdit = (review: Review) => {
+        setEditReview(review);
         setShowModal(true);
     };
 
-
     const handleCloseModal = () => {
         setShowModal(false);
-        setEditRestaurant(null);
+        setEditReview(null);
     };
 
-
     const handleSaveEdit = () => {
-        if (!editRestaurant) return;
+        if (!editReview) return;
 
-
-        const updatedRestaurants = restaurants.map((restaurant) =>
-            restaurant.id === editRestaurant.id ? editRestaurant : restaurant
+        const updatedReviews = reviews.map((review) =>
+            review.id === editReview.id ? editReview : review
         );
-        setRestaurants(updatedRestaurants);
+        setReviews(updatedReviews);
         handleCloseModal();
     };
 
-
-    const getCurrentPageRestaurants = () => {
+    const getCurrentPageReviews = () => {
         const startIndex = (currentPage - 1) * rowsPerPage;
         const endIndex = startIndex + rowsPerPage;
-        return restaurants.slice(startIndex, endIndex);
+        return reviews.slice(startIndex, endIndex);
     };
-
 
     const createPagination = () => {
         const pageButtons = [];
-
 
         pageButtons.push(
             <button
@@ -210,7 +187,6 @@ const AdminReviews: React.FC = () => {
                 &lt;
             </button>
         );
-
 
         for (let i = 1; i <= totalPages; i++) {
             pageButtons.push(
@@ -225,7 +201,6 @@ const AdminReviews: React.FC = () => {
                 </button>
             );
         }
-
 
         pageButtons.push(
             <button
@@ -266,15 +241,15 @@ const AdminReviews: React.FC = () => {
                 </button>
             </div>
 
-            <table className={styles.restaurantTable}>
+            <table className={styles.reviewTable}>
                 <thead>
                 <tr>
                     <th className={styles.checkboxCell}>
                         <input
                             type="checkbox"
                             checked={
-                                selectedRestaurants.length === restaurants.length &&
-                                restaurants.length > 0
+                                selectedReviews.length === reviews.length &&
+                                reviews.length > 0
                             }
                             onChange={handleSelectAll}
                         />
@@ -291,40 +266,40 @@ const AdminReviews: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {getCurrentPageRestaurants().map((restaurant) => (
-                    <tr key={restaurant.id}>
+                {getCurrentPageReviews().map((review) => (
+                    <tr key={review.id}>
                         <td className={styles.checkboxCell}>
                             <input
                                 type="checkbox"
-                                checked={selectedRestaurants.includes(restaurant.id)}
-                                onChange={(e) => handleCheckboxChange(e, restaurant.id)}
+                                checked={selectedReviews.includes(review.id)}
+                                onChange={(e) => handleCheckboxChange(e, review.id)}
                             />
                         </td>
-                        <td className={styles.idCell}>{restaurant.id}</td>
+                        <td className={styles.idCell}>{review.id}</td>
                         <td className={styles.restaurantNameCell}>
-                            {restaurant.restaurantName}
+                            {review.restaurantName}
                         </td>
-                        <td className={styles.titleCell}>{restaurant.title}</td>
-                        <td className={styles.contentCell}>{restaurant.content}</td>
+                        <td className={styles.titleCell}>{review.title}</td>
+                        <td className={styles.contentCell}>{review.content}</td>
                         <td className={styles.imageCell}>
                             <img
-                                src={restaurant.imageUrl}
-                                alt="식당 이미지"
-                                className={styles.restaurantImage}
+                                src={review.imageUrl}
+                                alt="리뷰 이미지"
+                                className={styles.reviewImage}
                             />
                         </td>
                         <td className={styles.regDateCell}>
-                            {restaurant.registrationDate}
+                            {review.regDate}
                         </td>
                         <td className={styles.hiddenCell}>
-                            {restaurant.isHidden ? '숨김' : '표시'}
+                            {review.isHidden ? '숨김' : '표시'}
                         </td>
                         <td className={styles.reportCell}>
-                            {restaurant.isReported ? '신고됨' : '미신고'}
+                            {review.isReported ? '신고됨' : '미신고'}
                         </td>
                         <td className={styles.editCell}>
                             <button
-                                onClick={() => handleEdit(restaurant)}
+                                onClick={() => handleEdit(review)}
                                 className={styles.editBtn}
                             >
                                 수정
@@ -346,7 +321,7 @@ const AdminReviews: React.FC = () => {
             </div>
 
             {/*모달*/}
-            {showModal && editRestaurant && (
+            {showModal && editReview && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <h2 className={styles.modalTitle}>리뷰 수정</h2>
@@ -354,10 +329,10 @@ const AdminReviews: React.FC = () => {
                             식당이름:
                             <input
                                 type="text"
-                                value={editRestaurant.restaurantName}
+                                value={editReview.restaurantName}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         restaurantName: e.target.value,
                                     })
                                 }
@@ -368,10 +343,10 @@ const AdminReviews: React.FC = () => {
                             제목:
                             <input
                                 type="text"
-                                value={editRestaurant.title}
+                                value={editReview.title}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         title: e.target.value,
                                     })
                                 }
@@ -382,10 +357,10 @@ const AdminReviews: React.FC = () => {
                             내용:
                             <input
                                 type="text"
-                                value={editRestaurant.content}
+                                value={editReview.content}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         content: e.target.value,
                                     })
                                 }
@@ -396,10 +371,10 @@ const AdminReviews: React.FC = () => {
                             사진 URL:
                             <input
                                 type="text"
-                                value={editRestaurant.imageUrl}
+                                value={editReview.imageUrl}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         imageUrl: e.target.value,
                                     })
                                 }
@@ -410,7 +385,7 @@ const AdminReviews: React.FC = () => {
                             등록일시:
                             <input
                                 type="text"
-                                value={editRestaurant.registrationDate}
+                                value={editReview.regDate}
                                 disabled
                                 className={styles.inputBox}
                             />
@@ -418,10 +393,10 @@ const AdminReviews: React.FC = () => {
                         <label className={styles.modalLabel}>
                             숨겨짐:
                             <select
-                                value={editRestaurant.isHidden ? 'true' : 'false'}
+                                value={editReview.isHidden ? 'true' : 'false'}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         isHidden: e.target.value === 'true',
                                     })
                                 }
@@ -434,10 +409,10 @@ const AdminReviews: React.FC = () => {
                         <label className={styles.modalLabel}>
                             신고여부:
                             <select
-                                value={editRestaurant.isReported ? 'true' : 'false'}
+                                value={editReview.isReported ? 'true' : 'false'}
                                 onChange={(e) =>
-                                    setEditRestaurant({
-                                        ...editRestaurant,
+                                    setEditReview({
+                                        ...editReview,
                                         isReported: e.target.value === 'true',
                                     })
                                 }
