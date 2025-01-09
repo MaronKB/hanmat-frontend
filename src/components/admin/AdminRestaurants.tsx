@@ -216,19 +216,11 @@ const AdminRestaurants: React.FC = () => {
                                 />
                             </td>
                             <td className={styles.idCell}>{restaurant.id}</td>
-                            <td className={styles.restaurantNameCell}>
-                                {restaurant.name}
-                            </td>
+                            <td className={styles.restaurantNameCell}>{restaurant.name}</td>
                             <td className={styles.locationCell}>{restaurant.location}</td>
-                            <td className={styles.roadAddressCell}>
-                                {restaurant.roadAddress}
-                            </td>
-                            <td className={styles.regDateCell}>
-                                {restaurant.registrationDate}
-                            </td>
-                            <td className={styles.closedCell}>
-                                {restaurant.isClosed}
-                            </td>
+                            <td className={styles.roadAddressCell}>{restaurant.roadAddress}</td>
+                            <td className={styles.regDateCell}>{restaurant.registrationDate}</td>
+                            <td className={styles.closedCell}>{restaurant.isClosed}</td>
                             <td className={styles.editCell}>
                                 <button
                                     onClick={() => handleEdit(restaurant)}

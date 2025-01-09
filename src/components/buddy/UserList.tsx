@@ -3,11 +3,12 @@ import {useEffect, useRef, useState} from "react";
 
 interface UserData {
     email: string;
-    nickname: string;
-    profileImage: string;
+    name: string;
+    picture: string;
+    isActive: boolean;
 }
 
-export default function Main({set}: {set: (user: string) => void}) {
+export default function Main({open}: {open: (target: string) => boolean}) {
     const [users, setUsers] = useState<UserData[]>([]);
 
     const token = localStorage.getItem('token') || '';
@@ -15,7 +16,16 @@ export default function Main({set}: {set: (user: string) => void}) {
     const getUsers = async () => {
         const response = await fetch('http://localhost:8080/hanmat/api/user/all');
         const users = await response.json();
-        setUsers(users.data.filter((u: { email: string; }) => u.email !== user.current.email));
+        console.log(users);
+        setUsers(users.data.items.filter((u: { email: string; }) => u.email !== user.current.email));
+    }
+    const toggleActive = (email: string) => {
+        const opened = open(email);
+        const newUsers = users.map((u: UserData) => {
+            u.isActive = (u.email === email) && opened;
+            return u;
+        });
+        setUsers(newUsers);
     }
     useEffect(() => {
         getUsers();
@@ -23,12 +33,12 @@ export default function Main({set}: {set: (user: string) => void}) {
     return (
         <div className={styles.list}>
             {users.map((user: UserData) => (
-                <div key={user.email} className={styles.user} onClick={() => set(user.email)}>
+                <div key={user.email} className={styles.user + (user.isActive ? (" " + styles.active) : "")} onClick={() => toggleActive(user.email)}>
                     <div className={styles.profile}>
-                        <img className={styles.image} src={user.profileImage ?? "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
+                        <img className={styles.image} src={user.picture ?? "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
                     </div>
                     <div className={styles.info}>
-                        <h3>{user.nickname}</h3>
+                        <h3>{user.name}</h3>
                     </div>
                 </div>
             ))}

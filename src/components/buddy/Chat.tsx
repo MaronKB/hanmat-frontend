@@ -4,17 +4,17 @@ import {useEffect, useRef, useState} from "react";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import ChatMessage, {Message} from "./ChatMessage";
 
-export default function Chat({socket, target}: {socket: Socket, target: string}) {
+export default function Chat({socket, target, isChatting}: {socket: Socket, target: string, isChatting: boolean}) {
     const token = localStorage.getItem('token');
     const user = useRef<AuthData>(JSON.parse(token || "{}"));
     const [targetUser, setTargetUser] = useState({
         email: '',
-        nickname: '',
-        profileImage: '',
-        isAdmin: false
+        name: '',
+        picture: ''
     });
     const [room, setRoom] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState<Message>({} as Message);
 
     const getTargetUser = async () => {
         const response = await fetch(`http://localhost:8080/hanmat/api/user/${target || "system@hanmat.com"}`);
@@ -23,7 +23,9 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
     }
 
     const getRoom = async () => {
-        const response = await fetch('http://localhost:3000/chat/room', {
+        // todo: change to production url & dotenv
+        // const response = await fetch('http://localhost:3000/chat/room', {
+        const response = await fetch('https://portfolio.mrkb.kr/hanmat/chat/room', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,7 +40,9 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
     }
 
     const getMessages = async (id: string) => {
-        const response = await fetch(`http://localhost:3000/chat/message`, {
+        // todo: change to production url & dotenv
+        // const response = await fetch(`http://localhost:3000/chat/message`, {
+        const response = await fetch(`https://portfolio.mrkb.kr/hanmat/chat/message`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,10 +63,15 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
         }
         const newMessages = data.map((m: MessageData) => {
             const isMine = m.user === user.current.email;
-            const nickname = isMine ? user.current.nickname : targetUser.nickname;
-            return new Message(m._id, m.room, m.user, nickname, targetUser.profileImage, m.message, isMine, new Date(m.createdAt))
+            const nickname = isMine ? user.current.nickname : targetUser.name;
+            return new Message(m._id, m.room, m.user, nickname, targetUser.picture, m.message, isMine, new Date(m.createdAt))
         });
         setMessages(newMessages);
+
+        const messageContainer = document.querySelector(`.${styles.messages}`);
+        if (messageContainer) {
+            messageContainer.scrollTop = messageContainer.scrollHeight
+        }
     }
 
     const sendMessage = async () => {
@@ -87,18 +96,26 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
         if (room !== "") getMessages(room);
     }, [room]);
 
-    socket.on('message', async () => {
-        if (room !== "") await getMessages(room);
+    useEffect(() => {
+        if (newMessage.room === room) {
+            getMessages(room);
+        } else {
+            console.log('new message from different room');
+        }
+    }, [newMessage]);
+
+    socket.on('message', async (msg) => {
+        setNewMessage(msg);
     });
 
     return (
-        <div className={styles.chat}>
+        <div className={styles.chat + (isChatting ? (" " + styles.active) : "")}>
             <div className={styles.header}>
                 <div className={styles.profile}>
-                    <img className={styles.image} src={targetUser.profileImage || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
+                    <img className={styles.image} src={targetUser.picture || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
                 </div>
                 <div className={styles.info}>
-                    <h3>{targetUser.nickname}</h3>
+                    <h3>{targetUser.name}</h3>
                     <h4>{targetUser.email}</h4>
                 </div>
             </div>
