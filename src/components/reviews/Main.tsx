@@ -26,7 +26,7 @@ const Main: React.FC = () => {
        }
        const result = await response.json(); // 결과 parsing
        if (result.success) {
-         setReviews(result.data);
+         setReviews(result.data.items);
        } else {
          console.error('Failed to fetch reviews:', result.message);
        }
