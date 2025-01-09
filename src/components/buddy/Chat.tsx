@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import ChatMessage, {Message} from "./ChatMessage";
 
-export default function Chat({socket, target}: {socket: Socket, target: string}) {
+export default function Chat({socket, target, isChatting}: {socket: Socket, target: string, isChatting: boolean}) {
     const token = localStorage.getItem('token');
     const user = useRef<AuthData>(JSON.parse(token || "{}"));
     const [targetUser, setTargetUser] = useState({
@@ -14,6 +14,7 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
     });
     const [room, setRoom] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState<Message>({} as Message);
 
     const getTargetUser = async () => {
         const response = await fetch(`http://localhost:8080/hanmat/api/user/${target || "system@hanmat.com"}`);
@@ -66,6 +67,11 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
             return new Message(m._id, m.room, m.user, nickname, targetUser.picture, m.message, isMine, new Date(m.createdAt))
         });
         setMessages(newMessages);
+
+        const messageContainer = document.querySelector(`.${styles.messages}`);
+        if (messageContainer) {
+            messageContainer.scrollTop = messageContainer.scrollHeight
+        }
     }
 
     const sendMessage = async () => {
@@ -90,12 +96,20 @@ export default function Chat({socket, target}: {socket: Socket, target: string})
         if (room !== "") getMessages(room);
     }, [room]);
 
-    socket.on('message', async () => {
-        if (room !== "") await getMessages(room);
+    useEffect(() => {
+        if (newMessage.room === room) {
+            getMessages(room);
+        } else {
+            console.log('new message from different room');
+        }
+    }, [newMessage]);
+
+    socket.on('message', async (msg) => {
+        setNewMessage(msg);
     });
 
     return (
-        <div className={styles.chat}>
+        <div className={styles.chat + (isChatting ? (" " + styles.active) : "")}>
             <div className={styles.header}>
                 <div className={styles.profile}>
                     <img className={styles.image} src={targetUser.picture || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
