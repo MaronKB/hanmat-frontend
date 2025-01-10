@@ -64,9 +64,11 @@ main {
     background-position: center;
     padding: 40px;
     margin: 0 auto;
+    overflow: scroll;
 }
 main.max {
     max-width: unset;
+    padding: 0;
 }
 
 a {

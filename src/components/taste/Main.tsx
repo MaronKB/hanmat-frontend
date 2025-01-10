@@ -15,8 +15,6 @@ export default function Taste() {
         const response = await fetch(`http://localhost:8080/hanmat/api/food/${lang}`);
         // const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/${lang}`);
         const data = await response.json();
-        console.log(lang);
-        console.log(data.data);
         setMenus(shuffle(data.data));
         setTotalPage(Math.ceil(data.data.length / 12));
 
@@ -30,15 +28,13 @@ export default function Taste() {
         }
         return array;
     }
-
-    const getPagination = () => {
-        const pagination = [];
-        for (let i = 1; i <= totalPage; i++) {
-            pagination.push(
-                <button key={i} onClick={() => setPage(i)}>{i}</button>
-            );
-        }
-        return pagination;
+    const goPage = (page:number) => {
+        if (page < 1) {
+            setPage(totalPage);
+        } else if (page > totalPage) {
+            setPage(1);
+        } else
+        setPage(page);
     }
 
     useEffect(() => {
@@ -50,18 +46,15 @@ export default function Taste() {
     }, [menus, page]);
 
     return (
-        <main>
+        <main className={"max"}>
             <div className={styles.grid}>
                 {list.map((menu: {id: string, image: string, name: string, dscrn: string}) => (
                     <GridContainer key={menu.id} id={menu.id} img={menu.image} title={menu.name} dscrn={menu.dscrn}/>
                 ))}
             </div>
             <div className={styles.pagination}>
-                <button onClick={() => setPage(page - 1)} disabled={page === 1}><FontAwesomeIcon icon={faAngleLeft} /></button>
-                <div>
-                    {getPagination()}
-                </div>
-                <button onClick={() => setPage(page + 1)} disabled={page === totalPage}><FontAwesomeIcon icon={faAngleRight}/></button>
+                <button onClick={() => goPage(page - 1)}><FontAwesomeIcon icon={faAngleLeft} /></button>
+                <button onClick={() => goPage(page + 1)}><FontAwesomeIcon icon={faAngleRight}/></button>
             </div>
         </main>
     );
