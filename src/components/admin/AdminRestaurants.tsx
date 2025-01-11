@@ -69,6 +69,38 @@ const AdminRestaurants: React.FC = () => {
         fetchRestaurants(currentPage);
     }, [currentPage]);
 
+    const fetchFilteredRestaurants = async (category: string, keyword: string, page: number) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(
+                `http://localhost:8080/hanmat/api/restaurant/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
+            );
+            if (response.ok) {
+                const data = await response.json();
+
+                const restaurantDTOs: RestaurantDTO[] = data.data.items;
+                const transformedRestaurants: Restaurant[] = restaurantDTOs.map((dto) => ({
+                    id: dto.id,
+                    name: dto.name,
+                    location: dto.roadAddr,
+                    roadAddress: dto.roadAddr,
+                    registrationDate: dto.regDate,
+                    isClosed: dto.closed ? '폐업' : '영업 중',
+                }));
+
+                setRestaurants(transformedRestaurants);
+                setTotalPages(data.data.totalPages);
+            } else {
+                setError('검색 결과를 불러오는데 실패했습니다.');
+            }
+        } catch (error) {
+            setError('검색 중 오류가 발생했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, restaurantId: number) => {
         if (event.target.checked) {
             setSelectedRestaurants((prev) => [...prev, restaurantId]);
@@ -98,8 +130,10 @@ const AdminRestaurants: React.FC = () => {
             alert('검색어를 입력해주세요.');
             return;
         }
-        alert('현재는 검색 기능이 지원되지 않습니다.');
+        fetchFilteredRestaurants(searchCategory, searchKeyword, 1);
+        setCurrentPage(1);
     };
+
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -182,6 +216,8 @@ const AdminRestaurants: React.FC = () => {
                     <option value="name">식당이름</option>
                     <option value="location">식당 위치</option>
                     <option value="roadAddress">도로명 주소</option>
+                    <option value="regDate">등록일시</option>
+                    <option value="closed">폐업 여부</option>
                 </select>
                 <input
                     type="text"
