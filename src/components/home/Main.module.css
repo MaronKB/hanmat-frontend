@@ -7,6 +7,7 @@
     align-items: center;
     gap: 20px;
 }
+/*
 .main::before {
     content: '';
     position: absolute;
@@ -17,6 +18,8 @@
     backdrop-filter: brightness(0.5) blur(10px);
     z-index: 0;
 }
+
+ */
 .main > * {
     position: relative;
     z-index: 1;
