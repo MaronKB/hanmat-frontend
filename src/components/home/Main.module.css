@@ -7,7 +7,6 @@
     align-items: center;
     gap: 20px;
 }
-/*
 .main::before {
     content: '';
     position: absolute;
@@ -15,32 +14,89 @@
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: brightness(0.5) blur(10px);
-    z-index: 0;
-}
-
- */
-.main > * {
-    position: relative;
-    z-index: 1;
-}
-.main > img {
-    width: 100%;
-    max-width: 400px;
-    height: 140px;
     background:
-            linear-gradient(45deg, black 25px, var(--background-color-sub) 25px 35px, transparent 35px calc(100% - 35px), var(--background-color-sub) calc(100% - 35px) calc(100% - 25px), black calc(100% - 25px)),
-            linear-gradient(135deg, black 25px, var(--background-color-sub) 25px 35px, transparent 35px calc(100% - 35px), var(--background-color-sub) calc(100% - 35px) calc(100% - 25px), black calc(100% - 25px)),
-            linear-gradient(0deg, var(--background-color-sub) 10px, transparent 10px calc(100% - 10px), var(--background-color-sub) calc(100% - 10px)),
-            linear-gradient(90deg, var(--background-color-sub) 10px, transparent 10px calc(100% - 10px), var(--background-color-sub) calc(100% - 10px)),
-            linear-gradient(135deg, transparent 40%, var(--main-color) 40% 50%, var(--text-highlight) 50% 60%, transparent 60%),
-            linear-gradient(white, white);
-    padding: 0 60px;
-    mix-blend-mode: screen;
-    object-fit: contain;
+            linear-gradient(
+                    135deg,
+                    transparent 130px,
+                    #0003 140px,
+                    white 140px 150px,
+                    var(--main-color) 150px 180px,
+                    white 180px 210px,
+                    var(--text-highlight) 210px 240px,
+                    white 240px 250px,
+                    #0003 250px,
+                    transparent 260px
+            ),
+            linear-gradient(
+                    115deg,
+                    transparent 130px,
+                    #0003 140px,
+                    white 140px 150px,
+                    var(--main-color) 150px 180px,
+                    white 180px 210px,
+                    var(--text-highlight) 210px 240px,
+                    white 240px 250px,
+                    #0003 250px,
+                    transparent 260px
+            ),
+            linear-gradient(
+                    65deg,
+                    transparent,
+                    #fff7 75%,
+                    transparent 75%
+            );
+    z-index: 0;
+    filter: grayscale(0.75);
 }
-
+.title {
+    position: absolute;
+    top: 100px;
+    left: 30px;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--text-color);
+    background:
+        linear-gradient(
+            0deg,
+            transparent 10px,
+            var(--text-color) 10px 15px,
+            transparent 15px calc(100% - 15px),
+            var(--text-color) calc(100% - 15px) calc(100% - 10px),
+            transparent calc(100% - 10px)
+        ),
+        linear-gradient(
+            90deg,
+            transparent 10px,
+            var(--text-color) 10px 15px,
+            transparent 15px calc(100% - 15px),
+            var(--text-color) calc(100% - 15px) calc(100% - 10px),
+            transparent calc(100% - 10px)
+        ),
+        linear-gradient(var(--background-color), var(--background-color));
+    padding: 20px 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: rotate(-10deg);
+}
+.description {
+}
+.description > h3 {
+    font-family: var(--font-heading), sans-serif;
+    font-size: 28px;
+    text-transform: uppercase;
+    color: var(--main-color);
+    mix-blend-mode: difference;
+}
+.description > p {
+    font-family: var(--font-heading), sans-serif;
+    font-size: 60px;
+    text-transform: uppercase;
+    color: var(--main-color);
+    mix-blend-mode: difference;
+}
 .section {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     width: 100%;
     max-width: 800px;
     display: flex;
@@ -55,23 +111,42 @@
 
 .buttons {
     display: flex;
-    gap: 20px;
+    gap: 5px;
     justify-content: center;
     z-index: 1;
 }
+.buttons > h3 {
+    width: 240px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-heading), sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 3px solid;
+    border-image: conic-gradient(transparent 0 70deg, var(--text-highlight) 70deg 80deg, transparent 80deg 100deg, var(--text-highlight) 100deg 110deg, transparent 110deg 250deg, var(--text-highlight) 250deg 260deg, transparent 260deg 280deg, var(--text-highlight) 280deg 290deg, transparent 290deg) 1;
+}
 .buttons > a {
     flex: none;
-    width: 100px;
-    color: var(--text-color);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--background-color);
     font-weight: 500;
     text-decoration: none;
     text-align: center;
-    background: var(--background-color);
-    padding: 10px 0;
-    border-radius: 5px;
-    transition: background 0.3s;
+    background: var(--text-highlight);
 }
 .buttons > a:hover {
     color: var(--text-color);
     background: var(--main-color);
+}
+.buttons > a > svg {
+    width: 30px;
+    height: 30px;
 }

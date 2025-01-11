@@ -1,12 +1,6 @@
 {
-    "welcome": "안녕하세요",
-    "overview": "개요",
+    "title": "한맛",
     "getStarted": "시작하기",
     "learnMore": "더 알아보기",
-    "section1": "섹션1",
-    "section1Content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata",
-    "section2": "섹션2",
-    "section2Content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in hendrerit in vulputate v",
-    "section3": "섹션3",
-    "section3Content": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet cl"
+    "description": "이것은 홈페이지입니다."
 }
