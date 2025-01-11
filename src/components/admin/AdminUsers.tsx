@@ -33,7 +33,7 @@ const AdminUsers: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const rowsPerPage = 10;
+    const rowsPerPage = 20;
 
     useEffect(() => {
         const fetchUsers = async () => {

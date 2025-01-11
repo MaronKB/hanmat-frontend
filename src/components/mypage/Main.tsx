@@ -102,22 +102,25 @@ const MyPage: React.FC = () => {
       </div>
 
       {/* 설정 섹션 */}
-      <div className="section">
-        <label>BUDDY에 자신을 보이기</label>
-        <input type="checkbox" checked={isBuddyVisible} onChange={toggleBuddyVisibility} />
-      </div>
-      <div className="section">
-        <label>자동 번역</label>
-        <input type="checkbox" checked={isAutoTranslate} onChange={toggleAutoTranslate} />
-      </div>
-      <div className="section">
-        <label>다크 모드</label>
-        <input type="checkbox" checked={isDarkMode} onChange={toggleDarkMode} />
-      </div>
-      <div className="section">
-        <label>주변 반경 설정</label>
-        <select value={radius} onChange={handleRadiusChange}>
-          {['1km', '3km', '5km', '10km', '20km', '30km'].map((option) => (
+        <div className="section">
+            <label>BUDDY에 자신을 보이기</label>
+            <input type="checkbox" className="checkbox" checked={isBuddyVisible}
+                   onChange={toggleBuddyVisibility}/> {/* className="checkbox" 추가 */}
+        </div>
+        <div className="section">
+            <label>자동 번역</label>
+            <input type="checkbox" className="checkbox" checked={isAutoTranslate}
+                   onChange={toggleAutoTranslate}/> {/* className="checkbox" 추가 */}
+        </div>
+        <div className="section">
+            <label>다크 모드</label>
+            <input type="checkbox" className="checkbox" checked={isDarkMode}
+                   onChange={toggleDarkMode}/> {/* className="checkbox" 추가 */}
+        </div>
+        <div className="section">
+            <label>주변 반경 설정</label>
+            <select value={radius} onChange={handleRadiusChange}>
+                {['1km', '3km', '5km', '10km', '20km', '30km'].map((option) => (
             <option key={option} value={option}>{option}</option>
           ))}
         </select>

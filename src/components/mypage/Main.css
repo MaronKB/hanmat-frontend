@@ -82,8 +82,6 @@ label {
   padding: 10px;
 }
 
-  margin-bottom: 10px;
-}
 
 .list-container ul {
   list-style: none;
@@ -168,17 +166,18 @@ label {
   display: inline-block;
   cursor: pointer;
 }
-[type="checkbox"] {
-    appearance: none;
-    position: relative;
-    border: max(2px, 0.1em) solid gray;
-    border-radius: 1.25em;
-    width: 2.25em;
-    height: 1.25em;
-    margin-right: 5px;
+/* 체크박스 스타일 변경 */
+.checkbox {
+  appearance: none;
+  position: relative;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 1.25em;
+  width: 2.25em;
+  height: 1.25em;
+  margin-right: 5px;
 }
 
-[type="checkbox"]::before {
+.checkbox::before {
   content: "";
   position: absolute;
   left: 0;
@@ -189,12 +188,12 @@ label {
   background-color: gray;
   transition: left 250ms linear;
 }
-[type="checkbox"]:checked::before {
+.checkbox:checked::before {
   background-color: white;
   left: 1em;
 }
 
-[type="checkbox"]:checked {
+.checkbox:checked {
   background-color: tomato;
   border-color: tomato;
 }

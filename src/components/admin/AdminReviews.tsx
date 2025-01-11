@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './AdminReviews.module.css';
 
 interface ReviewDTO {
@@ -30,95 +30,57 @@ const AdminReviews: React.FC = () => {
     const [selectedReviews, setSelectedReviews] = useState<number[]>([]);
     const [searchCategory, setSearchCategory] = useState<string>('restaurantName');
     const [searchKeyword, setSearchKeyword] = useState<string>('');
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [editReview, setEditReview] = useState<Review | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const rowsPerPage = 20;
+    const rowsPerPage = 10;
+
+    const fetchReviews = async (page: number) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(
+                `http://localhost:8080/hanmat/api/post/all?page=${page}&size=${rowsPerPage}`
+            );
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Raw data from backend:', data);
+
+                const reviewDTOs: ReviewDTO[] = data.data.items;
+
+                const transformedReviews: Review[] = reviewDTOs.map((dto) => ({
+                    id: dto.id,
+                    restaurantName: dto.restaurantName,
+                    title: dto.title,
+                    content: dto.content,
+                    imageUrl: dto.imageUrl || 'https://via.placeholder.com/50x50',
+                    regDate: dto.regDate,
+                    isHidden: dto.isHidden,
+                    isReported: dto.isReported,
+                }));
+
+                setReviews(transformedReviews);
+                setTotalPages(data.data.totalPages);
+            } else {
+                console.error('Failed to fetch reviews');
+                setError('데이터를 불러오는데 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+            setError('데이터를 불러오는 중 오류가 발생했습니다.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchReviews = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const response = await fetch('http://localhost:8080/hanmat/api/post/all');
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Raw data from backend:', data);
-                    setTotalPages(data.data.totalPages);
+        fetchReviews(currentPage);
+    }, [currentPage]);
 
-                    const reviewDTOs: ReviewDTO[] = data.data.items;
-
-                    const transformedReviews: Review[] = reviewDTOs.map(
-                        (dto) => ({
-                            id: dto.id,
-                            restaurantName: dto.restaurantName,
-                            title: dto.title,
-                            content: dto.content,
-                            imageUrl: dto.imageUrl,
-                            regDate: dto.regDate,
-                            isHidden: dto.isHidden,
-                            isReported: dto.isReported,
-                        })
-                    );
-                    console.log('Transformed data:', transformedReviews);
-
-                    setReviews(transformedReviews);
-                    setTotalPages(Math.ceil(transformedReviews.length / rowsPerPage));
-                } else {
-                    console.error('Failed to fetch reviews');
-                    setError('데이터를 불러오는데 실패했습니다.');
-                }
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
-                setError('데이터를 불러오는 중 오류가 발생했습니다.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchReviews();
-    }, []);
-
-    const handleCheckboxChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        reviewId: number
-    ) => {
-        if (event.target.checked) {
-            setSelectedReviews([...selectedReviews, reviewId]);
-        } else {
-            setSelectedReviews(
-                selectedReviews.filter((id) => id !== reviewId)
-            );
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
         }
-    };
-
-    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const allReviewIds = reviews.map((review) => review.id);
-            setSelectedReviews(allReviewIds);
-        } else {
-            setSelectedReviews([]);
-        }
-    };
-
-    const handleDelete = () => {
-        if (selectedReviews.length === 0) {
-            alert('삭제할 리뷰를 선택해주세요.');
-            return;
-        }
-
-        if (!confirm('해당 리뷰를 삭제하시겠습니까?')) {
-            return;
-        }
-
-        const updatedReviews = reviews.filter(
-            (review) => !selectedReviews.includes(review.id)
-        );
-        setReviews(updatedReviews);
-        setSelectedReviews([]);
-        setTotalPages(Math.ceil(updatedReviews.length / rowsPerPage));
     };
 
     const handleSearch = () => {
@@ -136,8 +98,6 @@ const AdminReviews: React.FC = () => {
                     return review.title.toLowerCase().includes(keyword);
                 case 'content':
                     return review.content.toLowerCase().includes(keyword);
-                case 'isReported':
-                    return review.isReported.toString().includes(keyword);
                 default:
                     return true;
             }
@@ -148,39 +108,13 @@ const AdminReviews: React.FC = () => {
         setCurrentPage(1);
     };
 
-    const handleEdit = (review: Review) => {
-        setEditReview(review);
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-        setEditReview(null);
-    };
-
-    const handleSaveEdit = () => {
-        if (!editReview) return;
-
-        const updatedReviews = reviews.map((review) =>
-            review.id === editReview.id ? editReview : review
-        );
-        setReviews(updatedReviews);
-        handleCloseModal();
-    };
-
-    const getCurrentPageReviews = () => {
-        const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = startIndex + rowsPerPage;
-        return reviews.slice(startIndex, endIndex);
-    };
-
     const createPagination = () => {
         const pageButtons = [];
 
         pageButtons.push(
             <button
                 key="prev"
-                onClick={() => setCurrentPage(currentPage - 1)}
+                onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className={styles.pageBtn}
             >
@@ -192,10 +126,8 @@ const AdminReviews: React.FC = () => {
             pageButtons.push(
                 <button
                     key={i}
-                    onClick={() => setCurrentPage(i)}
-                    className={`${styles.pageBtn} ${
-                        currentPage === i ? styles.active : ''
-                    }`}
+                    onClick={() => handlePageChange(i)}
+                    className={`${styles.pageBtn} ${currentPage === i ? styles.active : ''}`}
                 >
                     {i}
                 </button>
@@ -205,7 +137,7 @@ const AdminReviews: React.FC = () => {
         pageButtons.push(
             <button
                 key="next"
-                onClick={() => setCurrentPage(currentPage + 1)}
+                onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className={styles.pageBtn}
             >
@@ -218,6 +150,9 @@ const AdminReviews: React.FC = () => {
 
     return (
         <div className={styles.container}>
+            {isLoading && <p>로딩 중...</p>}
+            {error && <p className={styles.error}>{error}</p>}
+
             <div className={styles.searchContainer}>
                 <select
                     value={searchCategory}
@@ -227,7 +162,6 @@ const AdminReviews: React.FC = () => {
                     <option value="restaurantName">식당이름</option>
                     <option value="title">제목</option>
                     <option value="content">내용</option>
-                    <option value="isReported">신고여부</option>
                 </select>
                 <input
                     type="text"
@@ -244,195 +178,39 @@ const AdminReviews: React.FC = () => {
             <table className={styles.reviewTable}>
                 <thead>
                 <tr>
-                    <th className={styles.checkboxCell}>
-                        <input
-                            type="checkbox"
-                            checked={
-                                selectedReviews.length === reviews.length &&
-                                reviews.length > 0
-                            }
-                            onChange={handleSelectAll}
-                        />
-                    </th>
-                    <th className={styles.idCell}>번호</th>
-                    <th className={styles.restaurantNameCell}>식당이름</th>
-                    <th className={styles.titleCell}>제목</th>
-                    <th className={styles.contentCell}>내용</th>
-                    <th className={styles.imageCell}>사진</th>
-                    <th className={styles.regDateCell}>등록일시</th>
-                    <th className={styles.hiddenCell}>숨겨짐</th>
-                    <th className={styles.reportCell}>신고여부</th>
-                    <th className={styles.editCell}>수정</th>
+                    <th>번호</th>
+                    <th>식당이름</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>사진</th>
+                    <th>등록일시</th>
+                    <th>숨겨짐</th>
+                    <th>신고여부</th>
                 </tr>
                 </thead>
                 <tbody>
-                {getCurrentPageReviews().map((review) => (
+                {reviews.map((review) => (
                     <tr key={review.id}>
-                        <td className={styles.checkboxCell}>
-                            <input
-                                type="checkbox"
-                                checked={selectedReviews.includes(review.id)}
-                                onChange={(e) => handleCheckboxChange(e, review.id)}
-                            />
-                        </td>
-                        <td className={styles.idCell}>{review.id}</td>
-                        <td className={styles.restaurantNameCell}>
-                            {review.restaurantName}
-                        </td>
-                        <td className={styles.titleCell}>{review.title}</td>
-                        <td className={styles.contentCell}>{review.content}</td>
-                        <td className={styles.imageCell}>
+                        <td>{review.id}</td>
+                        <td>{review.restaurantName}</td>
+                        <td>{review.title}</td>
+                        <td>{review.content}</td>
+                        <td>
                             <img
                                 src={review.imageUrl}
                                 alt="리뷰 이미지"
                                 className={styles.reviewImage}
                             />
                         </td>
-                        <td className={styles.regDateCell}>
-                            {review.regDate}
-                        </td>
-                        <td className={styles.hiddenCell}>
-                            {review.isHidden ? '숨김' : '표시'}
-                        </td>
-                        <td className={styles.reportCell}>
-                            {review.isReported ? '신고됨' : '미신고'}
-                        </td>
-                        <td className={styles.editCell}>
-                            <button
-                                onClick={() => handleEdit(review)}
-                                className={styles.editBtn}
-                            >
-                                수정
-                            </button>
-                        </td>
+                        <td>{review.regDate}</td>
+                        <td>{review.isHidden ? '숨김' : '표시'}</td>
+                        <td>{review.isReported ? '신고됨' : '미신고'}</td>
                     </tr>
                 ))}
                 </tbody>
             </table>
 
-            <div className={styles.controls}>
-                <div className={styles.pagination}>{createPagination()}</div>
-
-                <div className={styles.buttons}>
-                    <button onClick={handleDelete} className={styles.deleteBtn}>
-                        삭제
-                    </button>
-                </div>
-            </div>
-
-            {/*모달*/}
-            {showModal && editReview && (
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <h2 className={styles.modalTitle}>리뷰 수정</h2>
-                        <label className={styles.modalLabel}>
-                            식당이름:
-                            <input
-                                type="text"
-                                value={editReview.restaurantName}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        restaurantName: e.target.value,
-                                    })
-                                }
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
-                            제목:
-                            <input
-                                type="text"
-                                value={editReview.title}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        title: e.target.value,
-                                    })
-                                }
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
-                            내용:
-                            <input
-                                type="text"
-                                value={editReview.content}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        content: e.target.value,
-                                    })
-                                }
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
-                            사진 URL:
-                            <input
-                                type="text"
-                                value={editReview.imageUrl}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        imageUrl: e.target.value,
-                                    })
-                                }
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
-                            등록일시:
-                            <input
-                                type="text"
-                                value={editReview.regDate}
-                                disabled
-                                className={styles.inputBox}
-                            />
-                        </label>
-                        <label className={styles.modalLabel}>
-                            숨겨짐:
-                            <select
-                                value={editReview.isHidden ? 'true' : 'false'}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        isHidden: e.target.value === 'true',
-                                    })
-                                }
-                                className={styles.selectBox}
-                            >
-                                <option value="true">숨김</option>
-                                <option value="false">표시</option>
-                            </select>
-                        </label>
-                        <label className={styles.modalLabel}>
-                            신고여부:
-                            <select
-                                value={editReview.isReported ? 'true' : 'false'}
-                                onChange={(e) =>
-                                    setEditReview({
-                                        ...editReview,
-                                        isReported: e.target.value === 'true',
-                                    })
-                                }
-                                className={styles.selectBox}
-                            >
-                                <option value="true">신고됨</option>
-                                <option value="false">미신고</option>
-                            </select>
-                        </label>
-                        <div className={styles.modalButtons}>
-                            <button onClick={handleSaveEdit} className={styles.saveBtn}>
-                                저장
-                            </button>
-                            <button onClick={handleCloseModal} className={styles.closeBtn}>
-                                닫기
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <div className={styles.pagination}>{createPagination()}</div>
         </div>
     );
 };
