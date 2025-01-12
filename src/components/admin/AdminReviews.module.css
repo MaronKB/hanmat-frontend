@@ -137,8 +137,7 @@
 .pagination {
     display: flex;
     justify-content: center;
-    margin-left: 470px;
-    margin-top: 20px;
+    margin-left: 400px;
 }
 
 .pageBtn {
@@ -173,6 +172,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 0.95rem;
     transition: all 0.2s ease;
+    margin-left: auto;
+
 }
 
 .deleteBtn:hover {

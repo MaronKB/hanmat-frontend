@@ -44,8 +44,6 @@ const AdminReviews: React.FC = () => {
             );
             if (response.ok) {
                 const data = await response.json();
-                console.log('Raw data from backend:', data);
-
                 const reviewDTOs: ReviewDTO[] = data.data.items;
 
                 const transformedReviews: Review[] = reviewDTOs.map((dto) => ({
@@ -62,11 +60,9 @@ const AdminReviews: React.FC = () => {
                 setReviews(transformedReviews);
                 setTotalPages(data.data.totalPages);
             } else {
-                console.error('Failed to fetch reviews');
                 setError('데이터를 불러오는데 실패했습니다.');
             }
         } catch (error) {
-            console.error('Error fetching reviews:', error);
             setError('데이터를 불러오는 중 오류가 발생했습니다.');
         } finally {
             setIsLoading(false);
@@ -77,10 +73,28 @@ const AdminReviews: React.FC = () => {
         fetchReviews(currentPage);
     }, [currentPage]);
 
-    const handlePageChange = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, reviewId: number) => {
+        if (event.target.checked) {
+            setSelectedReviews((prev) => [...prev, reviewId]);
+        } else {
+            setSelectedReviews((prev) => prev.filter((id) => id !== reviewId));
         }
+    };
+
+    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setSelectedReviews(reviews.map((review) => review.id));
+        } else {
+            setSelectedReviews([]);
+        }
+    };
+
+    const handleDelete = () => {
+        if (selectedReviews.length === 0) {
+            alert('삭제할 리뷰를 선택해주세요.');
+            return;
+        }
+        alert('현재는 삭제 기능이 지원되지 않습니다.');
     };
 
     const handleSearch = () => {
@@ -108,9 +122,14 @@ const AdminReviews: React.FC = () => {
         setCurrentPage(1);
     };
 
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     const createPagination = () => {
         const pageButtons = [];
-
         pageButtons.push(
             <button
                 key="prev"
@@ -178,6 +197,13 @@ const AdminReviews: React.FC = () => {
             <table className={styles.reviewTable}>
                 <thead>
                 <tr>
+                    <th>
+                        <input
+                            type="checkbox"
+                            checked={selectedReviews.length === reviews.length}
+                            onChange={handleSelectAll}
+                        />
+                    </th>
                     <th>번호</th>
                     <th>식당이름</th>
                     <th>제목</th>
@@ -186,11 +212,19 @@ const AdminReviews: React.FC = () => {
                     <th>등록일시</th>
                     <th>숨겨짐</th>
                     <th>신고여부</th>
+                    <th>수정</th>
                 </tr>
                 </thead>
                 <tbody>
                 {reviews.map((review) => (
                     <tr key={review.id}>
+                        <td>
+                            <input
+                                type="checkbox"
+                                checked={selectedReviews.includes(review.id)}
+                                onChange={(e) => handleCheckboxChange(e, review.id)}
+                            />
+                        </td>
                         <td>{review.id}</td>
                         <td>{review.restaurantName}</td>
                         <td>{review.title}</td>
@@ -205,12 +239,27 @@ const AdminReviews: React.FC = () => {
                         <td>{review.regDate}</td>
                         <td>{review.isHidden ? '숨김' : '표시'}</td>
                         <td>{review.isReported ? '신고됨' : '미신고'}</td>
+                        <td>
+                            <button
+                                className={styles.editBtn}
+                                onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}
+                            >
+                                수정
+                            </button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
 
-            <div className={styles.pagination}>{createPagination()}</div>
+            <div className={styles.controls}>
+                <div className={styles.pagination}>
+                    {createPagination()}
+                </div>
+                <button onClick={handleDelete} className={styles.deleteBtn}>
+                    삭제
+                </button>
+            </div>
         </div>
     );
 };
