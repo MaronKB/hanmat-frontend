@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import "./Main.css";
+import styles from './Main.module.css';
 import Modal from './Modal';
 
 const MyPage: React.FC = () => {
-    const [image, setImage] = useState('/default-profile.png');
-  const fileInputRef = useRef(null); // 파일 입력 요소 참조
+  const [image, setImage] = useState('/default-profile.png');
   const [introduce, setIntroduce] = useState('');
   const [isBuddyVisible, setIsBuddyVisible] = useState(true);
   const [isAutoTranslate, setIsAutoTranslate] = useState(true);
@@ -15,13 +14,17 @@ const MyPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReview, setCurrentReview] = useState('');
   const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) => setIntroduce(e.target.value);
+  const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setIntroduce(e.target.value);
   const toggleBuddyVisibility = () => setIsBuddyVisible(!isBuddyVisible);
   const toggleAutoTranslate = () => setIsAutoTranslate(!isAutoTranslate);
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
-  const handleRadiusChange = (e: React.ChangeEvent<HTMLSelectElement>) => setRadius(e.target.value);
-  const removeFavoriteStore = (index: number) => setFavoriteStores(favoriteStores.filter((_, i) => i !== index));
+  const handleRadiusChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setRadius(e.target.value);
+  const removeFavoriteStore = (index: number) =>
+    setFavoriteStores(favoriteStores.filter((_, i) => i !== index));
 
   const editReview = (index: number) => {
     setCurrentReview(myReviews[index]);
@@ -44,112 +47,136 @@ const MyPage: React.FC = () => {
       alert('탈퇴 처리되었습니다.');
     }
   };
-  // 파일 입력 클릭 핸들러
+
   const handleImageClick = () => {
-      fileInputRef.current.click(); // 숨겨진 파일 입력 클릭
+    fileInputRef.current?.click();
   };
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
+        setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
+
   return (
-    <div className="mypage-container">
+    <div className={`${styles['mypage-container']} ${isDarkMode ? styles.dark : ''}`}>
       {/* 이미지 업로드 */}
-      <div className="section">
+      <div className={styles.section}>
         <div
-                onClick={handleImageClick}
-                style={{
-                  width: '150px',
-                  height: '150px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  border: '2px solid #ccc',
-                  margin: '0 auto'
-                }}
-              >
-                <img
-                  src={image}
-                  alt="Profile Preview"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-              </div>
-              {/* 숨겨진 파일 입력 */}
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-              />
+          className={styles['profile-img-container']}
+        >
+          <img
+            src={image}
+            alt="Profile Preview"
+            className={styles['profile-img']}
+            onClick={handleImageClick}
+          />
+        </div>
+          <div className={styles['introduce-section']}>
+            <h2>username</h2>
+            <input
+              type="text"
+              value={introduce}
+              onChange={handleIntroduceChange}
+              placeholder="자기소개를 입력하세요"
+            />
+            <button type="submit" className={styles['submit-btn']}>
+              등록
+            </button>
+          </div>
+
         <input
-          type="text"
-          value={introduce}
-          onChange={handleIntroduceChange}
-          placeholder="자기소개를 입력하세요"
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+          style={{ display: 'none' }}
         />
-        <button type="submit" className="submit-btn">등록</button>
       </div>
 
       {/* 설정 섹션 */}
-        <div className="section">
-            <label>BUDDY에 자신을 보이기</label>
-            <input type="checkbox" className="checkbox" checked={isBuddyVisible}
-                   onChange={toggleBuddyVisibility}/> {/* className="checkbox" 추가 */}
-        </div>
-        <div className="section">
-            <label>자동 번역</label>
-            <input type="checkbox" className="checkbox" checked={isAutoTranslate}
-                   onChange={toggleAutoTranslate}/> {/* className="checkbox" 추가 */}
-        </div>
-        <div className="section">
-            <label>다크 모드</label>
-            <input type="checkbox" className="checkbox" checked={isDarkMode}
-                   onChange={toggleDarkMode}/> {/* className="checkbox" 추가 */}
-        </div>
-        <div className="section">
-            <label>주변 반경 설정</label>
-            <select value={radius} onChange={handleRadiusChange}>
-                {['1km', '3km', '5km', '10km', '20km', '30km'].map((option) => (
-            <option key={option} value={option}>{option}</option>
+      <div className={styles.section}>
+        <label>BUDDY에 자신을 보이기</label>
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={isBuddyVisible}
+          onChange={toggleBuddyVisibility}
+        />
+      </div>
+      <div className={styles.section}>
+        <label>자동 번역</label>
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={isAutoTranslate}
+          onChange={toggleAutoTranslate}
+        />
+      </div>
+      <div className={styles.section}>
+        <label>다크 모드</label>
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={isDarkMode}
+          onChange={toggleDarkMode}
+        />
+      </div>
+      <div className={styles.section}>
+        <label>주변 반경 설정</label>
+        <select value={radius} onChange={handleRadiusChange}>
+          {['1km', '3km', '5km', '10km', '20km', '30km'].map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
         </select>
       </div>
 
       {/* 관심 가게 */}
-      <div className="section">
+      <div className={styles.section}>
         <h3>관심 가게 목록</h3>
         <ul>
           {favoriteStores.map((store, index) => (
-            <li key={index}>{store} <button className="remove-btn" onClick={() => removeFavoriteStore(index)}>삭제</button></li>
-          ))}
-        </ul>
-      </div>
-
-      {/* 리뷰 */}
-      <div className="section">
-        <h3>나의 리뷰 목록</h3>
-        <ul>
-          {myReviews.map((review, index) => (
             <li key={index}>
-              {review}
-              <button className="fix-btn" onClick={() => editReview(index)}>수정</button>
+              {store}
+              <button
+                className={styles['remove-btn']}
+                onClick={() => removeFavoriteStore(index)}
+              >
+                삭제
+              </button>
             </li>
           ))}
         </ul>
       </div>
 
-      <button className="withdraw-btn" onClick={handleWithdrawal}>탈퇴하기</button>
+      {/* 리뷰 */}
+      <div className={styles.section}>
+        <h3>나의 리뷰 목록</h3>
+        <ul>
+          {myReviews.map((review, index) => (
+            <li key={index}>
+              {review}
+              <button
+                className={styles['fix-btn']}
+                onClick={() => editReview(index)}
+              >
+                수정
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button className={styles['withdraw-btn']} onClick={handleWithdrawal}>
+        탈퇴하기
+      </button>
 
       {/* 모달 창 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

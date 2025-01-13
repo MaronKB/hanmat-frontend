@@ -1,13 +1,12 @@
 /* MyPage.css */
 div.mypage-container {
-  width: 70%;
+  width: 50%;
 }
 .mypage-container {
   width: 80%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
 }
-
 .mypage-container.dark {
   background-color: #333;
   color: #fff;
@@ -17,7 +16,6 @@ h3 {
   text-align: center;
   margin-bottom: 20px;
 }
-
 .section {
   margin: 20px 0;
   padding: 10px;
@@ -38,12 +36,12 @@ label {
 }
 .section input[type="text"],
 .section select {
+  display: inline-block;
   width: 60%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-
 }
 .section select {
   width: 30%;
@@ -55,7 +53,9 @@ label {
   margin-left: 10px;
   float: right;
 }
-
+.submit-btn {
+  float: right;
+}
 .section button {
   background-color: #4caf50;
   color: white;
@@ -129,8 +129,7 @@ label {
 }
 
 .introduce-section {
-  align-items: center;
-  margin-bottom: 15px;
+  margin-right: 150px;
 }
 
 .introduce-section img {
@@ -141,6 +140,7 @@ label {
 }
 
 .introduce-section input {
+  width: 60%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -165,6 +165,12 @@ label {
   color: #0095f6;
   display: inline-block;
   cursor: pointer;
+}
+.profile-img {
+  width: 150px;
+  height: 150px;
+  margin-top: 30px;
+  margin-left: 30px;
 }
 /* 체크박스 스타일 변경 */
 .checkbox {
@@ -198,7 +204,7 @@ label {
   border-color: tomato;
 }
 .form-signup input[type="file"] {
-  display: none;
+  display: inline-block;
 }
 button:hover {
   background-color: #0056b3;
