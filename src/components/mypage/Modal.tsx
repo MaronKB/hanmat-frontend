@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import "./Modal.css";
+import styles from './Modal.module.css';
 
 interface ReviewModalProps {
   isOpen: boolean;
