@@ -1,5 +1,5 @@
 import React from 'react';
-import './Pagination.css'; // CSS 파일을 가져옴
+import styles from './Pagination.module.css'; // CSS 파일을 가져옴
 
 interface PaginationProps {
   currentPage: number;
@@ -9,11 +9,11 @@ interface PaginationProps {
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       {Array.from({ length: totalPages }, (_, index) => (
         <button
           key={index}
-          className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
+          className={styles.button + (currentPage === index + 1 ? (" " + styles.active) : '')}
           onClick={() => onPageChange(index + 1)}
         >
           {index + 1}

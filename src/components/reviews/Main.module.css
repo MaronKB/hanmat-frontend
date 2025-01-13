@@ -1,0 +1,75 @@
+.main {
+    padding: 20px;
+}
+
+.main-title {
+    background-color: #dadada;
+    padding: 30px;
+    height: 100px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-controls {
+    background-color: #cbcbcb;
+    padding: 10px;
+    height: 60px;
+    width: 100%;
+    border: 1px solid gray;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.button-rv {
+    margin-right: 10px;
+    margin-left: 200px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-rv:hover {
+    background-color: #0056b3;
+}
+
+.button-rv:active {
+    background-color: #003d80;
+    transform: scale(0.95);
+}
+
+.button-cn {
+    margin-right: 50px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-cn:hover {
+    background-color: #0056b3;
+}
+
+.button-cn:active {
+    background-color: #003d80;
+    transform: scale(0.95);
+}
+
+.select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
