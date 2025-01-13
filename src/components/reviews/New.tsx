@@ -19,34 +19,17 @@ export default function New({open}: { open: (open: boolean) => void }) {
     const [hoverRating, setHoverRating] = useState<number | null>(null);
     const [finalRating, setFinalRating] = useState<number>(0);
     const [images, setImages] = useState<string[]>([]);
+    const [fileList, setFileList] = useState<FileList | null>(null);
 
     const getFormData = () => {
         const form = document.querySelector('#new-review') as HTMLFormElement;
         const formData = new FormData(form);
         const entries = Object.fromEntries(formData.entries());
-        console.log(entries);
-        return entries;
-        /*
         return {
             title: entries.title,
             content: entries.content,
-            images: formData.getAll('images') as FileList,
+            images: fileList
         } as ReviewFormData;
-
-         */
-    }
-
-    const preview = () => {
-        const data = getFormData();
-        data.images.files.forEach((file: File) => {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.src = ev.target.result as string;
-                document.body.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
     }
 
     const addReview = async (ev: FormEvent<HTMLFormElement>) => {
@@ -58,23 +41,18 @@ export default function New({open}: { open: (open: boolean) => void }) {
             return;
         }
 
-        /*
-        todo: 이미지 업로드
-        이미지는 파일서버로 업로드한 후 URL을 받아와서 저장해야 함
-        추가 예정
-        */
-        const imageData = new FormData();
-        images.forEach((image, index) => {
-            imageData.append(`image${index + 1}`, image);
-        });
+        const formData = new FormData();
+        Array.from(newReviewData.images).forEach((file) => formData.append('image', file));
 
-        const res = await fetch('http://localhost:3000/hanmat/media/upload', {
+        const res = await fetch('https://portfolio.mrkb.kr/hanmat/media/upload', {
             method: 'POST',
-            headers: { 'Content-Type': 'multipart/form-data' },
-            body: JSON.stringify(imageData),
+            body: formData,
         });
 
-        console.log(res);
+        if (!res.ok) {
+            alert('Failed to upload images. Please try again.');
+            return
+        }
 
         const createRandomString = (length: number) => {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -118,27 +96,38 @@ export default function New({open}: { open: (open: boolean) => void }) {
 
     // 이미지 업로드 핸들러
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const addImages = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         if (files) {
-            // const newImages = Array.from(files);
-            // setImages((prevImages) => [...prevImages, ...newImages].slice(0, 3)); // 최대 3개
+            const newImages: File[] = Array.from(files);
+            const imageURLs: string[] = newImages.map((file) => URL.createObjectURL(file));
+            const imageArray: string[] = Array.from(images).concat(imageURLs);
+            if (imageArray.length > 4) {
+                alert('You can only upload up to 4 images!');
+                return;
+            }
+            const dataTransfer = new DataTransfer();
+            const imageFilesArray: File[] = (fileList) ? Array.from(fileList).concat(newImages) : newImages;
+            imageFilesArray.forEach((file) => dataTransfer.items.add(file));
+            setImages(imageArray);
+            setFileList(dataTransfer.files);
         }
     };
 
     // 이미지 삭제 핸들러
-    const handleDeleteImage = (index: number) => {
-        const updatedImages = images.filter((_, i) => i !== index);
+    const deleteImage = (index: number) => {
+        const updatedImages = images.filter((_: string, i: number) => i !== index);
         setImages(updatedImages);
+
+        const dataTransfer = new DataTransfer();
+        const updatedFiles = (fileList) ? Array.from(fileList).filter((_: File, i:number) => i !== index) : [];
+        updatedFiles.forEach((file) => dataTransfer.items.add(file));
+        setFileList(dataTransfer.files);
     };
 
     useEffect(() => {
         setFinalRating(hoverRating || rating);
     }, [hoverRating, rating]);
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <div className={styles.container}>
@@ -183,16 +172,8 @@ export default function New({open}: { open: (open: boolean) => void }) {
                         <div className={styles["image-preview-grid"]}>
                             {images.map((image, index) => (
                                 <div key={index} className={styles["image-thumbnail-container"]}>
-                                    <img
-                                        src={image}
-                                        alt={`Preview ${index}`}
-                                        className={styles["image-thumbnail"]}
-                                        onLoad={() => URL.revokeObjectURL(image)}
-                                    />
-                                    <button
-                                        className={styles["delete-button"]}
-                                        onClick={() => handleDeleteImage(index)}
-                                    >
+                                    <img src={image} alt={`Preview ${index}`} className={styles["image-thumbnail"]}/>
+                                    <button type={"button"} className={styles["delete-button"]} onClick={() => deleteImage(index)}>
                                         <FontAwesomeIcon icon={faTimes}/>
                                     </button>
                                 </div>
@@ -206,7 +187,7 @@ export default function New({open}: { open: (open: boolean) => void }) {
                             id="file-upload"
                             name={"images"}
                             className={styles["file-input"]}
-                            onChange={handleImageUpload}
+                            onChange={addImages}
                             accept="image/*"
                             multiple
                         />
