@@ -4,6 +4,7 @@ import Pagination from './Pagination';
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import Item from "./Item.tsx";
 import New from "./New.tsx";
+import Detail from "./Detail.tsx";
 
 export interface Review {
     id: number;
@@ -27,6 +28,7 @@ const Main: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [isNewModalOpened, setNewModalOpened] = useState<boolean>(false);
+    const [isDetailModalOpened, setDetailModalOpened] = useState<boolean>(false);
     const [showOnlyMyReviews, setShowOnlyMyReviews] = useState<boolean>(false);
     const [reviews, setReviews] = useState<Array<Review>>([]);
     const [currentReview, setCurrentReview] = useState<Review>();
@@ -34,13 +36,12 @@ const Main: React.FC = () => {
     const getReviews = async (page: number = 1) => {
         const query = !showOnlyMyReviews ? 'all?' : `my?email=${user.current.email}&`;
         try {
-            const response = await fetch(`http://localhost:8080/hanmat/api/post/${query}page=${page}&size=${PAGE_SIZE}`, {method: 'GET'});
+            const response = await fetch(`http://localhost:8080/hanmat/api/post/${query}page=${page}&size=${PAGE_SIZE}&sortBy=id&sortAs=desc`, {method: 'GET'});
             if (!response.ok) {
                 throw new Error('Failed to fetch user reviews.');
             }
 
             const result = await response.json();
-            console.log(result)
             if (result.success) {
                 setTotalPages(result.data.totalPages);
                 setReviews(result.data.items); // 사용자 리뷰만 상태에 저장
@@ -88,6 +89,7 @@ const Main: React.FC = () => {
                 onPageChange={(page) => setCurrentPage(page)}
             />
             {isNewModalOpened && <New open={setNewModalOpened}/>}
+            {(isDetailModalOpened && currentReview) && <Detail review={currentReview} open={setDetailModalOpened}/>}
         </main>
     );
 };

@@ -12,7 +12,6 @@ export default function Item({ review, set }: { review: Review, set: (review: Re
       review.image3,
       review.image4,
     ].filter((image) => image !== ""));
-    console.log(images)
   }, []);
 
   return (
