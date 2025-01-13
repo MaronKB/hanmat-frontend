@@ -44,6 +44,7 @@ export default function New({open}: { open: (open: boolean) => void }) {
         const formData = new FormData();
         Array.from(newReviewData.images).forEach((file) => formData.append('image', file));
 
+        // const res = await fetch(`http://localhost:3000/hanmat/media/upload`, {
         const res = await fetch('https://portfolio.mrkb.kr/hanmat/media/upload', {
             method: 'POST',
             body: formData,
@@ -53,6 +54,20 @@ export default function New({open}: { open: (open: boolean) => void }) {
             alert('Failed to upload images. Please try again.');
             return
         }
+
+        interface FileData {
+            destination: string,
+            encoding: string,
+            fieldname: string,
+            filename: string,
+            mimetype: string,
+            originalname: string,
+            path: string,
+            size: number
+        }
+
+        const files = await res.json();
+        const imageNames = files.map((f: FileData) => f.filename);
 
         const createRandomString = (length: number) => {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -70,10 +85,10 @@ export default function New({open}: { open: (open: boolean) => void }) {
             restaurantId: 20,
             content: newReviewData.content.toString(),
             rating: rating,
-            image1: images[0] || '',
-            image2: images[1] || '',
-            image3: images[2] || '',
-            image4: images[3] || '',
+            image1: imageNames[0] || '',
+            image2: imageNames[1] || '',
+            image3: imageNames[2] || '',
+            image4: imageNames[3] || '',
         } as Review;
 
         try {
