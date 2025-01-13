@@ -127,9 +127,11 @@ label {
 .withdraw-btn:hover {
   background-color: #d9363e;
 }
-
+.account-inf {
+  float: right;
+  padding-right: 170px;
+}
 .introduce-section {
-  margin-right: 150px;
 }
 
 .introduce-section img {
@@ -167,6 +169,7 @@ label {
   cursor: pointer;
 }
 .profile-img {
+  display: inline-block;
   width: 150px;
   height: 150px;
   margin-top: 30px;
