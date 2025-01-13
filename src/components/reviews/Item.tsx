@@ -12,6 +12,7 @@ export default function Item({ review, set }: { review: Review, set: (review: Re
       review.image3,
       review.image4,
     ].filter((image) => image !== ""));
+    console.log(images)
   }, []);
 
   return (
@@ -23,12 +24,12 @@ export default function Item({ review, set }: { review: Review, set: (review: Re
         <h3>{review.title}</h3>
         <p>{review.content}</p>
         <div className={styles.rating}>Rating: {review.rating} ★</div>
-        {images[0] !== "" && (
+        {(images[0] !== "" && images[0] !== null) && (
             <div className={styles.images}>
-              {images.map((image, index) => (
+              {images.filter(image => image !== "" && image !== null).map((image, index) => (
                   <img
                       key={index}
-                      src={image}
+                      src={"https://portfolio.mrkb.kr/hanmat/media/" + image}
                       alt={`Review ${review.id} - Image ${index + 1}`}
                       className={styles.image}
                       onLoad={() => URL.revokeObjectURL(image)}
