@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './Main.module.css';
 import Modal from './Modal';
 
@@ -14,7 +14,19 @@ const MyPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReview, setCurrentReview] = useState('');
   const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
+  const [username, setUsername] = useState('Guest');
+  const [email, setEmail] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 컴포넌트 마운트 시 localStorage에서 사용자 정보 로드
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userData = JSON.parse(token);
+      setUsername(userData.nickname || 'Guest'); // 닉네임 설정
+      setEmail(userData.email || ''); // 이메일 설정
+    }
+  }, []);
 
   const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setIntroduce(e.target.value);
@@ -76,19 +88,23 @@ const MyPage: React.FC = () => {
             className={styles['profile-img']}
             onClick={handleImageClick}
           />
-        </div>
+          <div className={styles['account-inf']}>
+            <h2>{username}</h2>
+            <p>{email}</p>
+          </div>
           <div className={styles['introduce-section']}>
-            <h2>username</h2>
             <input
-              type="text"
-              value={introduce}
-              onChange={handleIntroduceChange}
-              placeholder="자기소개를 입력하세요"
+            type="text"
+            value={introduce}
+            onChange={handleIntroduceChange}
+            placeholder="자기소개를 입력하세요"
             />
             <button type="submit" className={styles['submit-btn']}>
-              등록
+                등록
             </button>
           </div>
+        </div>
+
 
         <input
           type="file"
