@@ -35,22 +35,22 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
         {/* 검색창 */}
         <input
           type="text"
           placeholder="Search store or review title..."
-          className="search-input"
+          className={styles.searchInput}
         />
 
         {/* 별점 */}
-        <div className="rating-section">
+        <div className={styles.ratingSection}>
           {[1, 2, 3, 4, 5].map((star) => (
             <span
               key={star}
               onClick={() => setRating(star)}
-              className={star <= rating ? 'star selected' : 'star'}
+              className={star <= rating ? styles.starSelected : styles.star}
             >
               ★
             </span>
@@ -59,12 +59,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         </div>
 
         {/* 이미지 업로드 */}
-        <div className="image-upload-section">
+        <div className={styles.imageUploadSection}>
           {image ? (
-            <img src={image} alt="Uploaded" className="uploaded-image" />
+            <img src={image} alt="Uploaded" className={styles.uploadedImage} />
           ) : (
-            <div className="image-placeholder">
-              <label htmlFor="file-upload" className="upload-button">+</label>
+            <div className={styles.imagePlaceholder}>
+              <label htmlFor="file-upload" className={styles.uploadButton}>+</label>
               <input
                 id="file-upload"
                 type="file"
@@ -82,14 +82,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           placeholder="Write your review here..."
           value={reviewText}
           onChange={(e) => setReviewText(e.target.value)}
-          className="review-textarea"
+          className={styles.reviewTextarea}
         />
 
         {/* 버튼 */}
-        <div className="modal-buttons">
-          <button className="cancel-btn" onClick={onClose}>Cancel</button>
+        <div className={styles.modalButtons}>
+          <button className={styles.cancelBtn} onClick={onClose}>Cancel</button>
           <button
-            className="submit-btn"
+            className={styles.submitBtn}
             onClick={() => onSubmit(rating, image, reviewText)}
           >
             Submit
