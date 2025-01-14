@@ -17,14 +17,12 @@ export default function Main() {
 
     const getMyLocation = () => {
         navigator.geolocation.getCurrentPosition((pos) => {
-            console.log(pos);
             const coords = {
                 lat: pos.coords.latitude,
                 lng: pos.coords.longitude
             };
             setUserLocation(coords);
             getNearbyRestaurants(coords);
-            console.log(pos);
         });
     };
 
@@ -41,7 +39,6 @@ export default function Main() {
             },
             body: JSON.stringify(locationDTO),
         }).then(response => response.json()).then(data => {
-            console.log(data.data);
             setRestaurants(data.data);
         });
     }
