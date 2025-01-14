@@ -13,6 +13,18 @@
     cursor: pointer;
     z-index: 101;
 }
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px) brightness(0.8);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
 .header {
     position: relative;
     width: 100%;
@@ -24,6 +36,7 @@
     font-family: var(--font-heading), sans-serif;
     background-color: var(--background-color);
     padding: 0 20px 0 0;
+    z-index: 100;
 }
 .header::after {
     content: '';
@@ -64,6 +77,7 @@
     margin: 0 auto;
 }
 .controller {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -167,11 +181,14 @@
 }
 .languages {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px);
     left: 50%;
     display: flex;
     gap: 5px;
+    background: var(--background-color-sub);
     padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
     pointer-events: none;
     opacity: 0;
     transform: translate(-50%, -100%);
@@ -223,6 +240,35 @@
     background: var(--background-color-sub);
     border-radius: 5px;
     text-transform: uppercase;
+    cursor: pointer;
+}
+.login:hover {
+    background: var(--background-color);
+}
+.context {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 40px;
+    transform: translateY(-100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: var(--background-color-sub);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    z-index: 2;
+}
+.context.active {
+    pointer-events: all;
+    transform: translateY(0);
+    opacity: 1;
 }
 
 .narrow .menu {
@@ -231,14 +277,14 @@
 .narrow .header {
     position: fixed;
     top: 0;
-    left: -100%;
-    width: 100vw;
+    left: calc(-1 * var(--inner-width));
+    width: var(--inner-width);
     height: 100%;
     flex-direction: column;
     align-items: flex-start;
     gap: 80px;
     background: linear-gradient(90deg, var(--background-color) var(--inner-width), transparent var(--inner-width));
-    padding: 80px 0;
+    padding: 80px 20px;
     z-index: 100;
     transition: left 0.3s, backdrop-filter 0.3s;
     --inner-width: 300px;
@@ -247,19 +293,41 @@
     left: 0;
     backdrop-filter: blur(10px) brightness(0.8);
 }
+.narrow .header.active + .backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
 .narrow .logo {
     flex: none;
-    width: var(--inner-width);
+    width: 100%;
     justify-content: center;
 }
 .narrow .nav {
-    width: var(--inner-width);
+    width: 100%;
     flex-direction: column;
     justify-content: flex-start;
     gap: 10px;
     margin: 0;
 }
-.narrow .header > div {
-    width: var(--inner-width);
-    justify-content: center;
+.narrow .controller {
+    width: 100%;
+    justify-content: space-between;
+}
+.narrow .languages {
+    top: unset;
+    bottom: 50px;
+    transform: translate(-50%, 100%);
+}
+.narrow .languages.opened {
+    transform: translate(-50%, 0);
+}
+.narrow .context {
+    top: unset;
+    right: 0;
+    bottom: calc(100% + 10px);
+    left: unset;
+    transform: translateY(100%);
+}
+.narrow .context.active {
+    transform: translateY(0);
 }

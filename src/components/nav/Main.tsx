@@ -9,7 +9,16 @@ import us_flag from "../../assets/us-flag.png";
 import {useEffect, useRef, useState} from "react";
 import MainNavLink from "./MainNavLink.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faGlobe, faKey, faLanguage, faMoon, faSun} from "@fortawesome/free-solid-svg-icons";
+import {
+    faBars, faGear,
+    faGlobe,
+    faKey,
+    faLanguage,
+    faMoon,
+    faRightFromBracket,
+    faSun,
+    faUser
+} from "@fortawesome/free-solid-svg-icons";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 
 export default function Nav({alwaysNarrow = false}) {
@@ -18,9 +27,11 @@ export default function Nav({alwaysNarrow = false}) {
     const {t} = useTranslation("header");
     const { pathname } = useLocation();
     const token = localStorage.getItem("token");
-    const user = useRef<AuthData>(token ? JSON.parse(token) : null);
+    const user = useRef<AuthData | null>(token ? JSON.parse(token) : null);
     const [isDark, setDark] = useState(false);
     const [isLangOpen, setLangOpen] = useState(false);
+    const [isContextOpen, setContextOpen] = useState(false);
+
     const setColorScheme = () => {
         const isDark = localStorage.getItem("dark") === "true";
         setDark(isDark);
@@ -44,6 +55,10 @@ export default function Nav({alwaysNarrow = false}) {
             } else
             header.classList.toggle(`${styles.active}`);
         }
+    }
+    const logout = () => {
+        localStorage.removeItem("token");
+        user.current = null;
     }
 
     useEffect(() => {
@@ -78,12 +93,12 @@ export default function Nav({alwaysNarrow = false}) {
                     <MainNavLink link={"/taste"} text={t('header:taste')} toggle={toggleMenu}/>
                     <MainNavLink link={"/reviews"} text={t('header:reviews')} toggle={toggleMenu}/>
                     <MainNavLink link={"/buddy"} text={t('header:buddy')} toggle={toggleMenu}/>
-                    <MainNavLink link={"/mypage"} text={t('header:mypage')} toggle={toggleMenu}/>
                 </nav>
                 <div className={styles.controller}>
 
                     <div className={styles.color}>
-                        <input id="header-darkmode" type={"checkbox"} className={styles.dark} onChange={(ev) => setDark(ev.target.checked)} checked={isDark}/>
+                        <input id="header-darkmode" type={"checkbox"} className={styles.dark}
+                               onChange={(ev) => setDark(ev.target.checked)} checked={isDark}/>
                         <label htmlFor="header-darkmode">
                             <span className={styles.slider}/>
                         </label>
@@ -93,27 +108,36 @@ export default function Nav({alwaysNarrow = false}) {
                         </div>
                     </div>
                     <div className={styles.lang}>
-                        <button onClick={() => setLangOpen(!isLangOpen)}><FontAwesomeIcon icon={faGlobe}/><FontAwesomeIcon icon={faLanguage}/></button>
+                        <button onClick={() => setLangOpen(!isLangOpen)}><FontAwesomeIcon
+                            icon={faGlobe}/><FontAwesomeIcon icon={faLanguage}/></button>
                         <div className={styles.languages + (isLangOpen ? (" " + styles.opened) : "")}>
                             <button onClick={() => i18n.changeLanguage("en", setLang)}
-                                    className={i18n.language === "en" ? styles.active : ""}><img src={us_flag} alt={"EN"}/>
+                                    className={i18n.language === "en" ? styles.active : ""}><img src={us_flag}
+                                                                                                 alt={"EN"}/>
                             </button>
                             <button onClick={() => i18n.changeLanguage("ko", setLang)}
-                                    className={i18n.language === "ko" ? styles.active : ""}><img src={kr_flag} alt={"KR"}/>
+                                    className={i18n.language === "ko" ? styles.active : ""}><img src={kr_flag}
+                                                                                                 alt={"KR"}/>
                             </button>
                             <button onClick={() => i18n.changeLanguage("jp", setLang)}
-                                    className={i18n.language === "jp" ? styles.active : ""}><img src={jp_flag} alt={"JP"}/>
+                                    className={i18n.language === "jp" ? styles.active : ""}><img src={jp_flag}
+                                                                                                 alt={"JP"}/>
                             </button>
                         </div>
                     </div>
-                    {user.current &&
-                        <a className={styles.login}><FontAwesomeIcon icon={faKey}/></a>
-                    }
+                    {user.current && <>
+                        <a onClick={() => setContextOpen(!isContextOpen)} className={styles.login}><FontAwesomeIcon icon={faGear}/></a>
+                        <div className={styles.context + (isContextOpen ? (" " + styles.active) : "")}>
+                            <Link to={"/mypage"}><FontAwesomeIcon icon={faUser}/></Link>
+                            <a onClick={logout}><FontAwesomeIcon icon={faRightFromBracket}/></a>
+                        </div>
+                    </>}
                     {!user.current &&
                         <Link to="/login" className={styles.login}><FontAwesomeIcon icon={faKey}/></Link>
                     }
                 </div>
             </header>
+            <div className={styles.backdrop}/>
             <Outlet/>
             <footer>
                 <p>Footer</p>
