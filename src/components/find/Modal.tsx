@@ -3,12 +3,13 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faChevronRight, faX} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import {MouseEvent} from "react";
+import {Restaurant} from "./Main.tsx";
 
 interface Image {
     link: string;
     thumbnail: string;
 }
-export default function Modal({restaurant, isOpened, close}: {restaurant: {id: number, name: string}, isOpened: boolean, close: () => void}) {
+export default function Modal({restaurant, isOpened, close}: {restaurant: Restaurant, isOpened: boolean, close: () => void}) {
     const [images, setImages] = useState<Image[]>([]);
     const [isPreviewOpened, setIsPreviewOpened] = useState<boolean>(false);
     const [currentImage, setCurrentImage] = useState<Image | null>(null);
@@ -55,12 +56,30 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: {id: n
                         <button className={styles.close} onClick={close}><FontAwesomeIcon icon={faX}/></button>
                     </header>
                     <div className={styles.content}>
-                        <div className={styles.images}>
-                            {images.map((image: Image, index: number) => (
-                                <img key={index} className={styles.image} src={image.link} alt={restaurant.name} onClick={() => set(image)}/>
-                            ))}
-                        </div>
-                        <p>{restaurant.name}</p>
+                        <section className={styles.main}>
+                            <div className={styles.images}>
+                                {images.map((image: Image, index: number) => (
+                                    <img key={index} className={styles.image} src={image.thumbnail}
+                                         alt={restaurant.name} onClick={() => set(image)}/>
+                                ))}
+                            </div>
+                            <div className={styles.text}>
+                                <h3>{restaurant.name}</h3>
+                                <p>{restaurant.roadAddr}</p>
+                                <p>{restaurant.lmmAddr}</p>
+                            </div>
+                        </section>
+                        <h3>Reviews</h3>
+                        <section className={styles.reviews}>
+                            <div className={styles.review}>
+                                <h4>John Doe</h4>
+                                <p>Good food, good service, good price!</p>
+                            </div>
+                            <div className={styles.review}>
+                                <h4>Jane Doe</h4>
+                                <p>Good food, good service, good price!</p>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>

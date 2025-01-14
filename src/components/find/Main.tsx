@@ -6,13 +6,23 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import Modal from "./Modal.tsx";
 
+export type Restaurant = {
+    id: number;
+    name: string;
+    lmmAddr: string;
+    roadAddr: string;
+    latitude: number;
+    longitude: number;
+    closed: boolean;
+}
+
 export default function Main() {
     let lang = localStorage.getItem("lang") || "en";
     if (lang === "jp") lang = "ja";
 
     const [userLocation, setUserLocation] = useState({lat: 37.5665, lng: 126.9780});
     const [restaurants, setRestaurants] = useState([]);
-    const [currentRestaurant, setCurrentRestaurant] = useState({id: 0, name: ""});
+    const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant>();
     const [isModalOpened, setIsModalOpened] = useState(false);
 
     const getMyLocation = () => {
@@ -50,7 +60,7 @@ export default function Main() {
         }
     }
 
-    const openModal = (restaurant: {id: number, name: string}) => {
+    const openModal = (restaurant: Restaurant) => {
         setCurrentRestaurant(restaurant);
         setIsModalOpened(true);
     }
@@ -68,13 +78,10 @@ export default function Main() {
             <main className={"max " + styles.main}>
                 <MapDiv style={{width: "100%", height: "100%"}}>
                     <NaverMap center={userLocation} zoom={19}>
-                        {restaurants.map((restaurant: {id: number, name: string, latitude: number, longitude: number}) => (
+                        {restaurants.map((restaurant: Restaurant) => (
                             <MarkerComponent
                                 key={restaurant.id}
-                                id={restaurant.id}
-                                name={restaurant.name}
-                                latitude={restaurant.latitude}
-                                longitude={restaurant.longitude}
+                                restaurant={restaurant}
                                 highlightClass={styles.highlight}
                                 openModal={openModal}
                             />
@@ -89,8 +96,8 @@ export default function Main() {
                         <h1>Restaurants</h1>
                     </header>
                     <div className={styles.restaurants}>
-                        {restaurants.map((restaurant: {id: number, name: string, latitude: number, longitude: number}) => (
-                            <div key={restaurant.id} id={"restaurant-" + restaurant.id} className={styles.restaurant} onClick={() => openModal({id: restaurant.id, name: restaurant.name})}>
+                        {restaurants.map((restaurant: Restaurant) => (
+                            <div key={restaurant.id} id={"restaurant-" + restaurant.id} className={styles.restaurant} onClick={() => openModal(restaurant)}>
                                 <h2>{restaurant.name}</h2>
                             </div>
                         ))}
@@ -101,11 +108,11 @@ export default function Main() {
                     </div>
                 </div>
             </main>
-            <Modal
+            {(isModalOpened && currentRestaurant) && <Modal
                 restaurant={currentRestaurant}
                 isOpened={isModalOpened}
                 close={closeModal}
-            />
+            />}
         </NavermapsProvider>
     );
 }

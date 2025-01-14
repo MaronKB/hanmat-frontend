@@ -63,14 +63,21 @@
 }
 .content {
     flex: 1;
+    width: 100%;
     padding: 20px;
 }
-.images {
+.main {
     width: 100%;
-    height: 600px;
+    display: flex;
+    gap: 20px;
+}
+.images {
+    width: 400px;
+    height: 300px;
     display: grid;
     grid-template-columns: 3fr 2fr;
-    grid-template-rows: repeat(2, 300px);
+    grid-template-rows: repeat(2, 150px);
+    border-radius: 10px;
     overflow: hidden;
 }
 .image {
@@ -89,6 +96,15 @@
 }
 .image:nth-child(4) {
     display: none;
+}
+.text {
+    flex: 1;
+}
+.reviews {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
 .preview {

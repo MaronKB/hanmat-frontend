@@ -1,14 +1,15 @@
 import {Marker} from "react-naver-maps";
 import styles from "./Marker.module.css";
+import {Restaurant} from "./Main";
 
-export default function MarkerComponent({id, name, latitude, longitude, highlightClass, openModal}: {id: number, name: string, latitude: number, longitude: number, highlightClass: string, openModal: (restaurant: {id: number, name: string}) => void}) {
-    const position = {lat: latitude, lng: longitude};
+export default function MarkerComponent({restaurant, highlightClass, openModal}: {restaurant: Restaurant, highlightClass: string, openModal: (restaurant: Restaurant) => void}) {
+    const position = {lat: restaurant.latitude, lng: restaurant.longitude};
 
     const gotoRestaurant = () => {
         document.querySelectorAll("." + highlightClass).forEach((el) => {
             el.classList.remove(highlightClass);
         });
-        const target = document.querySelector("#restaurant-" + id);
+        const target = document.querySelector("#restaurant-" + restaurant.id);
         if (target) {
             target.scrollIntoView({behavior: "smooth", block: "center"});
             target.classList.add(highlightClass);
@@ -39,15 +40,15 @@ export default function MarkerComponent({id, name, latitude, longitude, highligh
                 position={position}
                 icon={
                     {
-                        content: createIcon(name),
+                        content: createIcon(restaurant.name),
                         size: {width: 40, height: 40},
                         scaledSize: {width: 40, height: 40},
                         anchor: {x: 20, y: 20}
                     }
                 }
                 onMouseover={gotoRestaurant}
-                onMouseout={() => document.querySelector("#restaurant-" + id)?.classList.remove(highlightClass)}
-                onClick={() => openModal({id, name})}
+                onMouseout={() => document.querySelector("#restaurant-" + restaurant.id)?.classList.remove(highlightClass)}
+                onClick={() => openModal(restaurant)}
             />
         </>
     );
