@@ -163,6 +163,46 @@ const AdminRestaurants: React.FC = () => {
         );
     };
 
+    const saveRestaurant = async () => {
+        if (!selectedRestaurant) {
+            alert('수정할 데이터를 선택해주세요.');
+            return;
+        }
+
+        // 서버로 전송할 데이터 준비
+        const payload = {
+            id: selectedRestaurant.id,
+            name: selectedRestaurant.name,
+            lmmAddr: selectedRestaurant.location,
+            roadAddr: selectedRestaurant.roadAddress,
+            regDate: selectedRestaurant.registrationDate,
+            closed: selectedRestaurant.isClosed === "폐업",
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/hanmat/api/restaurant/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                alert('데이터가 성공적으로 수정되었습니다.');
+                // 데이터 갱신
+                fetchRestaurants(searchCategory, searchKeyword, currentPage);
+                handleCloseModal();
+            } else {
+                const errorData = await response.json();
+                alert(`수정 실패: ${errorData.message}`);
+            }
+        } catch (error) {
+            alert(`서버와의 통신 중 오류가 발생했습니다: ${error}`);
+        }
+    };
+
+
     const handleOpenModal = (restaurant: Restaurant) => {
         setSelectedRestaurant(restaurant);
         setIsModalOpen(true);
@@ -328,7 +368,7 @@ const AdminRestaurants: React.FC = () => {
                             </select>
                         </label>
                         <div className={styles.modalButtons}>
-                            <button className={styles.saveBtn} onClick={() => alert('저장 기능 구현 예정')}>
+                            <button className={styles.saveBtn} onClick={saveRestaurant}>
                                 저장
                             </button>
                             <button className={styles.closeBtn} onClick={handleCloseModal}>
