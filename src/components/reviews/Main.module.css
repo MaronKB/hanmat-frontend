@@ -1,75 +1,118 @@
+/* 메인 컨테이너 */
 .main {
     padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto; /* 가운데 정렬 */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
 }
 
+/* 제목 스타일 */
 .main-title {
-    background-color: #dadada;
-    padding: 30px;
-    height: 100px;
+    background-color: #4a90e2;
+    padding: 20px;
+    height: auto;
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
+/* 컨트롤 박스 스타일 */
 .main-controls {
-    background-color: #cbcbcb;
-    padding: 10px;
-    height: 60px;
+    background-color: #ebebeb;
+    padding: 15px;
+    height: auto;
     width: 100%;
-    border: 1px solid gray;
-    display: flex;
+    border: 1px solid #e0e0e0;
+    display: flex; /* flexbox 설정 */
+    align-items: center;
+    justify-content: flex-start; /* 버튼들을 왼쪽 정렬 */
     margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+
+/* 버튼 스타일 */
+.button-rv,
+.button-cn {
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button-rv:hover, 
+.button-cn:hover {
+    background-color: #357abd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-rv:active, 
+.button-cn:active {
+    transform: scale(0.95);
+}
+
 
 .button-rv {
     margin-right: 10px;
-    margin-left: 200px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.button-rv:hover {
-    background-color: #0056b3;
-}
-
-.button-rv:active {
-    background-color: #003d80;
-    transform: scale(0.95);
+    margin-left: auto; /* 오른쪽으로 밀기 */
 }
 
 .button-cn {
-    margin-right: 50px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 0;
 }
 
-.button-cn:hover {
-    background-color: #0056b3;
-}
-
-.button-cn:active {
-    background-color: #003d80;
-    transform: scale(0.95);
-}
 
 .select {
-    padding: 8px;
-    border-radius: 5px;
+    margin-right: 350px;
+    padding: 10px;
+    border-radius: 50px;
     border: 1px solid #ccc;
+    background-color: white;
+    font-size: 0.95rem;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: all 0.3s ease;
 }
 
+.select:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+/* 카드 컨테이너 스타일 */
 .container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    margin-top: 20px;
+}
+
+/* 카드 아이템 */
+.container > div {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
 }

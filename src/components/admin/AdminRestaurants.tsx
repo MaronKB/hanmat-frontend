@@ -35,19 +35,25 @@ const AdminRestaurants: React.FC = () => {
 
     const rowsPerPage = 20;
 
-    const fetchRestaurants = async (page: number) => {
+    const fetchRestaurants = async (category: string, keyword: string, page: number) => {
         setIsLoading(true);
         setError(null);
+
+        const endpoint =
+            category && keyword
+                ? `http://localhost:8080/hanmat/api/restaurant/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
+                : `http://localhost:8080/hanmat/api/restaurant/all?page=${page}&size=${rowsPerPage}`;
+
         try {
-            const response = await fetch(`http://localhost:8080/hanmat/api/restaurant/all?page=${page}&size=${rowsPerPage}`);
+            const response = await fetch(endpoint);
             if (response.ok) {
                 const data = await response.json();
-
                 const restaurantDTOs: RestaurantDTO[] = data.data.items;
+
                 const transformedRestaurants: Restaurant[] = restaurantDTOs.map((dto) => ({
                     id: dto.id,
                     name: dto.name,
-                    location: dto.roadAddr,
+                    location: dto.lmmAddr,
                     roadAddress: dto.roadAddr,
                     registrationDate: dto.regDate,
                     isClosed: dto.closed ? '폐업' : '영업 중',
@@ -65,75 +71,25 @@ const AdminRestaurants: React.FC = () => {
         }
     };
 
+    // 자동 검색
+    // useEffect(() => {
+    //     fetchRestaurants(searchCategory, searchKeyword, currentPage);
+    // }, [currentPage, searchCategory, searchKeyword]);
+
+    // 수동 검색
     useEffect(() => {
-        fetchRestaurants(currentPage);
-    }, [currentPage]);
+        fetchRestaurants(searchCategory, searchKeyword, currentPage);
+    }, [currentPage, searchCategory]);
 
-    const fetchFilteredRestaurants = async (category: string, keyword: string, page: number) => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(
-                `http://localhost:8080/hanmat/api/restaurant/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
-            );
-            if (response.ok) {
-                const data = await response.json();
-
-                const restaurantDTOs: RestaurantDTO[] = data.data.items;
-                const transformedRestaurants: Restaurant[] = restaurantDTOs.map((dto) => ({
-                    id: dto.id,
-                    name: dto.name,
-                    location: dto.roadAddr,
-                    roadAddress: dto.roadAddr,
-                    registrationDate: dto.regDate,
-                    isClosed: dto.closed ? '폐업' : '영업 중',
-                }));
-
-                setRestaurants(transformedRestaurants);
-                setTotalPages(data.data.totalPages);
-            } else {
-                setError('검색 결과를 불러오는데 실패했습니다.');
-            }
-        } catch (error) {
-            setError('검색 중 오류가 발생했습니다.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, restaurantId: number) => {
-        if (event.target.checked) {
-            setSelectedRestaurants((prev) => [...prev, restaurantId]);
-        } else {
-            setSelectedRestaurants((prev) => prev.filter((id) => id !== restaurantId));
-        }
-    };
-
-    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            setSelectedRestaurants(restaurants.map((restaurant) => restaurant.id));
-        } else {
-            setSelectedRestaurants([]);
-        }
-    };
-
-    const handleDelete = () => {
-        if (selectedRestaurants.length === 0) {
-            alert('삭제할 식당을 선택해주세요.');
-            return;
-        }
-        alert('현재는 삭제 기능이 지원되지 않습니다.');
-    };
 
     const handleSearch = () => {
         if (!searchKeyword.trim()) {
             alert('검색어를 입력해주세요.');
             return;
         }
-        fetchFilteredRestaurants(searchCategory, searchKeyword, 1);
         setCurrentPage(1);
+        fetchRestaurants(searchCategory, searchKeyword, 1);
     };
-
 
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -204,7 +160,6 @@ const AdminRestaurants: React.FC = () => {
         );
     };
 
-
     return (
         <div className={styles.container}>
             <div className={styles.searchContainer}>
@@ -226,7 +181,9 @@ const AdminRestaurants: React.FC = () => {
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     className={styles.inputBox}
                 />
-                <button onClick={handleSearch} className={styles.searchBtn}>조회</button>
+                <button onClick={handleSearch} className={styles.searchBtn}>
+                    조회
+                </button>
             </div>
 
             {isLoading && <p>데이터를 불러오는 중입니다...</p>}
@@ -239,7 +196,11 @@ const AdminRestaurants: React.FC = () => {
                         <input
                             type="checkbox"
                             checked={selectedRestaurants.length === restaurants.length}
-                            onChange={handleSelectAll}
+                            onChange={(e) =>
+                                setSelectedRestaurants(
+                                    e.target.checked ? restaurants.map((r) => r.id) : []
+                                )
+                            }
                         />
                     </th>
                     <th className={styles.idCell}>번호</th>
@@ -258,7 +219,13 @@ const AdminRestaurants: React.FC = () => {
                             <input
                                 type="checkbox"
                                 checked={selectedRestaurants.includes(restaurant.id)}
-                                onChange={(e) => handleCheckboxChange(e, restaurant.id)}
+                                onChange={(e) =>
+                                    setSelectedRestaurants((prev) =>
+                                        e.target.checked
+                                            ? [...prev, restaurant.id]
+                                            : prev.filter((id) => id !== restaurant.id)
+                                    )
+                                }
                             />
                         </td>
                         <td>{restaurant.id}</td>
@@ -268,7 +235,12 @@ const AdminRestaurants: React.FC = () => {
                         <td>{restaurant.registrationDate}</td>
                         <td>{restaurant.isClosed}</td>
                         <td>
-                            <button className={styles.editBtn} onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}>수정</button>
+                            <button
+                                className={styles.editBtn}
+                                onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}
+                            >
+                                수정
+                            </button>
                         </td>
                     </tr>
                 ))}
@@ -277,7 +249,9 @@ const AdminRestaurants: React.FC = () => {
 
             <div className={styles.controls}>
                 {createPagination()}
-                <button onClick={handleDelete} className={styles.deleteBtn}>삭제</button>
+                <button onClick={() => alert('삭제 기능은 현재 지원되지 않습니다.')} className={styles.deleteBtn}>
+                    삭제
+                </button>
             </div>
         </div>
     );
