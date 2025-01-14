@@ -32,6 +32,9 @@ const AdminRestaurants: React.FC = () => {
     const [endPage, setEndPage] = useState<number>(10);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+
 
     const rowsPerPage = 20;
 
@@ -160,6 +163,25 @@ const AdminRestaurants: React.FC = () => {
         );
     };
 
+    const handleOpenModal = (restaurant: Restaurant) => {
+        setSelectedRestaurant(restaurant);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedRestaurant(null);
+        setIsModalOpen(false);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (selectedRestaurant) {
+            setSelectedRestaurant({
+                ...selectedRestaurant,
+                [e.target.name]: e.target.value,
+            });
+        }
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.searchContainer}>
@@ -237,7 +259,7 @@ const AdminRestaurants: React.FC = () => {
                         <td>
                             <button
                                 className={styles.editBtn}
-                                onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}
+                                onClick={() => handleOpenModal(restaurant)}
                             >
                                 수정
                             </button>
@@ -253,6 +275,70 @@ const AdminRestaurants: React.FC = () => {
                     삭제
                 </button>
             </div>
+
+            {isModalOpen && selectedRestaurant && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2 className={styles.modalTitle}>식당 정보 수정</h2>
+                        <label className={styles.modalLabel}>
+                            식당 이름
+                            <input
+                                type="text"
+                                name="name"
+                                value={selectedRestaurant.name}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            식당 위치
+                            <input
+                                type="text"
+                                name="location"
+                                value={selectedRestaurant.location}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            도로명 주소
+                            <input
+                                type="text"
+                                name="roadAddress"
+                                value={selectedRestaurant.roadAddress}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            등록일시
+                            <input
+                                type="text"
+                                name="registrationDate"
+                                value={selectedRestaurant.registrationDate}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            폐업 여부
+                            <select
+                                name="isClosed"
+                                value={selectedRestaurant.isClosed}
+                                onChange={handleInputChange}
+                            >
+                                <option value="영업 중">영업 중</option>
+                                <option value="폐업">폐업</option>
+                            </select>
+                        </label>
+                        <div className={styles.modalButtons}>
+                            <button className={styles.saveBtn} onClick={() => alert('저장 기능 구현 예정')}>
+                                저장
+                            </button>
+                            <button className={styles.closeBtn} onClick={handleCloseModal}>
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
