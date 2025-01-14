@@ -1,0 +1,212 @@
+/* ---- 배경 ---- */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* 배경은 더 진하게 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px); /* 뒷배경 블러 효과 */
+}
+
+.container {
+    background: #fff; /* 모달 전체 배경 */
+    border-radius: 12px; /* 더 둥근 모서리 */
+    padding: 24px;
+    width: 640px; /* 살짝 더 넓게 조정 */
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 더 부드러운 그림자 */
+}
+
+/* 닫기 버튼 */
+.closeButton {
+   position: absolute;
+       top: 16px;
+       right: 16px;
+       font-size: 35px;
+       color: #666;
+       cursor: pointer;
+       transition: color 0.2s;
+}
+
+
+
+/* ---- 제목 ---- */
+.title {
+    font-size: 22px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #222; /* 좀 더 고급스러워 보이는 진한 회색 */
+}
+
+/* ---- 별점 + 추천 버튼 ---- */
+.ratingAndRecommend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* 버튼 */
+.recommendButton {
+    background-color: #5c9eff; /* 현대적인 파스텔 블루 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 24px; /* 둥근 버튼 */
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+}
+
+.recommendButton:hover {
+
+    transform: translateY(-2px); /* 살짝 위로 튀는 애니메이션 */
+}
+
+.recommendButton:active {
+
+    transform: scale(0.97); /* 클릭 시 버튼 살짝 눌림 효과 */
+}
+
+/* 별점 */
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* 별 사이 간격 */
+}
+
+.star {
+    font-size: 30px; /* 별 크기 */
+    color: #e0e0e0; /* 기본 색상 (빈 별은 연한 그레이) */
+    transition: color 0.3s ease, transform 0.3s ease; /* 부드러운 애니메이션 추가 */
+    cursor: pointer; /* 커서 모양 변경 */
+}
+
+.starFilled {
+    color: #ffd700; /* 채워진 별 색상: 골드 */
+}
+
+.star:hover {
+    color: #ffcc4d; /* hover 시 밝은 노란색 */
+    transform: scale(1.2); /* hover 시 사이즈 살짝 확대 */
+}
+/* ---- 본문 ---- */
+.body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Left-align content for better readability */
+    text-align: left; /* Changed text alignment */
+    gap: 20px; /* Slightly increased gap for better spacing */
+    margin-bottom: 30px; /* Increased margin for clearer separation */
+    background-color: #fafafa; /* Added a light background */
+    padding: 20px; /* Added inner spacing */
+    border-radius: 10px; /* Rounded borders for aesthetics */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    border: 1px solid #ddd; /* Light border to define the section */
+}
+
+.text {
+    font-size: 18px; /* Slightly larger font size for better readability */
+    line-height: 1.8; /* Increased line height for improved spacing */
+    color: #333; /* Darkened text color for better contrast */
+    font-weight: 500; /* Slightly bolder font-weight */
+    word-wrap: break-word;
+    margin-bottom: 16px; /* Additional spacing between paragraphs */
+    text-indent: 10px; /* Added small indentation for paragraphs */
+}
+
+/* 이미지 섹션 */
+.images {
+    display: flex;
+    justify-content: center;
+    gap: 12px; /* 이미지 간격 */
+    flex-wrap: wrap; /* 이미지가 많으면 줄 바꿈 */
+    margin-top: 16px;
+}
+
+.image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 */
+    transition: transform 0.3s, box-shadow 0.3s; /* hover 애니메이션 추가 */
+}
+
+.image:hover {
+    transform: scale(1.03); /* 이미지 hover 시 확대 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* hover 시 그림자 강화 */
+}
+
+/* ---- 댓글 ---- */
+.commentsSection {
+    width: 100%;
+    margin-top: 40px; /* Increased margin for better separation */
+
+    border-radius: 16px; /* More rounded corners */
+    padding: 24px; /* Increased padding */
+
+    max-height: 300px; /* Increased height limit for better usability */
+    overflow-y: auto; /* Allow vertical scrolling for overflow */
+
+}
+
+/* 댓글 박스 */
+.comments {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Increased spacing between individual comments */
+    max-height: 200px; /* Increased limit for comment section */
+    overflow-y: auto;
+    scrollbar-width: thin; /* 좀 더 얇은 스크롤 */
+}
+
+.comment {
+    background: #f4f4f4;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #000; /* 연한 회색 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 댓글 입력 */
+.commentInput {
+    width: 100%;
+    height: 60px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+.commentInput:focus {
+    border-color: #5c9eff; /* 포커스 시 버튼과 동일한 색 */
+    outline: none;
+}
+
+/* 등록 버튼 */
+.addCommentButton {
+    width: 100%;
+    background-color: #5c9eff; /* 버튼 색상 통일 */
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addCommentButton:hover {
+    background-color: #517edb;
+}
