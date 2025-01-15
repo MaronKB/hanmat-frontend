@@ -169,7 +169,6 @@ const AdminRestaurants: React.FC = () => {
             return;
         }
 
-        // 서버로 전송할 데이터 준비
         const payload = {
             id: selectedRestaurant.id,
             name: selectedRestaurant.name,
@@ -190,7 +189,7 @@ const AdminRestaurants: React.FC = () => {
 
             if (response.ok) {
                 alert('데이터가 성공적으로 수정되었습니다.');
-                // 데이터 갱신
+
                 fetchRestaurants(searchCategory, searchKeyword, currentPage);
                 handleCloseModal();
             } else {
@@ -221,6 +220,43 @@ const AdminRestaurants: React.FC = () => {
             });
         }
     };
+
+    // 삭제
+    const handleDelete = async () => {
+        if (selectedRestaurants.length === 0) {
+            alert("삭제할 식당을 선택해주세요.");
+            return;
+        }
+
+        const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch("http://localhost:8080/hanmat/api/restaurant/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(selectedRestaurants),
+            });
+
+            if (response.ok) {
+                alert("삭제가 완료되었습니다.");
+                setRestaurants((prevRestaurants) =>
+                    prevRestaurants.filter((r) => !selectedRestaurants.includes(r.id))
+                );
+                setSelectedRestaurants([]);
+            } else {
+                const errorData = await response.json();
+                alert(`삭제 실패: ${errorData.message || "알 수 없는 오류"}`);
+            }
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    };
+
+
 
     return (
         <div className={styles.container}>
@@ -311,7 +347,7 @@ const AdminRestaurants: React.FC = () => {
 
             <div className={styles.controls}>
                 {createPagination()}
-                <button onClick={() => alert('삭제 기능은 현재 지원되지 않습니다.')} className={styles.deleteBtn}>
+                <button onClick={handleDelete} className={styles.deleteBtn}>
                     삭제
                 </button>
             </div>
