@@ -1,11 +1,20 @@
 import styles from "./Modal.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight, faX} from "@fortawesome/free-solid-svg-icons";
+import {
+    faAddressBook,
+    faChevronLeft,
+    faChevronRight,
+    faCopy,
+    faX
+} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import {MouseEvent} from "react";
 import {Restaurant} from "./Main.tsx";
+import {Review} from "../reviews/Main.tsx";
+import Item from "../reviews/Item.tsx";
+import errorImage from "../../assets/images/error-image.png";
 
-interface Image {
+type Image = {
     link: string;
     thumbnail: string;
 }
@@ -13,11 +22,37 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
     const [images, setImages] = useState<Image[]>([]);
     const [isPreviewOpened, setIsPreviewOpened] = useState<boolean>(false);
     const [currentImage, setCurrentImage] = useState<Image | null>(null);
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [page, setPage] = useState<number>(1);
 
     const getImages = async () => {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/map/${restaurant.name}`);
+        const address = restaurant.roadAddr.length > 0 ? restaurant.roadAddr : restaurant.lmmAddr;
+        const string = address + ", " + restaurant.name;
+        /*
+        issue: 네이버 이미지 링크가 다 낡았음
+        todo: 검색엔진 네이버 => 구글로 변경 바꿔야 함
+         */
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/map/${string}`);
         const data = await response.json();
         setImages(data.data);
+    }
+
+    const getReviews = async () => {
+        // todo: change to each restaurant url
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/all?page=1&size=6&sort=new`);
+        // const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/restaurant/${restaurant.id}?page=${page}&size=6&sort=new`);
+        const data = await response.json();
+        setReviews(data.data.items);
+    }
+
+    const getMoreReviews = async () => {
+        // todo: change to each restaurant url
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/all?page=${page}&size=6&sort=new`);
+        // const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/restaurant/${restaurant.id}?page=${page}&size=6&sort=new`);
+        const data = await response.json();
+        const newReviews = [...reviews];
+        newReviews.push(...data.data.items);
+        setReviews(newReviews);
     }
 
     const set = (image: Image) => {
@@ -45,7 +80,12 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
 
     useEffect(() => {
         if (restaurant.name) getImages();
+        if (restaurant.id) getReviews();
     }, [restaurant]);
+
+    useEffect(() => {
+        if (page > 1) getMoreReviews();
+    }, [page]);
 
     return (
         <>
@@ -59,26 +99,33 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
                         <section className={styles.main}>
                             <div className={styles.images}>
                                 {images.map((image: Image, index: number) => (
-                                    <img key={index} className={styles.image} src={image.thumbnail}
-                                         alt={restaurant.name} onClick={() => set(image)}/>
+                                    <img key={index} className={styles.image}
+                                         src={image.link}
+                                         alt={restaurant.name}
+                                         onError={(ev) => ev.currentTarget.src = errorImage}
+                                         onClick={() => set(image)}/>
                                 ))}
                             </div>
                             <div className={styles.text}>
-                                <h3>{restaurant.name}</h3>
-                                <p>{restaurant.roadAddr}</p>
-                                <p>{restaurant.lmmAddr}</p>
+                                <h3 className={styles.title}>{restaurant.name}</h3>
+                                <div className={styles.address}>
+                                    <FontAwesomeIcon icon={faAddressBook}/>
+                                    {restaurant.roadAddr.length > 0 && <a><span>{restaurant.roadAddr}</span><FontAwesomeIcon icon={faCopy}/></a>}
+                                    {restaurant.lmmAddr.length > 0 && <a><span>{restaurant.lmmAddr}</span><FontAwesomeIcon icon={faCopy}/></a>}
+                                </div>
+                                <p className={styles.description}>{restaurant.description ?? "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"}</p>
                             </div>
                         </section>
-                        <h3>Reviews</h3>
-                        <section className={styles.reviews}>
-                            <div className={styles.review}>
-                                <h4>John Doe</h4>
-                                <p>Good food, good service, good price!</p>
+                        <section className={styles["review-container"]}>
+                            <h3 className={styles["review-title"]}>Reviews</h3>
+                            <div className={styles.reviews}>
+                                {reviews.length > 0 ? reviews.map((review: Review) => (
+                                    <Item key={review.id} review={review} set={() => {
+                                    }}/>
+                                )) : <p>No reviews</p>}
                             </div>
-                            <div className={styles.review}>
-                                <h4>Jane Doe</h4>
-                                <p>Good food, good service, good price!</p>
-                            </div>
+                            {reviews.length > 0 &&
+                                <button className={styles.more} onClick={() => setPage(page + 1)}>More</button>}
                         </section>
                     </div>
                 </div>
@@ -87,7 +134,10 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
                 <div className={styles.preview} onClick={() => setIsPreviewOpened(false)}>
                     <button type={"button"} className={styles.arrow} onClick={(ev) => show(ev, currentImage, false)}>
                         <FontAwesomeIcon icon={faChevronLeft}/></button>
-                    <img src={currentImage.link} alt={restaurant.name}/>
+                    <img src={currentImage.link}
+                         alt={restaurant.name}
+                         onError={(ev) => ev.currentTarget.src = errorImage}
+                    />
                     <button type={"button"} className={styles.arrow} onClick={(ev) => show(ev, currentImage, true)}>
                         <FontAwesomeIcon icon={faChevronRight}/></button>
                 </div>}

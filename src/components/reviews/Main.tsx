@@ -6,7 +6,7 @@ import Item from "./Item.tsx";
 import New from "./New.tsx";
 import Detail from "./Detail.tsx";
 
-export interface Review {
+export type Review = {
     id: number;
     title: string;
     author: string;
