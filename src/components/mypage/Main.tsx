@@ -13,21 +13,42 @@ const MyPage: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [radius, setRadius] = useState('5km');
     const [favoriteStores, setFavoriteStores] = useState(['식당 1', '식당 2', '식당 3', '식당 4']);
-    const [myReviews, setMyReviews] = useState(['리뷰 1', '리뷰 2', '리뷰 3', '리뷰 4']);
+    const [myReviews, setMyReviews] = useState<any[]>([]); // 리뷰 데이터 상태
+    const [showOnlyMyReviews, setShowOnlyMyReviews] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentReview, setCurrentReview] = useState('');
+    const [currentReview, setCurrentReview] = useState<string>("");
     const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
     const [username, setUsername] = useState('Guest');
-    const [email, setEmail] = useState('');
+    const email = user?.email || ""; // 사용자 이메일 가져오기
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // 컴포넌트 마운트 시 localStorage에서 사용자 정보 로드
     useEffect(() => {
-        if (user.current) {
-            setUsername(user.current.nickname || 'Guest'); // 닉네임 설정
-            setEmail(user.current.email || ''); // 이메일 설정
-        }
-    }, []);
+            const fetchMyReviews = async () => {
+                try {
+                    const response = await fetch(
+                        `http://localhost:5173/api/posts/my?email=${email}&page=1&size=10&sort=new`
+                    );
+
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch reviews");
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        setMyReviews(data.data.content); // 페이지 데이터(content) 설정
+                    } else {
+                        console.error("Error fetching reviews:", data.message);
+                    }
+                } catch (error) {
+                    console.error("Error fetching reviews:", error);
+                }
+            };
+
+            if (email) {
+                fetchMyReviews();
+            }
+        }, [email]);
+
 
     const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setIntroduce(e.target.value);
@@ -46,14 +67,17 @@ const MyPage: React.FC = () => {
     };
 
     const saveEditedReview = () => {
-        if (currentReviewIndex !== null) {
-            const updatedReviews = [...myReviews];
-            updatedReviews[currentReviewIndex] = currentReview;
-            setMyReviews(updatedReviews);
-            setIsModalOpen(false);
-            setCurrentReviewIndex(null);
-        }
-    };
+            if (currentReviewIndex !== null) {
+                const updatedReviews = [...myReviews];
+                updatedReviews[currentReviewIndex] = {
+                    ...updatedReviews[currentReviewIndex],
+                    POST_CONTENT: currentReview,
+                };
+                setMyReviews(updatedReviews);
+                setIsModalOpen(false);
+                setCurrentReviewIndex(null);
+            }
+        };
 
     const handleWithdrawal = () => {
         if (window.confirm('탈퇴하시겠습니까?')) {
@@ -142,15 +166,6 @@ const MyPage: React.FC = () => {
                 />
             </div>
             <div className={styles.section}>
-                <label>다크 모드</label>
-                <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={isDarkMode}
-                    onChange={toggleDarkMode}
-                />
-            </div>
-            <div className={styles.section}>
                 <label>주변 반경 설정</label>
                 <select value={radius} onChange={handleRadiusChange}>
                     {['1km', '3km', '5km', '10km', '20km', '30km'].map((option) => (
@@ -182,19 +197,28 @@ const MyPage: React.FC = () => {
             {/* 리뷰 */}
             <div className={styles.section}>
                 <h3>나의 리뷰 목록</h3>
+                {myReviews.length > 0 ? (
                 <ul>
                     {myReviews.map((review, index) => (
                         <li key={index}>
-                            {review}
+                            <h4>{review.POST_TITLE}</h4>
+                            <p>{review.POST_CONTENT}</p>
                             <button
                                 className={styles['fix-btn']}
-                                onClick={() => editReview(index)}
+                                onClick={() => {
+                                    setCurrentReview(review.POST_CONTENT); // 수정할 리뷰 내용 설정
+                                    setCurrentReviewIndex(index); // 수정할 리뷰 인덱스 설정
+                                    setIsModalOpen(true); // 모달 열기
+                                }}
                             >
                                 수정
                             </button>
                         </li>
                     ))}
                 </ul>
+            ) : (
+                <p>작성한 리뷰가 없습니다.</p>
+            )}
             </div>
 
             <button className={styles['withdraw-btn']} onClick={handleWithdrawal}>

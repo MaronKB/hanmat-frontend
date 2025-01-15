@@ -11,7 +11,7 @@
 /* 제목 스타일 */
 .main-title {
     background-color: #4a90e2;
-    padding: 20px;
+    padding: 50px;
     height: auto;
     width: 100%;
     text-align: center;
@@ -54,25 +54,25 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.button-rv:hover, 
+.button-rv:hover,
 .button-cn:hover {
     background-color: #357abd;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.button-rv:active, 
+.button-rv:active,
 .button-cn:active {
     transform: scale(0.95);
 }
 
 
 .button-rv {
-    margin-right: 10px;
+
     margin-left: auto; /* 오른쪽으로 밀기 */
 }
 
 .button-cn {
-    margin-right: 0;
+    margin-right: 10px;
 }
 
 

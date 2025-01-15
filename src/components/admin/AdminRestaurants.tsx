@@ -32,6 +32,9 @@ const AdminRestaurants: React.FC = () => {
     const [endPage, setEndPage] = useState<number>(10);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+
 
     const rowsPerPage = 20;
 
@@ -160,6 +163,101 @@ const AdminRestaurants: React.FC = () => {
         );
     };
 
+    const saveRestaurant = async () => {
+        if (!selectedRestaurant) {
+            alert('수정할 데이터를 선택해주세요.');
+            return;
+        }
+
+        const payload = {
+            id: selectedRestaurant.id,
+            name: selectedRestaurant.name,
+            lmmAddr: selectedRestaurant.location,
+            roadAddr: selectedRestaurant.roadAddress,
+            regDate: selectedRestaurant.registrationDate,
+            closed: selectedRestaurant.isClosed === "폐업",
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/hanmat/api/restaurant/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                alert('데이터가 성공적으로 수정되었습니다.');
+
+                fetchRestaurants(searchCategory, searchKeyword, currentPage);
+                handleCloseModal();
+            } else {
+                const errorData = await response.json();
+                alert(`수정 실패: ${errorData.message}`);
+            }
+        } catch (error) {
+            alert(`서버와의 통신 중 오류가 발생했습니다: ${error}`);
+        }
+    };
+
+
+    const handleOpenModal = (restaurant: Restaurant) => {
+        setSelectedRestaurant(restaurant);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedRestaurant(null);
+        setIsModalOpen(false);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (selectedRestaurant) {
+            setSelectedRestaurant({
+                ...selectedRestaurant,
+                [e.target.name]: e.target.value,
+            });
+        }
+    };
+
+    // 삭제
+    const handleDelete = async () => {
+        if (selectedRestaurants.length === 0) {
+            alert("삭제할 식당을 선택해주세요.");
+            return;
+        }
+
+        const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch("http://localhost:8080/hanmat/api/restaurant/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(selectedRestaurants),
+            });
+
+            if (response.ok) {
+                alert("삭제가 완료되었습니다.");
+                setRestaurants((prevRestaurants) =>
+                    prevRestaurants.filter((r) => !selectedRestaurants.includes(r.id))
+                );
+                setSelectedRestaurants([]);
+            } else {
+                const errorData = await response.json();
+                alert(`삭제 실패: ${errorData.message || "알 수 없는 오류"}`);
+            }
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    };
+
+
+
     return (
         <div className={styles.container}>
             <div className={styles.searchContainer}>
@@ -237,7 +335,7 @@ const AdminRestaurants: React.FC = () => {
                         <td>
                             <button
                                 className={styles.editBtn}
-                                onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}
+                                onClick={() => handleOpenModal(restaurant)}
                             >
                                 수정
                             </button>
@@ -249,10 +347,74 @@ const AdminRestaurants: React.FC = () => {
 
             <div className={styles.controls}>
                 {createPagination()}
-                <button onClick={() => alert('삭제 기능은 현재 지원되지 않습니다.')} className={styles.deleteBtn}>
+                <button onClick={handleDelete} className={styles.deleteBtn}>
                     삭제
                 </button>
             </div>
+
+            {isModalOpen && selectedRestaurant && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2 className={styles.modalTitle}>식당 정보 수정</h2>
+                        <label className={styles.modalLabel}>
+                            식당 이름
+                            <input
+                                type="text"
+                                name="name"
+                                value={selectedRestaurant.name}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            식당 위치
+                            <input
+                                type="text"
+                                name="location"
+                                value={selectedRestaurant.location}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            도로명 주소
+                            <input
+                                type="text"
+                                name="roadAddress"
+                                value={selectedRestaurant.roadAddress}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            등록일시
+                            <input
+                                type="text"
+                                name="registrationDate"
+                                value={selectedRestaurant.registrationDate}
+                                onChange={handleInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            폐업 여부
+                            <select
+                                name="isClosed"
+                                value={selectedRestaurant.isClosed}
+                                onChange={handleInputChange}
+                            >
+                                <option value="영업 중">영업 중</option>
+                                <option value="폐업">폐업</option>
+                            </select>
+                        </label>
+                        <div className={styles.modalButtons}>
+                            <button className={styles.saveBtn} onClick={saveRestaurant}>
+                                저장
+                            </button>
+                            <button className={styles.closeBtn} onClick={handleCloseModal}>
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
