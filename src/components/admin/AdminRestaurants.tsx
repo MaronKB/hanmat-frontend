@@ -34,6 +34,15 @@ const AdminRestaurants: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newRestaurant, setNewRestaurant] = useState<Restaurant>({
+        id: 0,
+        name: '',
+        location: '',
+        roadAddress: '',
+        registrationDate: '',
+        isClosed: '영업 중',
+    });
 
 
     const rowsPerPage = 20;
@@ -257,6 +266,73 @@ const AdminRestaurants: React.FC = () => {
     };
 
 
+    // 추가
+    const handleOpenAddModal = () => {
+        setIsAddModalOpen(true);
+    };
+
+    const handleCloseAddModal = () => {
+        setNewRestaurant({
+            id: 0,
+            name: '',
+            location: '',
+            roadAddress: '',
+            registrationDate: '',
+            isClosed: '영업 중',
+        });
+        setIsAddModalOpen(false);
+    };
+
+    const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+
+        setNewRestaurant({
+            ...newRestaurant,
+            [name]: value,
+        });
+    };
+
+
+    const handleAddRestaurant = async () => {
+        if (!newRestaurant.name || !newRestaurant.location || !newRestaurant.roadAddress || !newRestaurant.registrationDate) {
+            alert("모든 항목을 입력해주세요.");
+            return;
+        }
+
+        const payload = {
+            name: newRestaurant.name,
+            lmmAddr: newRestaurant.location,
+            roadAddr: newRestaurant.roadAddress,
+            regDate: newRestaurant.registrationDate,
+            closed: newRestaurant.isClosed === "폐업",
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/hanmat/api/restaurant/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                alert("추가되었습니다.");
+                setIsAddModalOpen(false);
+                fetchRestaurants(searchCategory, searchKeyword, currentPage);
+            } else {
+                const result = await response.json();
+                alert(`추가 실패: ${result.message}`);
+            }
+        } catch (error) {
+            alert("추가 중 오류가 발생했습니다.");
+            console.error(error);
+        }
+    };
+
+
+
+
+
 
     return (
         <div className={styles.container}>
@@ -347,11 +423,15 @@ const AdminRestaurants: React.FC = () => {
 
             <div className={styles.controls}>
                 {createPagination()}
+                <button onClick={handleOpenAddModal} className={styles.addBtn}>
+                    추가
+                </button>
                 <button onClick={handleDelete} className={styles.deleteBtn}>
                     삭제
                 </button>
             </div>
 
+            {/*수정 모달*/}
             {isModalOpen && selectedRestaurant && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
@@ -408,6 +488,70 @@ const AdminRestaurants: React.FC = () => {
                                 저장
                             </button>
                             <button className={styles.closeBtn} onClick={handleCloseModal}>
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/*추가 모달*/}
+            {isAddModalOpen && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2 className={styles.modalTitle}>식당 추가</h2>
+                        <label className={styles.modalLabel}>
+                            식당 이름
+                            <input
+                                type="text"
+                                name="name"
+                                value={newRestaurant.name}
+                                onChange={handleNewInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            식당 위치
+                            <input
+                                type="text"
+                                name="location"
+                                value={newRestaurant.location}
+                                onChange={handleNewInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            도로명 주소
+                            <input
+                                type="text"
+                                name="roadAddress"
+                                value={newRestaurant.roadAddress}
+                                onChange={handleNewInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            등록일시
+                            <input
+                                type="text"
+                                name="registrationDate"
+                                value={newRestaurant.registrationDate}
+                                onChange={handleNewInputChange}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            폐업 여부
+                            <select
+                                name="isClosed"
+                                value={newRestaurant.isClosed}
+                                onChange={handleNewInputChange}
+                            >
+                                <option value="영업 중">영업 중</option>
+                                <option value="폐업">폐업</option>
+                            </select>
+                        </label>
+                        <div className={styles.modalButtons}>
+                            <button className={styles.saveBtn} onClick={handleAddRestaurant}>
+                                추가
+                            </button>
+                            <button className={styles.closeBtn} onClick={handleCloseAddModal}>
                                 닫기
                             </button>
                         </div>
