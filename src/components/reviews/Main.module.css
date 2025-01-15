@@ -67,12 +67,12 @@
 
 
 .button-rv {
-    margin-right: 10px;
+
     margin-left: auto; /* 오른쪽으로 밀기 */
 }
 
 .button-cn {
-    margin-right: 0;
+    margin-right: 10px;
 }
 
 
