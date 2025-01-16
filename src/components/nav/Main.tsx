@@ -26,7 +26,7 @@ export default function Nav({alwaysNarrow = false}) {
         <>
             <Header alwaysNarrow={alwaysNarrow} user={user.current} setDark={setDark} isDark={isDark} setLang={setLang}/>
             <Outlet/>
-            <Footer setLang={setLang}/>
+            <Footer alwaysNarrow={alwaysNarrow} setLang={setLang}/>
         </>
     );
 }

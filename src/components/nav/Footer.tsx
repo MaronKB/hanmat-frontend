@@ -9,8 +9,9 @@ import kr_flag from "../../assets/kr-flag.jpg";
 import jp_flag from "../../assets/jp-flag.png";
 import {useTranslation} from "react-i18next";
 
-export default function Footer({setLang}: {setLang: () => void}) {
+export default function Footer({alwaysNarrow, setLang}: {alwaysNarrow: boolean, setLang: () => void}) {
     const {t} = useTranslation("header");
+    if (alwaysNarrow) return null;
 
     return (
         <footer className={styles.footer}>
