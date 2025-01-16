@@ -1,10 +1,13 @@
 {
-  "find": "Find",
-  "reviews": "Reviews",
-  "taste": "Taste",
-  "buddy": "Buddy",
-  "mypage": "My Page",
-  "login": "Log In",
-  "logout": "Log Out",
-  "signup": "Sign Up"
+    "find": "Find",
+    "reviews": "Reviews",
+    "taste": "Taste",
+    "buddy": "Buddy",
+    "restaurants": "Restaurants",
+    "users": "Users",
+    "admin": "Admin",
+    "mypage": "My Page",
+    "login": "Log In",
+    "logout": "Log Out",
+    "signup": "Sign Up"
 }

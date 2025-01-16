@@ -27,9 +27,9 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="/reviews" element={<Reviews />} />
                 <Route path="/buddy" element={<Buddy />} />
                 <Route path="/mypage" element={<MyPage />} />
-                <Route path={"/adminReviews"} element={<AdminReviews />} />
-                <Route path={"/adminRestaurants"} element={<AdminRestaurants />} />
-                <Route path={"/adminUsers"} element={<AdminUsers />} />
+                <Route path={"/admin/reviews"} element={<AdminReviews />} />
+                <Route path={"/admin/restaurants"} element={<AdminRestaurants />} />
+                <Route path={"/admin/users"} element={<AdminUsers />} />
             </Route>
         </Routes>
     </BrowserRouter>

@@ -2,7 +2,7 @@ import {GoogleOAuthProvider, CredentialResponse} from "@react-oauth/google";
 import {GoogleLogin} from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
 
-export interface AuthData {
+export type AuthData = {
     email: string;
     nickname: string;
     profileImage: string;

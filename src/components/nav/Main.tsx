@@ -29,6 +29,7 @@ export default function Nav({alwaysNarrow = false}) {
     const token = localStorage.getItem("token");
     const user = useRef<AuthData | null>(token ? JSON.parse(token) : null);
     const [isDark, setDark] = useState(false);
+    const [isAdminOpen, setAdminOpen] = useState(false);
     const [isLangOpen, setLangOpen] = useState(false);
     const [isContextOpen, setContextOpen] = useState(false);
 
@@ -93,6 +94,14 @@ export default function Nav({alwaysNarrow = false}) {
                     <MainNavLink link={"/taste"} text={t('header:taste')} toggle={toggleMenu}/>
                     <MainNavLink link={"/reviews"} text={t('header:reviews')} toggle={toggleMenu}/>
                     <MainNavLink link={"/buddy"} text={t('header:buddy')} toggle={toggleMenu}/>
+                    {user.current?.isAdmin && <div className={styles["admin-container"]}>
+                        <button className={styles["admin-button"]} onClick={() => setAdminOpen(!isAdminOpen)}>{t('header:admin')}</button>
+                        <div className={styles.admin + (isAdminOpen ? (" " + styles.active) : "")}>
+                            <MainNavLink link={"/admin/restaurants"} text={t('header:restaurants')} toggle={toggleMenu}/>
+                            <MainNavLink link={"/admin/reviews"} text={t('header:reviews')} toggle={toggleMenu}/>
+                            <MainNavLink link={"/admin/users"} text={t('header:users')} toggle={toggleMenu}/>
+                        </div>
+                    </div>}
                 </nav>
                 <div className={styles.controller}>
 
