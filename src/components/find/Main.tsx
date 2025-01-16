@@ -13,6 +13,7 @@ export type Restaurant = {
     roadAddr: string;
     latitude: number;
     longitude: number;
+    description: string;
     closed: boolean;
 }
 

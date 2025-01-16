@@ -25,16 +25,16 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
     const [reviews, setReviews] = useState<Review[]>([]);
     const [page, setPage] = useState<number>(1);
 
+    const key = "AIzaSyCKZIAKfa02TOjE1l-AKIHVp8FN_YYtz7Q";
+    const engineId = "4337cc49ad6b4468a";
+
     const getImages = async () => {
         const address = restaurant.roadAddr.length > 0 ? restaurant.roadAddr : restaurant.lmmAddr;
         const string = address + ", " + restaurant.name;
-        /*
-        issue: 네이버 이미지 링크가 다 낡았음
-        todo: 검색엔진 네이버 => 구글로 변경 바꿔야 함
-         */
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/map/${string}`);
+        // const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/map/${string}`); // 네이버
+        const response = await fetch(`https://www.googleapis.com/customsearch/v1?key=${key}&cx=${engineId}&q=${string}&searchType=image&num=4`); // 구글
         const data = await response.json();
-        setImages(data.data);
+        setImages(data.items);
     }
 
     const getReviews = async () => {
@@ -120,8 +120,7 @@ export default function Modal({restaurant, isOpened, close}: {restaurant: Restau
                             <h3 className={styles["review-title"]}>Reviews</h3>
                             <div className={styles.reviews}>
                                 {reviews.length > 0 ? reviews.map((review: Review) => (
-                                    <Item key={review.id} review={review} set={() => {
-                                    }}/>
+                                    <Item key={review.id} review={review} onClick={() => {}}/>
                                 )) : <p>No reviews</p>}
                             </div>
                             {reviews.length > 0 &&
