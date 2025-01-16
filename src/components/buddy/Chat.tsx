@@ -3,6 +3,8 @@ import {Socket} from "socket.io-client";
 import {useEffect, useRef, useState} from "react";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import ChatMessage, {Message} from "./ChatMessage";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
 
 export default function Chat({socket, target, isChatting}: {socket: Socket, target: string, isChatting: boolean}) {
     const token = localStorage.getItem('token');
@@ -67,11 +69,6 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
             return new Message(m._id, m.room, m.user, nickname, targetUser.picture, m.message, isMine, new Date(m.createdAt))
         });
         setMessages(newMessages);
-
-        const messageContainer = document.querySelector(`.${styles.messages}`);
-        if (messageContainer) {
-            messageContainer.scrollTop = messageContainer.scrollHeight
-        }
     }
 
     const sendMessage = async () => {
@@ -82,6 +79,12 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
             message: input.value
         }));
         input.value = '';
+    }
+
+    const onKeydown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+        if (ev.key === 'Enter') {
+            sendMessage();
+        }
     }
 
     useEffect(() => {
@@ -104,6 +107,13 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
         }
     }, [newMessage]);
 
+    useEffect(() => {
+        const messageContainer = document.querySelector(`.${styles.messages}`);
+        if (messageContainer) {
+            messageContainer.scrollTop = messageContainer.scrollHeight
+        }
+    }, [messages]);
+
     socket.on('message', async (msg) => {
         setNewMessage(msg);
     });
@@ -125,8 +135,8 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
                 )}
             </div>
             <div className={styles.input}>
-                <input id="message-input" type="text" placeholder="Enter your message..." />
-                <button type={"button"} onClick={sendMessage}>Send</button>
+                <input id="message-input" type="text" placeholder="Enter your message..." onKeyDown={(ev) => onKeydown(ev)} autoComplete={"off"}/>
+                <button type={"button"} onClick={sendMessage}><FontAwesomeIcon icon={faPaperPlane}/></button>
             </div>
         </div>
     )

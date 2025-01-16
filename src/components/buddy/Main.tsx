@@ -4,6 +4,8 @@ import UserList from "./UserList";
 import Chat from "./Chat.tsx";
 import chatStyles from "./Chat.module.css";
 import {useEffect, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 
 export default function Main() {
     // const socket: Socket = io('ws://localhost:3000');
@@ -33,6 +35,7 @@ export default function Main() {
             <section className={styles.container}>
                 <UserList open={openChat}/>
                 <Chat socket={socket} target={targetUser} isChatting={isChatting}/>
+                <h4 className={styles.tooltip + (isChatting ? (" " + styles.inactive) : "")}><FontAwesomeIcon icon={faChevronLeft}/><span>Select Buddy<br/>To Start Chat!</span></h4>
             </section>
         </main>
     );
