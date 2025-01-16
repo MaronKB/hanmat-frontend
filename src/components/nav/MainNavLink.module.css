@@ -11,6 +11,7 @@
     text-align: center;
     text-decoration: inherit;
     text-transform: uppercase;
+    white-space: nowrap;
     color: var(--text-color);
     text-decoration: none;
     transition: 0.3s;
