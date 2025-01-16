@@ -50,10 +50,10 @@
     user-select: none;
 }
 .restaurant:hover {
-    background: var(--background-color-sub);
+    background: var(--background-color-dark);
 }
 .restaurant.highlight {
-    background: var(--background-color-sub);
+    background: var(--background-color-dark);
 }
 .fold-container {
     position: absolute;

@@ -12,11 +12,11 @@
     align-items: center;
     gap: 10px;
     padding: 10px;
-    box-shadow: 0 0 5px var(--background-color-sub);
+    box-shadow: 0 0 5px var(--background-color-dark);
     user-select: none;
 }
 .user:hover {
-    background: var(--background-color-sub);
+    background: var(--background-color-dark);
     cursor: pointer;
 }
 .user.active {

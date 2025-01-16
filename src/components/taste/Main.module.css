@@ -37,7 +37,7 @@
     font-family: var(--font-gothic), sans-serif;
     font-size: 16px;
     color: var(--text-color);
-    background-color: var(--background-color-sub);
+    background-color: var(--background-color-dark);
     cursor: pointer;
 }
 .pagination button:hover {
