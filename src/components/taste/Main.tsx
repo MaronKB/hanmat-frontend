@@ -4,6 +4,7 @@ import GridContainer from "./GridContainer.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faAngleRight} from "@fortawesome/free-solid-svg-icons";
 import TasteModal from "./TasteModal.tsx";
+import {useTranslation} from "react-i18next";
 
 export type Menu = {
     id: number,
@@ -17,13 +18,15 @@ export type Menu = {
 }
 
 export default function Taste() {
+    const {t} = useTranslation();
+    const lang = localStorage.getItem("lang") || "en";
+
     const [menus, setMenus] = useState<Menu[]>([]);
     const [page, setPage] = useState<number>(1);
     const [totalPage, setTotalPage] = useState<number>(1);
     const [list, setList] = useState<Menu[]>([]);
     const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
     const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
-    const lang = localStorage.getItem("lang") || "en";
 
     const getMenus = async () => {
         const response = await fetch(`http://localhost:8080/hanmat/api/food/${lang}`);
@@ -61,6 +64,10 @@ export default function Taste() {
     useEffect(() => {
         getMenus();
     }, []);
+
+    useEffect(() => {
+        getMenus();
+    }, [t]);
 
     useEffect(() => {
         setList(menus.slice((page - 1) * 12, page * 12));
