@@ -27,6 +27,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    pointer-events: none;
 }
 .pagination button {
     width: 40px;
@@ -39,6 +40,7 @@
     color: var(--text-color);
     background-color: var(--background-color-dark);
     cursor: pointer;
+    pointer-events: auto;
 }
 .pagination button:hover {
     color: white;
