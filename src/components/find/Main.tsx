@@ -4,7 +4,7 @@ import styles from "./Main.module.css";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import Modal from "./Modal.tsx";
+import Modal from "./FindModal.tsx";
 
 export type Restaurant = {
     id: number;
