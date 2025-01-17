@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import Modal from "./FindModal.tsx";
+import {useTranslation} from "react-i18next";
 
 export type Restaurant = {
     id: number;
@@ -18,6 +19,7 @@ export type Restaurant = {
 }
 
 export default function Main() {
+    const {t} = useTranslation();
     let lang = localStorage.getItem("lang") || "en";
     if (lang === "jp") lang = "ja";
 
@@ -73,6 +75,10 @@ export default function Main() {
     useEffect(() => {
         getMyLocation();
     }, []);
+
+    useEffect(() => {
+        location.reload();
+    }, [t]);
 
     return (
         <NavermapsProvider ncpClientId={"d2682gqz4u&language=" + lang}>
