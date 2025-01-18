@@ -44,7 +44,6 @@ const AdminRestaurants: React.FC = () => {
         isClosed: '영업 중',
     });
 
-
     const rowsPerPage = 20;
 
     const fetchRestaurants = async (category: string, keyword: string, page: number) => {
@@ -422,13 +421,17 @@ const AdminRestaurants: React.FC = () => {
             </table>
 
             <div className={styles.controls}>
-                {createPagination()}
-                <button onClick={handleOpenAddModal} className={styles.addBtn}>
-                    추가
-                </button>
-                <button onClick={handleDelete} className={styles.deleteBtn}>
-                    삭제
-                </button>
+                <div className={styles.controlsBtn}>
+                    <button onClick={handleOpenAddModal} className={styles.addBtn}>
+                        추가
+                    </button>
+                    <button onClick={handleDelete} className={styles.deleteBtn}>
+                        삭제
+                    </button>
+                </div>
+                <div className={styles.controlsPgn}>
+                    {createPagination()}
+                </div>
             </div>
 
             {/*수정 모달*/}

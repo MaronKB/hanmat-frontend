@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './AdminReviews.module.css';
-
-interface ReviewDTO {
-    id: number;
-    restaurantName: string;
-    title: string;
-    content: string;
-    imageUrl: string;
-    regDate: string;
-    isHidden: boolean;
-    isReported: boolean;
-}
 
 interface Review {
     id: number;
-    restaurantName: string;
+    restaurantId: string;
     title: string;
     content: string;
     imageUrl: string;
@@ -28,57 +17,58 @@ const AdminReviews: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [selectedReviews, setSelectedReviews] = useState<number[]>([]);
-    const [searchCategory, setSearchCategory] = useState<string>('restaurantName');
+    const [searchCategory, setSearchCategory] = useState<string>('title');
     const [searchKeyword, setSearchKeyword] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [appliedSearchKeyword, setAppliedSearchKeyword] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
     const rowsPerPage = 10;
 
-    const fetchReviews = async (page: number) => {
-        setIsLoading(true);
-        setError(null);
+    const fetchReviews = async (category: string, keyword: string, page: number) => {
+        const endpoint =
+            keyword.trim()
+                ? `http://localhost:8080/hanmat/api/post/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
+                : `http://localhost:8080/hanmat/api/post/all?page=${page}&size=${rowsPerPage}`;
+
         try {
-            const response = await fetch(
-                `http://localhost:8080/hanmat/api/post/all?page=${page}&size=${rowsPerPage}`
-            );
+            const response = await fetch(endpoint);
             if (response.ok) {
                 const data = await response.json();
-                const reviewDTOs: ReviewDTO[] = data.data.items;
-
-                const transformedReviews: Review[] = reviewDTOs.map((dto) => ({
-                    id: dto.id,
-                    restaurantName: dto.restaurantName,
-                    title: dto.title,
-                    content: dto.content,
-                    imageUrl: dto.imageUrl || 'https://via.placeholder.com/50x50',
-                    regDate: dto.regDate,
-                    isHidden: dto.isHidden,
-                    isReported: dto.isReported,
+                const reviews: Review[] = data.data.items.map((review: any) => ({
+                    id: review.id,
+                    restaurantId: review.restaurantId,
+                    title: review.title,
+                    content: review.content,
+                    imageUrl: review.image1 || 'https://via.placeholder.com/50x50',
+                    regDate: review.regDate,
+                    isHidden: review.isHidden,
+                    isReported: review.isReported,
                 }));
 
-                setReviews(transformedReviews);
+                setReviews(reviews);
                 setTotalPages(data.data.totalPages);
             } else {
-                setError('데이터를 불러오는데 실패했습니다.');
+                console.error('Failed to fetch reviews.');
             }
         } catch (error) {
-            setError('데이터를 불러오는 중 오류가 발생했습니다.');
-        } finally {
-            setIsLoading(false);
+            console.error('Error fetching reviews:', error);
         }
     };
 
     useEffect(() => {
-        fetchReviews(currentPage);
-    }, [currentPage]);
+        fetchReviews(searchCategory, appliedSearchKeyword, currentPage);
+    }, [currentPage, searchCategory, appliedSearchKeyword]);
 
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, reviewId: number) => {
-        if (event.target.checked) {
-            setSelectedReviews((prev) => [...prev, reviewId]);
-        } else {
-            setSelectedReviews((prev) => prev.filter((id) => id !== reviewId));
-        }
+    const handleSearch = () => {
+        setAppliedSearchKeyword(searchKeyword);
+        setCurrentPage(1);
+    };
+
+    const handleCheckboxChange = (reviewId: number) => {
+        setSelectedReviews((prev) =>
+            prev.includes(reviewId) ? prev.filter((id) => id !== reviewId) : [...prev, reviewId]
+        );
     };
 
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,39 +79,6 @@ const AdminReviews: React.FC = () => {
         }
     };
 
-    const handleDelete = () => {
-        if (selectedReviews.length === 0) {
-            alert('삭제할 리뷰를 선택해주세요.');
-            return;
-        }
-        alert('현재는 삭제 기능이 지원되지 않습니다.');
-    };
-
-    const handleSearch = () => {
-        if (!searchKeyword.trim()) {
-            alert('검색어를 입력해주세요.');
-            return;
-        }
-
-        const filteredReviews = reviews.filter((review) => {
-            const keyword = searchKeyword.toLowerCase();
-            switch (searchCategory) {
-                case 'restaurantName':
-                    return review.restaurantName.toLowerCase().includes(keyword);
-                case 'title':
-                    return review.title.toLowerCase().includes(keyword);
-                case 'content':
-                    return review.content.toLowerCase().includes(keyword);
-                default:
-                    return true;
-            }
-        });
-
-        setReviews(filteredReviews);
-        setTotalPages(Math.ceil(filteredReviews.length / rowsPerPage));
-        setCurrentPage(1);
-    };
-
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -129,58 +86,64 @@ const AdminReviews: React.FC = () => {
     };
 
     const createPagination = () => {
-        const pageButtons = [];
-        pageButtons.push(
-            <button
-                key="prev"
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={styles.pageBtn}
-            >
-                &lt;
-            </button>
+        const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+        return (
+            <div className={styles.pagination}>
+                {pageNumbers.map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`${styles.pageBtn} ${page === currentPage ? styles.active : ''}`}
+                    >
+                        {page}
+                    </button>
+                ))}
+            </div>
         );
+    };
 
-        for (let i = 1; i <= totalPages; i++) {
-            pageButtons.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={`${styles.pageBtn} ${currentPage === i ? styles.active : ''}`}
-                >
-                    {i}
-                </button>
-            );
+    const saveReview = async () => {
+        if (!selectedReview) return;
+
+        const payload = {
+            ...selectedReview,
+            isHidden: selectedReview.isHidden,
+            isReported: selectedReview.isReported,
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/hanmat/api/post/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                alert('Review updated successfully.');
+                fetchReviews(searchCategory, appliedSearchKeyword, currentPage);
+                setIsModalOpen(false);
+            } else {
+                console.error('Failed to update review.');
+            }
+        } catch (error) {
+            console.error('Error updating review:', error);
         }
-
-        pageButtons.push(
-            <button
-                key="next"
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={styles.pageBtn}
-            >
-                &gt;
-            </button>
-        );
-
-        return pageButtons;
     };
 
     return (
         <div className={styles.container}>
-            {isLoading && <p>로딩 중...</p>}
-            {error && <p className={styles.error}>{error}</p>}
-
             <div className={styles.searchContainer}>
                 <select
                     value={searchCategory}
                     onChange={(e) => setSearchCategory(e.target.value)}
                     className={styles.selectBox}
                 >
-                    <option value="restaurantName">식당이름</option>
+                    <option value="restaurantId">식당 번호</option>
                     <option value="title">제목</option>
                     <option value="content">내용</option>
+                    <option value="regDate">등록일시</option>
+                    <option value="isHidden">숨김 여부</option>
+                    <option value="isReported">신고 여부</option>
                 </select>
                 <input
                     type="text"
@@ -190,7 +153,7 @@ const AdminReviews: React.FC = () => {
                     className={styles.inputBox}
                 />
                 <button onClick={handleSearch} className={styles.searchBtn}>
-                    조회
+                    검색
                 </button>
             </div>
 
@@ -200,18 +163,18 @@ const AdminReviews: React.FC = () => {
                     <th>
                         <input
                             type="checkbox"
-                            checked={selectedReviews.length === reviews.length}
                             onChange={handleSelectAll}
+                            checked={selectedReviews.length === reviews.length}
                         />
                     </th>
                     <th>번호</th>
-                    <th>식당이름</th>
+                    <th>식당 번호</th>
                     <th>제목</th>
                     <th>내용</th>
                     <th>사진</th>
                     <th>등록일시</th>
-                    <th>숨겨짐</th>
-                    <th>신고여부</th>
+                    <th>숨김 여부</th>
+                    <th>신고 여부</th>
                     <th>수정</th>
                 </tr>
                 </thead>
@@ -222,19 +185,15 @@ const AdminReviews: React.FC = () => {
                             <input
                                 type="checkbox"
                                 checked={selectedReviews.includes(review.id)}
-                                onChange={(e) => handleCheckboxChange(e, review.id)}
+                                onChange={() => handleCheckboxChange(review.id)}
                             />
                         </td>
                         <td>{review.id}</td>
-                        <td>{review.restaurantName}</td>
+                        <td>{review.restaurantId}</td>
                         <td>{review.title}</td>
                         <td>{review.content}</td>
                         <td>
-                            <img
-                                src={review.imageUrl}
-                                alt="리뷰 이미지"
-                                className={styles.reviewImage}
-                            />
+                            <img src={review.imageUrl} alt="리뷰 이미지" className={styles.reviewImage} />
                         </td>
                         <td>{review.regDate}</td>
                         <td>{review.isHidden ? '숨김' : '표시'}</td>
@@ -242,7 +201,10 @@ const AdminReviews: React.FC = () => {
                         <td>
                             <button
                                 className={styles.editBtn}
-                                onClick={() => alert('수정 기능은 현재 지원되지 않습니다.')}
+                                onClick={() => {
+                                    setSelectedReview(review);
+                                    setIsModalOpen(true);
+                                }}
                             >
                                 수정
                             </button>
@@ -252,14 +214,66 @@ const AdminReviews: React.FC = () => {
                 </tbody>
             </table>
 
-            <div className={styles.controls}>
-                <div className={styles.pagination}>
-                    {createPagination()}
+            {createPagination()}
+
+            {isModalOpen && selectedReview && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2>리뷰 수정</h2>
+                        <label>
+                            제목
+                            <input
+                                type="text"
+                                value={selectedReview.title}
+                                onChange={(e) =>
+                                    setSelectedReview({ ...selectedReview, title: e.target.value } as Review)
+                                }
+                            />
+                        </label>
+                        <label>
+                            내용
+                            <textarea
+                                value={selectedReview.content}
+                                onChange={(e) =>
+                                    setSelectedReview({ ...selectedReview, content: e.target.value } as Review)
+                                }
+                            />
+                        </label>
+                        <label>
+                            숨김 여부
+                            <select
+                                value={selectedReview.isHidden ? '숨김' : '표시'}
+                                onChange={(e) =>
+                                    setSelectedReview({
+                                        ...selectedReview,
+                                        isHidden: e.target.value === '숨김',
+                                    } as Review)
+                                }
+                            >
+                                <option value="표시">표시</option>
+                                <option value="숨김">숨김</option>
+                            </select>
+                        </label>
+                        <label>
+                            신고 여부
+                            <select
+                                value={selectedReview.isReported ? '신고됨' : '미신고'}
+                                onChange={(e) =>
+                                    setSelectedReview({
+                                        ...selectedReview,
+                                        isReported: e.target.value === '신고됨',
+                                    } as Review)
+                                }
+                            >
+                                <option value="미신고">미신고</option>
+                                <option value="신고됨">신고됨</option>
+                            </select>
+                        </label>
+                        <button onClick={saveReview}>저장</button>
+                        <button onClick={() => setIsModalOpen(false)}>닫기</button>
+                    </div>
                 </div>
-                <button onClick={handleDelete} className={styles.deleteBtn}>
-                    삭제
-                </button>
-            </div>
+            )}
         </div>
     );
 };
