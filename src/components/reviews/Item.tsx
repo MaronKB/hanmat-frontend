@@ -9,33 +9,60 @@ interface ItemProps {
 
 export default function Item({ review, onClick }: ItemProps) {
     const [images, setImages] = useState<string[]>([]);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null); // 선택된 이미지 관리
 
     useEffect(() => {
-        // 빈 이미지와 null 값 제외
-        setImages(
-            [review.image1, review.image2, review.image3, review.image4].filter((image) => image && image !== "")
+        const filteredImages = [review.image1, review.image2, review.image3, review.image4].filter(
+            (image) => image && image !== ""
         );
+        setImages(filteredImages);
+
+        // 첫 번째 이미지를 초기 선택 이미지로 설정
+        if (filteredImages.length > 0) {
+            setSelectedImage(filteredImages[0]);
+        }
     }, [review]);
 
-    return (
-   <div
+   return (
+       <div
            className={styles.review}
            onClick={(e) => {
                console.log("Item clicked", review); // 디버깅
                onClick(e);
            }}
        >
-           <h3>{review.title}</h3>
+           {/* 메인 이미지 영역 */}
+           {selectedImage && (
+               <img
+                   src={`https://portfolio.mrkb.kr/hanmat/media/${selectedImage}`}
+                   alt={`Selected Review ${review.id}`}
+                   className={styles.mainImage}
+               />
+           )}
+
+           {/* 리뷰 제목, 별점 및 내용 */}
+           <div className={styles.titleAndRating}>
+               <h3 className={styles.title}>{review.title}</h3>
+               <div className={styles.rating}>
+                   {Array.from({ length: review.rating }, (_, i) => (
+                       <span key={i}>★</span>
+                   ))}
+               </div>
+           </div>
            <p>{review.content}</p>
-           <div className={styles.rating}>Rating: {review.rating} ★</div>
-           {images.length > 0 && (
-               <div className={styles.images}>
+
+           {/* 썸네일 미리보기 */}
+           {images.length > 1 && (
+               <div className={styles.thumbnailContainer}>
                    {images.map((image, index) => (
                        <img
                            key={index}
                            src={`https://portfolio.mrkb.kr/hanmat/media/${image}`}
-                           alt={`Review ${review.id} - Image ${index + 1}`}
-                           className={styles.image}
+                           alt={`Review ${review.id} - Thumbnail ${index + 1}`}
+                           className={`${styles.thumbnail} ${
+                               selectedImage === image ? styles.activeThumbnail : ""
+                           }`}
+                           onClick={() => setSelectedImage(image)} // 클릭 시 선택된 이미지 변경
                        />
                    ))}
                </div>

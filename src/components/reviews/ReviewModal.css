@@ -1,162 +1,71 @@
-.review-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+/* 전체 레이아웃 설정 */
+.review-modal-content-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  flex-direction: column;
+  position: relative;
+  max-width: 800px;
+  max-height: 90vh;
+  margin: auto;
+  background: white;
+  border-radius: 8px;
+  overflow-y: auto;
 }
 
 .review-modal-content {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80%;
-  overflow-y: auto;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.review-modal-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.review-modal-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.review-modal-rating-container {
-  margin-top: 15px;
   display: flex;
-  justify-content: center;
+  gap: 20px;
+}
+
+/* 왼쪽 이미지 섹션 */
+.review-modal-images-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
-.review-modal-stars .fa-star {
-  font-size: 22px;
-  color: #ddd;
+.review-modal-main-image {
+  width: 100%;
+  max-height: 300px;
 }
 
-.review-modal-stars .fa-star.filled {
-  color: #ffca28;
+.review-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-.review-modal-recommend-button {
-  background-color: #ff5722;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 25px;
+/* 썸네일 */
+.review-modal-thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-modal-thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: border 0.2s;
 }
 
-.review-modal-recommend-button:hover {
-  background-color: #e64a19;
+.review-modal-thumbnail:hover {
+  border: 2px solid #007bff;
 }
 
-/* 이미지 스타일 수정 */
+.active-thumbnail {
+  border: 2px solid #007bff;
+}
+
+/* 오른쪽 콘텐츠 섹션 */
 .review-modal-body {
+  flex: 2;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-bottom: 20px;
-}
-
-.review-modal-images {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 한 줄에 두 개 */
-  gap: 10px; /* 이미지 간격 */
-}
-
-.review-modal-images img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover; /* 이미지 비율 유지 */
-  border: 2px solid #ddd;
-}
-
-/* 텍스트 스타일 수정 */
-.review-modal-text {
-  max-height: 200px; /* 텍스트 최대 높이 제한 */
-  overflow-y: auto; /* 스크롤 활성화 */
-  padding-right: 5px; /* 스크롤 바와 텍스트 간격 */
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.5;
-}
-
-.review-modal-comments-section {
-  margin-top: 20px;
-}
-
-.review-modal-comment-card {
-  background: #f9f9f9;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.review-modal-pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.review-modal-pagination-button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  background: #ddd;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.review-modal-pagination-button.active {
-  background: #007bff;
-  color: white;
-}
-
-.review-modal-comment-input-section {
-  margin-top: 20px;
-}
-
-.review-modal-comment-input {
-  margin-top: -10px;
-  width: 100%;
-  height: 100px;
-  margin-bottom: 10px;
-  padding: 15px;
-  border: 1px solid #ddd;
-}
-
-.review-modal-add-comment-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  width: 100%;
-  transition: background 0.3s;
-}
-
-.review-modal-add-comment-button:hover {
-  background-color: #0056b3;
 }

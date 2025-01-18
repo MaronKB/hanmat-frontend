@@ -27,6 +27,7 @@ export default function Detail({
     const [images, setImages] = useState<string[]>([]);
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>("");
+    const [selectedImage, setSelectedImage] = useState<string | null>(null); // 현재 클릭된 이미지를 저장
 
     useEffect(() => {
         // 리뷰에서 등록된 이미지만 필터링
@@ -68,7 +69,8 @@ export default function Detail({
                     <h2 className={styles.title}>{review.title}</h2>
                     <div className={styles.ratingAndRecommend}>
                         <div className={styles.stars}>{renderStars(review.rating)}</div>
-                        <div>이 리뷰를</div><button className={styles.recommendButton}>추천</button>
+                        <div>이 리뷰를</div>
+                        <button className={styles.recommendButton}>추천</button>
                     </div>
                 </div>
                 {/* 본문 및 이미지 */}
@@ -83,6 +85,9 @@ export default function Detail({
                                 src={`https://portfolio.mrkb.kr/hanmat/media/${image}`} // base URL 추가
                                 alt={`Review image ${index + 1}`}
                                 className={styles.image}
+                                onClick={() =>
+                                    setSelectedImage(`https://portfolio.mrkb.kr/hanmat/media/${image}`)
+                                } // 클릭 이벤트 추가
                             />
                         ))}
                     </div>
@@ -108,6 +113,26 @@ export default function Detail({
                         등록
                     </button>
                 </div>
+
+           {selectedImage && (
+               <div className={styles.imageModal} onClick={(e) => e.stopPropagation()}>
+                   <div className={styles.imageContainer}>
+                       {/* 이미지 */}
+                       <img
+                           src={selectedImage}
+                           alt="Selected Review"
+                           className={styles.largeImage}
+                       />
+                       {/* 닫기 버튼 */}
+                       <button
+                           className={styles.imageCloseButton}
+                           onClick={() => setSelectedImage(null)}
+                       >
+                           닫기
+                       </button>
+                   </div>
+               </div>
+           )}
             </div>
         </div>
     );
