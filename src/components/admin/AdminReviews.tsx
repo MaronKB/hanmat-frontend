@@ -102,6 +102,34 @@ const AdminReviews: React.FC = () => {
         );
     };
 
+    const handleDelete = async () => {
+        if (selectedReviews.length === 0) {
+            alert('삭제할 리뷰를 선택해주세요.');
+            return;
+        }
+
+        const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch('http://localhost:8080/hanmat/api/post/delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(selectedReviews),
+            });
+
+            if (response.ok) {
+                alert('리뷰가 삭제되었습니다.');
+                fetchReviews(searchCategory, appliedSearchKeyword, currentPage);
+                setSelectedReviews([]);
+            } else {
+                console.error('Failed to delete reviews.');
+            }
+        } catch (error) {
+            console.error('Error deleting reviews:', error);
+        }
+    };
+
     const saveReview = async () => {
         if (!selectedReview) return;
 
@@ -214,7 +242,14 @@ const AdminReviews: React.FC = () => {
                 </tbody>
             </table>
 
-            {createPagination()}
+            <div className={styles.controls}>
+                <div className={styles.buttons}>
+                    <button className={styles.deleteBtn} onClick={handleDelete}>
+                        삭제
+                    </button>
+                </div>
+                {createPagination()}
+            </div>
 
             {isModalOpen && selectedReview && (
                 <div className={styles.modal}>
@@ -274,6 +309,7 @@ const AdminReviews: React.FC = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
