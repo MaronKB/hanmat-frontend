@@ -9,76 +9,55 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-
-
 .review-background {
-  background-color: #f8f9fa; /* 기본 배경색 */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* 배경과 요소 분리감 */
-  background-image: url('/reviewimg.png'); /* 배경 이미지 경로 */
-  background-size: 600px; /* 이미지 크기를 너비 200px로 조정 */
-  background-position: calc(100% - 40px) center; /* 오른쪽에서 20px 왼쪽으로 이동 */
-  background-repeat: no-repeat; /* 이미지 반복 방지 */
-  padding: 50px 0; /* 양옆 패딩 제거, 위아래만 패딩 유지 */
-
-  height: 400px; /* 원하는 높이를 지정 */
-  max-height: 100vh; /* 옵션: 뷰포트 최대 높이 제한 */
+    position: relative;
+    min-height: 400px; /* 원하는 높이를 지정 */
+    max-height: 100vh; /* 옵션: 뷰포트 최대 높이 제한 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: var(--background-color-bright);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* 배경과 요소 분리감 */
+    padding: 60px; /* 양옆 패딩 제거, 위아래만 패딩 유지 */
+}
+.review-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right;
+    padding: 0 60px;
+    z-index: 0;
+}
+@media (max-width: 920px) {
+    .review-image {
+        opacity: 0.3;
+    }
 }
 
-  /* 부모 요소의 크기를 키움 */{
-  height: 330px; /* 원하는 높이를 지정 */
-  max-height: 100vh; /* 옵션: 뷰포트 최대 높이 제한 */
+.text-area {
+    z-index: 1;
 }
-
-.review-section {
-  display: flex;
-  flex-direction: column; /* 요소를 수직 정렬 */
-  align-items: center;    /* 중앙 정렬 */
-  text-align: center;     /* 텍스트 및 요소 가운데 정렬 */
-  padding: 20px;          /* 내부 여백 */
-  gap: 12px;              /* 아이템 간 간격 */
-}
-
-/* 제목 스타일 */
 .review-title {
     color:#8d43d6;
-    margin-top:30px;
-    margin-left:70px;
+    margin: 0 0 10px 0;
 }
-
 .sub-title {
- margin-left:70px;
- color:gray;
 }
 
 .review-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  /* 밑줄 색상과 두께 */
-  padding-bottom: 10px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    z-index: 1;
 }
-
-.review-text {
-  text-decoration: underline; /* 밑줄 추가 */
-  text-underline-offset: 4px; /* 밑줄과 텍스트 간격 */
-  text-decoration-thickness: 2px; /* 밑줄의 두께 */
-  color: #666; /* 텍스트 색상 */
-  font-size: 2.5rem;
-}
-
-
-
-.icon {
-  margin-left: 0;         /* 불필요한 좌측 여백 제거 */
-  margin-bottom: 10px;    /* 아래쪽 간격 추가 */
-}
-
-
-
-
 .review-button {
   width: 150px;
-  margin-right: 1190px;
   background: linear-gradient(90deg, #e700ff, #00c6ff); /* 그라데이션 배경 */
   color: white; /* 텍스트 색상 */
   border: none; /* 테두리 제거 */
@@ -86,6 +65,7 @@ body {
   padding: 12px 24px; /* 내부 여백 */
   font-size: 16px; /* 글꼴 크기 */
   font-weight: bold; /* 텍스트 강조 */
+    white-space: nowrap;
   cursor: pointer; /* 클릭 가능 표시 */
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 부드러운 그림자 */
   transition: all 0.3s ease-in-out; /* 부드러운 애니메이션 */
@@ -110,94 +90,19 @@ body {
   outline: none; /* 기본 포커스 제거 */
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* 포커스 시 테두리 강조 */
 }
-
-/* 컨트롤 박스 스타일 */
-.main-controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    height: auto;
-    width: 100%;
-    display: flex; /* flexbox 설정 */
-    align-items: center;
-    justify-content: left; /* 가로로 가운데 정렬 */
-     align-items: center; /* 세로로 가운데 정렬 */
-    margin-bottom: 20px;
-    border-radius: 8px;
-    gap: 16px; /* 버튼 간격 조정 */
-}
-
-/* Create New 버튼 */
-.button-cn {
-  margin-top:-53px;
-  margin-right:850px;
-  width: 155px;
-  background: linear-gradient(90deg, #e700ff, #00c6ff); /* 그라데이션 배경 */
-  color: white; /* 텍스트 색상 */
-  border: none; /* 테두리 제거 */
-  border-radius: 50px; /* 완전히 둥근 버튼 모양 */
-  padding: 12px 10px; /* 내부 여백 */
-  font-size: 16px; /* 글꼴 크기 */
-  font-weight: bold; /* 텍스트 강조 */
-  cursor: pointer; /* 클릭 가능 표시 */
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* 부드러운 그림자 */
-  transition: all 0.3s ease-in-out; /* 부드러운 애니메이션 */
-}
-
-/* 호버 효과 */
-.button-cn:hover {
-  background: linear-gradient(90deg, #e700ff, #0099cc); /* 더 짙은 그라데이션 */
-  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3); /* 그림자 강화 */
-  transform: translateY(-3px); /* 버튼이 살짝 위로 올라감 */
-}
-
-/* 활성화 효과(클릭 시) */
-.button-cn:active {
-  background: linear-gradient(90deg, #e700ff, #006699); /* 더 어두운 톤 */
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2); /* 그림자 축소 */
-  transform: translateY(0); /* 원래 위치로 복귀 */
-}
-
-/* 포커스 효과(접근성 개선) */
-.button-cn:focus {
-  outline: none; /* 기본 포커스 제거 */
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* 포커스 시 테두리 강조 */
-}
-
-/* My Reviews 버튼 */
-
-
-
-.button-rv {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  background-color: #f5f5f5;
-  color: #333;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-left: -20px; /* 위치 조정 */
-  box-shadow: 0 11px 6px rgba(0, 0, 0, 0.3); /* 기본 상태의 그림자 */
-}
-
-.button-rv:hover {
-  background-color: #e0e0e0; /* 호버 시 배경 변경 */
-  color: #4a90e2; /* 호버 시 글자 색 변경 */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 호버 상태 시 더 강조된 그림자 */
-}
-
-.button-rv:active {
-  transform: scale(0.95); /* 클릭 시 크기 축소 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 활성화 상태에서는 작아진 그림자 */
+.review-button > svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
 }
 
 /* 정렬 버튼 */
 .select-buttons {
-
   display: flex;
+    justify-content: flex-start;
   align-items: center;
+    flex-wrap: wrap;
   gap: 15px; /* 버튼 간격 */
   margin-top: 50px; /* 추가: 컨테이너 여백 */
 }
@@ -206,33 +111,46 @@ body {
   all: unset;
       font-size: 16px;
       font-weight: bold;
+    text-align: center;
       padding: 10px 17px;
-       color: #4a90e2;
-      background-color: #fff;
+       color: var(--text-highlight);
+    background-color: var(--background-color-bright);
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 11px 6px rgba(0, 0, 0, 0.1);
 }
-
 .select-buttons button:hover {
-  background-color: #f0f0f0;
-  color: #4a90e2;
+  background-color: var(--background-color-bright);
+  color: var(--text-highlight);
    transform: translateY(-5px);
 }
-
 .select-buttons button.active {
-  background-color: #333; /* 활성화 상태 */
-  color: #fff;
+  background-color: var(--text-color); /* 활성화 상태 */
+  color: var(--background-color-bright);
+}
+.select-buttons button:last-child {
+    margin: 0 0 0 auto;
 }
 
-.select-buttons > button:not(:last-child) {
-  margin-right: 15px; /* 버튼 간격 */
+.select-buttons button > svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--text-highlight);
+    margin: 0 8px 0 0;
+}
+
+.sort-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 .active {
-  background-color: #333; /* 활성 상태의 스타일 */
-  color: white;
+  background-color: var(--text-color); /* 활성 상태의 스타일 */
+  color: var(--background-color-bright);
 }
 
 /* 카드 컨테이너 스타일 */
@@ -244,49 +162,15 @@ body {
     margin-top: 20px;
 }
 
-/* 카드 아이템
-
-*/
-.container > div {
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.container > div:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-
-/* 정렬 버튼 */
-.sort-buttons {
-  display: flex; /* 버튼 정렬 */
-  gap: 12px;    /* 버튼 간격 */
-}
-
-.sort-buttons button {
-       font-size: 16px;
-       font-weight: bold;
-       padding: 10px 17px;
-       color: #4a90e2;
-       background-color: #fff;
-       border-radius: 5px;
-       cursor: pointer;
-       transition: all 0.3s ease;
-       box-shadow: 0 11px 6px rgba(0, 0, 0, 0.1);
-}
-
-.sort-buttons button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-.sort-buttons button.active {
-
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+@media (max-width: 510px) {
+    .select-buttons {
+        flex-direction: column-reverse;
+    }
+    .sort-buttons {
+        width: 100%;
+    }
+    .sort-buttons button {
+        flex: 1;
+    }
 }
 
