@@ -330,9 +330,6 @@ const AdminRestaurants: React.FC = () => {
 
 
 
-
-
-
     return (
         <div className={styles.container}>
             <div className={styles.searchContainer}>
