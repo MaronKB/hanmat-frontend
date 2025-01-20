@@ -189,7 +189,7 @@ const Main: React.FC = () => {
                     fetchReviewsWithSort(sortOption);
                 }}
             />
-            {isNewModalOpened && <New open={setNewModalOpened} />}
+            {isNewModalOpened && <New isOpened={isNewModalOpened} open={setNewModalOpened} />}
             {modalData && (
                 <Detail
                     review={modalData}

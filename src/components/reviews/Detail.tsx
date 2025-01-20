@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import styles from "./Detail.module.css";
 import {Review} from "./Main.tsx";
 import Modal from "../common/Modal.tsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faStar} from "@fortawesome/free-solid-svg-icons";
 
 interface Comment {
     id: number;
@@ -44,7 +46,7 @@ export default function Detail({
                     index < rating ? styles.starFilled : styles.starEmpty
                 }`}
             >
-                ★
+                <FontAwesomeIcon icon={faStar} />
             </span>
         ));
     };

@@ -2,16 +2,28 @@ import styles from "./New.module.css";
 import {Review} from "./Main.tsx";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faSearch, faStar, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {
+    faMapLocation,
+    faMapLocationDot,
+    faPlus,
+    faRotate,
+    faSearch,
+    faStar,
+    faTimes,
+    faUtensils
+} from "@fortawesome/free-solid-svg-icons";
 import React, {FormEvent, useEffect, useState} from "react";
+import Modal from "../common/Modal.tsx";
+import {KeyboardEvent} from "react";
+import {Restaurant} from "../find/Main.tsx";
 
-interface ReviewFormData {
+type ReviewFormData = {
     title: string;
     content: string;
     images: FileList;
 }
 
-export default function New({open}: { open: (open: boolean) => void }) {
+export default function New({isOpened, open}: { isOpened: boolean, open: (open: boolean) => void }) {
     const token = localStorage.getItem('token');
     const user = JSON.parse(token || '{}') as AuthData;
 
@@ -20,6 +32,9 @@ export default function New({open}: { open: (open: boolean) => void }) {
     const [finalRating, setFinalRating] = useState<number>(0);
     const [images, setImages] = useState<string[]>([]);
     const [fileList, setFileList] = useState<FileList | null>(null);
+    const [searchedRestaurants, setSearchedRestaurants] = useState<Restaurant[]>([]);
+    const [isSearchResultsOpen, setSearchResultsOpen] = useState<boolean>(false);
+    const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
 
     const getFormData = () => {
         const form = document.querySelector('#new-review') as HTMLFormElement;
@@ -30,6 +45,64 @@ export default function New({open}: { open: (open: boolean) => void }) {
             content: entries.content,
             images: fileList
         } as ReviewFormData;
+    }
+
+    const getRestaurants = async (name: string) => {
+        if (name.length < 2) return;
+        const response = await fetch(
+            `http://localhost:8080/hanmat/api/restaurant/name/${name}`,
+            { method: 'GET' }
+        );
+        if (!response.ok) {
+            throw new Error('Failed to fetch restaurant data.');
+        }
+        const restaurants = await response.json();
+        setSearchedRestaurants(restaurants.data as Restaurant[]);
+    }
+
+    const toggleSearchResults = (ev: KeyboardEvent<HTMLInputElement>) => {
+        if (ev.key === "Enter") {
+            ev.preventDefault();
+            const results = document.querySelector(`.${styles["search-results"]}`);
+            if (!results) return;
+            const current = results.querySelector(`.${styles["search-result"]}.${styles.active}`);
+            if (current) {
+                selectRestaurant(parseInt(current.id.replace("restaurant-", "")));
+            }
+        }
+        if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+            ev.preventDefault();
+
+            const results = document.querySelector(`.${styles["search-results"]}`);
+            if (!results) return;
+
+            const current = results.querySelector(`.${styles["search-result"]}.${styles.active}`);
+            if (!current) {
+                const newCurrent = results.querySelector(`.${styles["search-result"]}`);
+                if (newCurrent) {
+                    newCurrent.classList.add(styles.active);
+                    newCurrent.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+                return;
+            }
+
+            const next = current[ev.key === "ArrowDown" ? "nextElementSibling" : "previousElementSibling"];
+            if (next) {
+                current.classList.remove(styles.active);
+                next.classList.add(styles.active);
+                next.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+    }
+
+    const selectRestaurant = (id: number) => {
+        const restaurant = searchedRestaurants.find((r) => r.id === id);
+        if (restaurant) {
+            const searchInput = document.querySelector(`.${styles["search-input"]}`) as HTMLInputElement;
+            searchInput.value = restaurant.name;
+            setSelectedRestaurant(restaurant);
+            setSearchResultsOpen(false);
+        }
     }
 
     const addReview = async (ev: FormEvent<HTMLFormElement>) => {
@@ -82,7 +155,7 @@ export default function New({open}: { open: (open: boolean) => void }) {
             id: 0,
             title: "Review " + createRandomString(8), // newReviewData.title.toString(),
             author: user.email,
-            restaurantId: 20,
+            restaurantId: selectedRestaurant?.id ?? 20,
             content: newReviewData.content.toString(),
             rating: rating,
             image1: imageNames[0] || '',
@@ -145,80 +218,107 @@ export default function New({open}: { open: (open: boolean) => void }) {
     }, [hoverRating, rating]);
 
     return (
-        <div className={styles.container}>
-            <div className={styles.modal}>
-                <header className={styles.header}>
+        <Modal title={"새 리뷰"} isOpened={isOpened} close={() => open(false)}>
+            <form id="new-review" className={styles.content} onSubmit={(ev) => addReview(ev)}>
+                <div className={styles.restaurant + (selectedRestaurant ? (" " + styles.active) : "")}>
+                    <input type={"hidden"} name={"restaurantId"} value={selectedRestaurant?.id ?? ""}/>
+                    <div className={styles["restaurant-header"]}>
+                        <FontAwesomeIcon icon={faUtensils}/>
+                        <h3>{selectedRestaurant?.name ?? "Please Select Restaurant"}</h3>
+                        {selectedRestaurant &&
+                            <button type={"button"} onClick={() => setSelectedRestaurant(null)}><FontAwesomeIcon
+                                icon={faRotate}/></button>}
+                    </div>
+
                     <div className={styles["search-input-container"]}>
                         <FontAwesomeIcon icon={faSearch}/>
                         <input
                             type="text"
-                            placeholder="Search store or review title..."
+                            placeholder="Search Restaurant By Title..."
                             className={styles["search-input"]}
+                            onInput={(ev) => getRestaurants(ev.currentTarget.value)}
+                            onFocus={() => setSearchResultsOpen(true)}
+                            onBlur={() => setTimeout(() => setSearchResultsOpen(false), 200)}
+                            onKeyDown={(ev) => toggleSearchResults(ev)}
                         />
-                    </div>
-                    <button className={styles["close-button"]} onClick={() => open(false)}>
-                        <FontAwesomeIcon icon={faTimes}/>
-                    </button>
-                </header>
-                <form id="new-review" className={styles.content} onSubmit={(ev) => addReview(ev)}>
-                    <div className={styles.ratings}>
-                        <div className={styles.rating}>
-                            {[...Array(5)].map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={styles.star + (index < finalRating ? (" " + styles.filled) : "")}
-                                    onClick={() => setRating(index + 1)}
-                                    onMouseEnter={() => setHoverRating(index + 1)}
-                                    onMouseLeave={() => setHoverRating(null)}
-                                >
-                                    <FontAwesomeIcon icon={faStar}/>
-                                </span>
-                            ))}
-                        </div>
-                        <span className={styles["rating-instruction"]}>
-                            {rating > 0
-                                ? `You selected ${rating} star${rating > 1 ? 's' : ''}!`
-                                : 'Please select a rating!'
-                            }
-                        </span>
-                    </div>
-
-                    <div className={styles["image-upload"]}>
-                        <div className={styles["image-preview-grid"]}>
-                            {images.map((image, index) => (
-                                <div key={index} className={styles["image-thumbnail-container"]}>
-                                    <img src={image} alt={`Preview ${index}`} className={styles["image-thumbnail"]}/>
-                                    <button type={"button"} className={styles["delete-button"]} onClick={() => deleteImage(index)}>
-                                        <FontAwesomeIcon icon={faTimes}/>
-                                    </button>
+                        {isSearchResultsOpen && <div className={styles["search-results"]}>
+                            {searchedRestaurants.map((restaurant) => (
+                                <div key={"restaurant-" + restaurant.id} id={"restaurant-" + restaurant.id}
+                                     className={styles["search-result"]}
+                                     onClick={() => selectRestaurant(restaurant.id)}>
+                                    {restaurant.name}
                                 </div>
                             ))}
-                        </div>
-                        <label htmlFor="file-upload" className={styles["upload-label"]}>
-                            <FontAwesomeIcon icon={faPlus}/>
-                        </label>
-                        <input
-                            type="file"
-                            id="file-upload"
-                            name={"images"}
-                            className={styles["file-input"]}
-                            onChange={addImages}
-                            accept="image/*"
-                            multiple
-                        />
+                        </div>}
                     </div>
-                    <textarea
-                        name={"content"}
-                        placeholder="Write your review here..."
-                        rows={5}
-                        style={{resize: 'vertical'}}
+                    <div className={styles["restaurant-body"]}>
+                        <p>{selectedRestaurant?.description ?? "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"}</p>
+                        <p><FontAwesomeIcon
+                            icon={faMapLocationDot}/>{selectedRestaurant?.lmmAddr ?? "Restaurant is not selected or lmm address of this restaurant does not exist"}
+                        </p>
+                        <p><FontAwesomeIcon
+                            icon={faMapLocation}/>{selectedRestaurant?.roadAddr ?? "Restaurant is not selected or road address of this restaurant does not exist"}
+                        </p>
+                    </div>
+                    <div className={styles["restaurant-footer"]}/>
+                </div>
+                <div className={styles.ratings}>
+                    <div className={styles.rating}>
+                        {[...Array(5)].map((_, index) => (
+                            <span
+                                key={index}
+                                className={styles.star + (index < finalRating ? (" " + styles.filled) : "")}
+                                onClick={() => setRating(index + 1)}
+                                onMouseEnter={() => setHoverRating(index + 1)}
+                                onMouseLeave={() => setHoverRating(null)}
+                            >
+                                <FontAwesomeIcon icon={faStar}/>
+                            </span>
+                        ))}
+                    </div>
+                    <span className={styles["rating-instruction"]}>
+                        {rating > 0
+                            ? `You selected ${rating} star${rating > 1 ? 's' : ''}!`
+                            : 'Please select a rating!'
+                        }
+                    </span>
+                </div>
+
+                <div className={styles["image-upload"]}>
+                    <div className={styles["image-preview-grid"]}>
+                        {images.map((image, index) => (
+                            <div key={index} className={styles["image-thumbnail-container"]}>
+                                <img src={image} alt={`Preview ${index}`} className={styles["image-thumbnail"]}/>
+                                <button type={"button"} className={styles["delete-button"]}
+                                        onClick={() => deleteImage(index)}>
+                                    <FontAwesomeIcon icon={faTimes}/>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <label htmlFor="file-upload" className={styles["upload-label"]}>
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </label>
+                    <input
+                        type="file"
+                        id="file-upload"
+                        name={"images"}
+                        className={styles["file-input"]}
+                        onChange={addImages}
+                        accept="image/*"
+                        multiple
                     />
-                    <div className={styles.buttons}>
-                        <button type={"button"} onClick={() => open(false)}>Cancel</button>
-                        <button type={"submit"}>Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </div>
+                <textarea
+                    name={"content"}
+                    className={styles.textarea}
+                    placeholder="Write your review here..."
+                />
+                <div className={styles.buttons}>
+                    <button type={"button"} onClick={() => open(false)}>Cancel</button>
+                    <button type={"submit"}>Submit</button>
+                </div>
+            </form>
+        </Modal>
     );
 }
