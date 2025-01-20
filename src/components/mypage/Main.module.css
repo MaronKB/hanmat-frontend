@@ -1,6 +1,7 @@
 /* MyPage.css */
 div.mypage-container {
   width: 50%;
+  padding-bottom: 25px;
 }
 .mypage-container {
   width: 80%;
