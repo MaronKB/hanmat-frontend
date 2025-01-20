@@ -31,6 +31,7 @@ const Main: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [isNewModalOpened, setNewModalOpened] = useState<boolean>(false);
+    const [isDetailModalOpened, setIsDetailModalOpened] = useState<boolean>(false);
     const [modalData, setModalData] = useState<Review | null>(null);
     const [showOnlyMyReviews, setShowOnlyMyReviews] = useState<boolean>(false);
     const [reviews, setReviews] = useState<Array<Review>>([]);
@@ -62,6 +63,7 @@ const Main: React.FC = () => {
 
     const handleReviewClick = (review: Review) => {
         setModalData(review);
+        setIsDetailModalOpened(true);
     };
 
     useEffect(() => {
@@ -191,7 +193,8 @@ const Main: React.FC = () => {
             {modalData && (
                 <Detail
                     review={modalData}
-                    closeModal={() => setModalData(null)}
+                    isOpened={isDetailModalOpened}
+                    closeModal={() => setIsDetailModalOpened(false)}
                 />
             )}
         </main>
