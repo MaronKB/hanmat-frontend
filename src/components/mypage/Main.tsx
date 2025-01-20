@@ -19,35 +19,17 @@ const MyPage: React.FC = () => {
     const [currentReview, setCurrentReview] = useState<string>("");
     const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
     const [username, setUsername] = useState('Guest');
-    const email = user?.email || ""; // 사용자 이메일 가져오기
+    const [email, setEmail] = useState(''); // 사용자 이메일 가져오기
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-            const fetchMyReviews = async () => {
-                try {
-                    const response = await fetch(
-                        `http://localhost:5173/api/posts/my?email=${email}&page=1&size=10&sort=new`
-                    );
-
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch reviews");
-                    }
-
-                    const data = await response.json();
-                    if (data.success) {
-                        setMyReviews(data.data.content); // 페이지 데이터(content) 설정
-                    } else {
-                        console.error("Error fetching reviews:", data.message);
-                    }
-                } catch (error) {
-                    console.error("Error fetching reviews:", error);
-                }
-            };
-
-            if (email) {
-                fetchMyReviews();
-            }
-        }, [email]);
+     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const userData = JSON.parse(token);
+          setUsername(userData.nickname || 'Guest'); // 닉네임 설정
+          setEmail(userData.email || ''); // 이메일 설정
+        }
+      }, []);
 
 
     const handleIntroduceChange = (e: React.ChangeEvent<HTMLInputElement>) =>
