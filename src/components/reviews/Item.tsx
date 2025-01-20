@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Item.module.css";
 import { Review } from "./Main";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 interface ItemProps {
     review: Review;
@@ -43,11 +45,11 @@ export default function Item({ review, onClick }: ItemProps) {
            {/* 리뷰 제목, 별점 및 내용 */}
            <div className={styles.titleAndRating}>
                <h3 className={styles.title}>{review.title}</h3>
-               <div className={styles.rating}>
-                   {Array.from({ length: review.rating }, (_, i) => (
-                       <span key={i}>★</span>
-                   ))}
-               </div>
+              <div className={styles.rating}>
+                  {Array.from({ length: review.rating }, (_, i) => (
+                      <FontAwesomeIcon key={i} icon={faStar} />
+                  ))}
+              </div>
            </div>
            <p>{review.content}</p>
 
