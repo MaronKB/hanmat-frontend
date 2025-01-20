@@ -4,7 +4,8 @@ import {Menu} from "./Main.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBowlFood, faHashtag, faPepperHot} from "@fortawesome/free-solid-svg-icons";
 
-export default function TasteModal({menu, isOpened, close}: {menu: Menu, isOpened: boolean, close: () => void}) {
+export default function TasteModal({menu, isOpened, close}: {menu: Menu | null, isOpened: boolean, close: () => void}) {
+    if (!menu) return null;
     const title = menu.name.split("(")[0].toUpperCase();
     const dscrn = menu.dscrn ? menu.dscrn.split(",") : ["재료 정보 없음"];
 

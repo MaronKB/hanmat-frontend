@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import Modal from "./FindModal.tsx";
-import {useTranslation} from "react-i18next";
 
 export type Restaurant = {
     id: number;
@@ -19,13 +18,12 @@ export type Restaurant = {
 }
 
 export default function Main() {
-    const {t} = useTranslation();
     let lang = localStorage.getItem("lang") || "en";
     if (lang === "jp") lang = "ja";
 
     const [userLocation, setUserLocation] = useState({lat: 37.5665, lng: 126.9780});
     const [restaurants, setRestaurants] = useState([]);
-    const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant>();
+    const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant | null>(null);
     const [isModalOpened, setIsModalOpened] = useState(false);
 
     const getMyLocation = () => {
@@ -76,10 +74,6 @@ export default function Main() {
         getMyLocation();
     }, []);
 
-    useEffect(() => {
-        location.reload();
-    }, [t]);
-
     return (
         <NavermapsProvider ncpClientId={"d2682gqz4u&language=" + lang}>
             <main className={"max " + styles.main}>
@@ -115,7 +109,7 @@ export default function Main() {
                     </div>
                 </div>
             </main>
-            {(isModalOpened && currentRestaurant) && <Modal
+            {currentRestaurant && <Modal
                 restaurant={currentRestaurant}
                 isOpened={isModalOpened}
                 close={closeModal}

@@ -84,7 +84,7 @@ export default function Taste() {
                 <button onClick={() => goPage(page - 1)}><FontAwesomeIcon icon={faAngleLeft} /></button>
                 <button onClick={() => goPage(page + 1)}><FontAwesomeIcon icon={faAngleRight}/></button>
             </div>
-            {selectedMenu && <TasteModal menu={selectedMenu} isOpened={isModalOpened} close={() => setIsModalOpened(false)}/>}
+            <TasteModal menu={selectedMenu} isOpened={isModalOpened} close={() => setIsModalOpened(false)}/>
         </main>
     );
 };
