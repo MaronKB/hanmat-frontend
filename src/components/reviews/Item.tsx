@@ -3,6 +3,7 @@ import styles from "./Item.module.css";
 import { Review } from "./Main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import errorImg from "../../assets/images/error-image.png";
 
 interface ItemProps {
     review: Review;
@@ -37,6 +38,13 @@ export default function Item({ review, onClick }: ItemProps) {
            {selectedImage && (
                <img
                    src={`https://portfolio.mrkb.kr/hanmat/media/${selectedImage}`}
+                   alt={`Selected Review ${review.id}`}
+                   className={styles.mainImage}
+               />
+           )}
+           {!selectedImage && (
+               <img
+                   src={errorImg}
                    alt={`Selected Review ${review.id}`}
                    className={styles.mainImage}
                />
