@@ -70,6 +70,7 @@ main {
 }
 main.max {
     max-width: unset;
+    min-height: 100vh;
     padding: 0;
 }
 

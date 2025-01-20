@@ -16,7 +16,7 @@
 }
 .container.opened {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: all;
 }
 .modal {
     width: 100%;

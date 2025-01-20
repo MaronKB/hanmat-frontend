@@ -19,6 +19,7 @@ type Image = {
     thumbnail: string;
 }
 export default function FindModal({restaurant, isOpened, close}: {restaurant: Restaurant, isOpened: boolean, close: () => void}) {
+
     const [images, setImages] = useState<Image[]>([]);
     const [isPreviewOpened, setIsPreviewOpened] = useState<boolean>(false);
     const [currentImage, setCurrentImage] = useState<Image | null>(null);

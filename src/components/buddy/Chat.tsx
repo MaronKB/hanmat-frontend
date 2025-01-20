@@ -5,6 +5,7 @@ import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import ChatMessage, {Message} from "./ChatMessage";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
+import errorImage from "../../assets/images/error-image.png";
 
 export default function Chat({socket, target, isChatting}: {socket: Socket, target: string, isChatting: boolean}) {
     const token = localStorage.getItem('token');
@@ -122,7 +123,7 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
         <div className={styles.chat + (isChatting ? (" " + styles.active) : "")}>
             <div className={styles.header}>
                 <div className={styles.profile}>
-                    <img className={styles.image} src={targetUser.picture || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" />
+                    <img className={styles.image} src={targetUser.picture || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"} alt="user" onError={(ev) => ev.currentTarget.src = errorImage}/>
                 </div>
                 <div className={styles.info}>
                     <h3>{targetUser.name}</h3>
