@@ -23,9 +23,11 @@ export default function Detail({
   closeModal: () => void;
 }) {
   const [images, setImages] = useState<string[]>([]);
-  const [comments, setComments] = useState<Comment[]>([]); // 댓글 상태
-  const [newComment, setNewComment] = useState<string>("");
+  const [comments, setComments] = useState<Comment[]>([]); // 기존 댓글 리스트
+  const [newComment, setNewComment] = useState<string>(""); // 새로
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 상태
 
   // 리뷰 이미지 불러오기
   useEffect(() => {
@@ -35,86 +37,115 @@ export default function Detail({
     setImages(filteredImages);
   }, [review]);
 
-  // 댓글 데이터 서버에서 가져오기
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/hanmat/api/comment/all?page=1&size=10&sort=id`, {
-          method: "GET",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch comments.");
-        }
-        const result = await response.json();
-        if (result.success) {
-          setComments(result.data.items); // 서버의 댓글 데이터로 상태 반영
-        } else {
-          console.error("Error fetching comments:", result.message);
-        }
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
+    const regBy = sessionStorage.getItem("userEmail");
 
-    fetchComments(); // 컴포넌트 최초 렌더링 시 댓글 로드
-  }, [review.id]);
+    if (!regBy || regBy.trim() === "") {
+      alert("로그인이 필요합니다.");
 
-  // 댓글 추가
- const addComment = async () => {
-   if (!newComment.trim()) {
-     alert("댓글 내용을 입력하세요.");
-     return;
-   }
+    } else {
+      console.log("현재 로그인된 사용자:", regBy);
+    }
+  }, []);
 
-   // 동적으로 로그인한 사용자 이메일 가져오기 (sessionStorage에서 불러오기)
- const regBy = sessionStorage.getItem("userEmail");
- if (!regBy || regBy.trim() === "") {
-   console.log("로그인 사용자 이메일이 없습니다.");
-   alert("로그인이 필요합니다.");
-   return;
- }
+ // 로그인 사용자의 세션 확인
+   useEffect(() => {
+     const regBy = sessionStorage.getItem("userEmail");
 
-   // 부적절한 이메일 여부 확인 (추가 검증)
-   if (regBy.length > 50) {
-     alert("작성자 정보는 50자를 초과할 수 없습니다.");
-     return;
-   }
-
-   console.log("Request Data:", {
-     postId: review.id,
-     content: newComment.trim(),
-     regBy,
-   });
-
-   try {
-     const response = await fetch(`http://localhost:8080/hanmat/api/comment/add`, {
-       method: "POST",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-         postId: review.id, // 게시물 ID
-         content: newComment.trim(), // 댓글 내용
-         regBy, // 동적으로 가져온 작성자 정보
-       }),
-     });
-
-     if (!response.ok) {
-       throw new Error("Failed to add comment.");
-     }
-
-     const result = await response.json();
-
-     if (result.success) {
-       setComments((prevComments) => [...prevComments, result.data]); // 댓글 리스트 갱신
-       setNewComment(""); // 댓글 입력 필드 초기화
+     if (!regBy || regBy.trim() === "") {
+       alert("로그인이 필요합니다.");
      } else {
-       console.error("댓글 등록 실패:", result.message);
-       alert("댓글 등록 실패: " + result.message);
+       console.log("현재 로그인된 사용자:", regBy);
      }
-   } catch (error) {
-     console.error("Error adding comment:", error);
-     alert("댓글 등록 중 오류가 발생했습니다.");
+   }, []);
+
+   // 댓글 목록 불러오기
+   useEffect(() => {
+     const fetchComments = async () => {
+       setIsLoading(true);
+       setError(null);
+
+       try {
+         const response = await fetch(
+           `http://localhost:8080/hanmat/api/comment/all?page=1&size=10&sort=id`,
+           { method: "GET" }
+         );
+
+         if (!response.ok) {
+           throw new Error("댓글 데이터를 가져올 수 없습니다.");
+         }
+
+         const result = await response.json();
+         if (result.success) {
+           setComments(result.data.items);
+         } else {
+           throw new Error(result.message || "댓글 가져오기 실패");
+         }
+       } catch (error) {
+         console.error("댓글 가져오기 오류:", error);
+         setError(error.message || "댓글 불러오는 중 에러가 발생했습니다.");
+       } finally {
+         setIsLoading(false);
+       }
+     };
+
+     fetchComments();
+   }, [review.id]);
+
+   // 댓글 추가 기능
+   const addComment = async () => {
+     const regBy = sessionStorage.getItem("userEmail");
+
+     console.log("현재 sessionStorage 값:", regBy);
+
+     if (!regBy || regBy.trim() === "") {
+       alert("로그인이 필요합니다.");
+       return;
+     }
+
+     if (!newComment.trim()) {
+       alert("댓글 내용을 입력하세요.");
+       return;
+     }
+
+     try {
+       const response = await fetch(`http://localhost:8080/hanmat/api/comment/add`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+           postId: review.id,
+           content: newComment.trim(),
+           regBy,
+         }),
+       });
+
+       if (!response.ok) {
+         const error = await response.json();
+         throw new Error(error.message || "댓글 등록 실패.");
+       }
+
+       const result = await response.json();
+       if (result.success) {
+         setComments((prevComments) => [...prevComments, result.data]); // 새로운 댓글 추가
+         setNewComment(""); // 입력창 초기화
+         alert("댓글이 성공적으로 등록되었습니다.");
+       } else {
+         alert("댓글 등록 실패: " + result.message);
+       }
+     } catch (error) {
+       console.error("댓글 등록 오류:", error);
+       alert("댓글 등록 중 문제가 발생했습니다.");
+     }
+   };
+
+   // 로딩, 에러 상태 처리 및 렌더링
+   if (isLoading) {
+     return <p>Loading...</p>;
    }
- };
+
+   if (error) {
+     return <p style={{ color: "red" }}>오류 발생: {error}</p>;
+   }
 
   // 좋아요 토글 함수
   const toggleLike = (id: number) => {
