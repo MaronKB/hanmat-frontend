@@ -1,9 +1,7 @@
 /* 메인 컨테이너 */
 .main {
-    max-width: 1800px;
     font-family: 'Poppins', sans-serif;
     padding: 30px;
-    margin: 0 auto; /* 가운데 정렬 */
 }
 
 .review-background {

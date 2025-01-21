@@ -89,7 +89,7 @@ const MyPage: React.FC = () => {
     }
 
     return (
-        <div className={`${styles['mypage-container']} ${isDarkMode ? styles.dark : ''}`}>
+        <main className={`${styles['mypage-container']} ${isDarkMode ? styles.dark : ''}`}>
             {/* 이미지 업로드 */}
             <div className={styles.section}>
                 <div
@@ -217,7 +217,7 @@ const MyPage: React.FC = () => {
                 />
                 <button onClick={saveEditedReview}>저장</button>
             </Modal>
-        </div>
+        </main>
     );
 };
 

@@ -31,7 +31,7 @@
     transform: scale(0);
 }
 .opened .modal {
-    transform: scale(1);
+    transform: none;
 }
 .header {
     width: 100%;

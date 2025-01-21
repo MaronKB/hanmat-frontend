@@ -4,7 +4,7 @@ import { Review } from "./Main.tsx";
 import Modal from "../common/Modal.tsx";
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faStar, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faStar, faThumbsUp, faX} from "@fortawesome/free-solid-svg-icons";
 import {useTranslation} from "react-i18next";
 
 interface Comment {
@@ -195,8 +195,7 @@ export default function Detail({
                 <button
                   className={styles.likeButton}
                   onClick={() => toggleLike(comment.id)}
-                >
-                  ❤️
+                ><FontAwesomeIcon icon={faHeart}/>
                 </button>
                 {/* 좋아요 숫자 */}
                 <span className={styles.likeCount}>{comment.likes}</span>
@@ -225,7 +224,7 @@ export default function Detail({
               className={styles.largeImage}
             />
             {/* 닫기 버튼 */}
-            <button className={styles.imageCloseButton} onClick={() => setSelectedImage(null)}>{t("reviews:close")}</button>
+            <button className={styles.imageCloseButton} onClick={() => setSelectedImage(null)}><FontAwesomeIcon icon={faX}/></button>
           </div>
         </div>
       )}
