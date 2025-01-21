@@ -94,21 +94,53 @@
   text-overflow: ellipsis;
 }
 
-/* 별점 스타일 */
+
+/* 리뷰 전체 wrapper */
+.reviewWrapper {
+ display: flex;
+   flex-direction: column; /* 내용을 세로로 쌓기 */
+   align-items: center; /* 수평 가운데 정렬 */
+   justify-content: center; /* 수직 가운데 정렬 (필요시 추가) */
+   gap: 8px; /* 위아래 간격 */
+   text-align: center; /* 텍스트도 가운데 정렬 */
+   margin-bottom: 16px; /* 각 리뷰끼리 간격 추가 */
+}
+
+/* 별점 */
 .rating {
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-bottom: 15px; /* 별점을 항상 하단으로 배치 */
+  color: #f8a504;
+  display: flex; /* 별을 나란히 정렬 */
+  justify-content: flex-start; /* 별점을 왼쪽 정렬 */
+  gap: 4px; /* 별 간의 간격 */
 }
 
-.titleAndRating {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* 제목과 별점 사이 간격 */
+/* 제목과 작성자 */
+.titleAndAuthor {
+  display: flex; /* 제목과 작성자 가로로 정렬 */
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: center; /* 세로 정렬(중앙 정렬) */
+  gap: 8px; /* 제목과 작성자 사이 간격 */
 }
 
+/* 제목 */
 .title {
-  margin: 0;
-  font-size: 1.2rem; /* 제목 크기 */
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* 작성자 정보 */
+.author {
+  font-size: 0.9rem;
+  color: gray;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 넘친 부분 ... 표시 */
+  max-width: 150px; /* 작성자 정보 최대 너비 */
+}
+
+/* 내용 */
+.content {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
 }

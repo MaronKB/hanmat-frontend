@@ -49,17 +49,27 @@ export default function Item({ review, onClick }: ItemProps) {
                    className={styles.mainImage}
                />
            )}
+        <div className={styles.reviewWrapper}>
+          {/* 별점 */}
+          <div className={styles.rating}>
+            {Array.from({ length: review.rating }, (_, i) => (
+              <FontAwesomeIcon key={i} icon={faStar} />
+            ))}
+          </div>
 
-           {/* 리뷰 제목, 별점 및 내용 */}
-           <div className={styles.titleAndRating}>
-               <h3 className={styles.title}>{review.title}</h3>
-              <div className={styles.rating}>
-                  {Array.from({ length: review.rating }, (_, i) => (
-                      <FontAwesomeIcon key={i} icon={faStar} />
-                  ))}
-              </div>
-           </div>
-           <p>{review.content}</p>
+          {/* 제목과 작성자 */}
+          <div className={styles.titleAndAuthor}>
+            <h3 className={styles.title}>{review.title}</h3>
+            <p className={styles.author}>
+              {review.author.split("@")[0].length > 10
+                ? `${review.author.split("@")[0].slice(0, 10)}...`
+                : review.author.split("@")[0]}
+            </p>
+          </div>
+
+          {/* 내용 */}
+          <p className={styles.content}>{review.content}</p>
+        </div>
 
            {/* 썸네일 미리보기 */}
            {images.length > 1 && (
