@@ -232,24 +232,31 @@
 }
 
 .likeSection {
-    display: flex;
-    align-items: center;
+
+ display: flex; /* Flexbox로 가로 정렬 */
+  align-items: center; /* 아이콘과 숫자를 수직 가운데 정렬 */
+  gap: 8px; /* 버튼과 숫자 사이 간격 */
 }
 
 .likeButton {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
+   all: unset; /* 기본 스타일 제거 */
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* 버튼 크기 고정 */
+    height: 40px;
+    background-color: transparent; /* 배경 투명화 */
 }
 
 .likeButton:hover {
-    transform: scale(1.2);
-    transition: transform 0.2s;
+  /* 마우스 오버 시 색상 변경만 허용 */
+  transform: none; /* 크기 변화 효과 제거 */
+  background-color: transparent; /* 배경 변화 제거 */
 }
 
 .likeCount {
-    margin-left: 5px;
-    font-size: 1rem;
-    color: gray;
+  display: inline-block; /* 숫자 영역을 inline-block으로 */
+  width: 30px; /* 충분한 고정 너비 설정 */
+  text-align: center; /* 숫자를 중앙 정렬 */
 }
