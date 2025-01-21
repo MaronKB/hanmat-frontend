@@ -189,20 +189,23 @@ export default function Detail({
         <div className={styles.comments}>
           {comments.map((comment) => (
             <div key={comment.id} className={styles.commentContainer}>
+            <div className={styles.commentAuthor}>
+               {comment.regBy.split("@")[0].length > 10
+                        ? `${comment.regBy.split("@")[0].slice(0, 10)}...`
+                        : comment.regBy.split("@")[0]}
+            </div>
               <p className={styles.comment}>{comment.text}</p>
-              <div className={styles.likeSection}>
-                {/* 좋아요 버튼 */}
-                <button
-                  className={styles.likeButton}
-                  onClick={() => toggleLike(comment.id)}
-                ><FontAwesomeIcon icon={faHeart}/>
-                </button>
-                {/* 좋아요 숫자 */}
-                <span className={styles.likeCount}>{comment.likes}</span>
-              </div>
-              <div className={styles.commentAuthor}>
-                작성자: {comment.regBy} {/* 댓글 작성자 표시 */}
-              </div>
+             <div className={styles.likeSection}>
+               {/* 좋아요 버튼 */}
+               <button
+                 className={styles.likeButton}
+                 onClick={() => toggleLike(comment.id)}
+               >
+                 <FontAwesomeIcon icon={faHeart} style={{ color: 'red' }} />
+               </button>
+               {/* 좋아요 숫자 */}
+               <span className={styles.likeCount}>{comment.likes}</span>
+             </div>
             </div>
           ))}
         </div>
