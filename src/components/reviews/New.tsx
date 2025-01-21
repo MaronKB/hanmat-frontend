@@ -52,7 +52,7 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
     const getRestaurants = async (name: string) => {
         if (name.length < 2) return;
         const response = await fetch(
-            `http://localhost:8080/hanmat/api/restaurant/name/${name}`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/restaurant/name/${name}`,
             { method: 'GET' }
         );
         if (!response.ok) {
@@ -167,7 +167,7 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
         } as Review;
 
         try {
-            const response = await fetch('http://localhost:8080/hanmat/api/post/save', {  // 올바른 백엔드 URL
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/save`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newReview),

@@ -20,14 +20,12 @@ export default function Chat({socket, target, isChatting}: {socket: Socket, targ
     const [newMessage, setNewMessage] = useState<Message>({} as Message);
 
     const getTargetUser = async () => {
-        const response = await fetch(`http://localhost:8080/hanmat/api/user/${target || "system@hanmat.com"}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/${target || "system@hanmat.com"}`);
         const user = await response.json();
         setTargetUser(user.data);
     }
 
     const getRoom = async () => {
-        // todo: change to production url & dotenv
-        // const response = await fetch('http://localhost:3000/chat/room', {
         const response = await fetch('https://portfolio.mrkb.kr/hanmat/chat/room', {
             method: 'POST',
             headers: {

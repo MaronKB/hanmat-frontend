@@ -52,8 +52,8 @@ const AdminRestaurants: React.FC = () => {
 
         const endpoint =
             category && keyword
-                ? `http://localhost:8080/hanmat/api/restaurant/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
-                : `http://localhost:8080/hanmat/api/restaurant/all?page=${page}&size=${rowsPerPage}`;
+                ? `${import.meta.env.VITE_BACKEND_URL}/api/restaurant/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
+                : `${import.meta.env.VITE_BACKEND_URL}/api/restaurant/all?page=${page}&size=${rowsPerPage}`;
 
         try {
             const response = await fetch(endpoint);
@@ -187,7 +187,7 @@ const AdminRestaurants: React.FC = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/hanmat/api/restaurant/update', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/update`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -240,7 +240,7 @@ const AdminRestaurants: React.FC = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch("http://localhost:8080/hanmat/api/restaurant/delete", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/delete`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -308,7 +308,7 @@ const AdminRestaurants: React.FC = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/hanmat/api/restaurant/add", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

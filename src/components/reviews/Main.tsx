@@ -44,7 +44,7 @@ const Main: React.FC = () => {
             : `my?email=${user.current.email}&`;
         try {
             const response = await fetch(
-                `http://localhost:8080/hanmat/api/post/${query}page=${page}&size=${PAGE_SIZE}&sort=id&sortAs=desc`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/post/${query}page=${page}&size=${PAGE_SIZE}&sort=id&sortAs=desc`,
                 { method: 'GET' }
             );
             if (!response.ok) {
@@ -87,7 +87,7 @@ const Main: React.FC = () => {
             : `my?email=${user.current.email}&`;
         try {
             const response = await fetch(
-                `http://localhost:8080/hanmat/api/post/${query}page=${currentPage}&size=${PAGE_SIZE}&sort=${sort}`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/post/${query}page=${currentPage}&size=${PAGE_SIZE}&sort=${sort}`,
                 { method: 'GET' }
             );
 

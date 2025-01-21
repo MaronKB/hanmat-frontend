@@ -14,7 +14,7 @@ export default function Main({open}: {open: (target: string) => boolean}) {
     const token = localStorage.getItem('token') || '';
     const user = useRef<UserData>(JSON.parse(token));
     const getUsers = async () => {
-        const response = await fetch('http://localhost:8080/hanmat/api/user/all');
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/all`);
         const users = await response.json();
         console.log(users);
         setUsers(users.data.items.filter((u: { email: string; }) => u.email !== user.current.email));

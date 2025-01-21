@@ -50,7 +50,7 @@ const AdminUsers: React.FC = () => {
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:8080/hanmat/api/user/all');
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/all`);
                 if (response.ok) {
                     const data = await response.json();
                     setTotalPages(data.data.totalPages);
@@ -81,6 +81,15 @@ const AdminUsers: React.FC = () => {
 
         fetchUsers();
     }, []);
+
+    useEffect(() => {
+        console.error('Error:', error);
+    }, [error]);
+
+    useEffect(() => {
+        console.log("done");
+    }, [isLoading]);
+
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, userId: number) => {
         if (event.target.checked) {
@@ -464,4 +473,3 @@ const AdminUsers: React.FC = () => {
 };
 
 export default AdminUsers;
-

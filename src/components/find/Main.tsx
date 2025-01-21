@@ -43,7 +43,7 @@ export default function Main() {
             latitude: lat,
             longitude: lng
         }
-        fetch(`http://localhost:8080/hanmat/api/restaurant/nearby`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/restaurant/nearby`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

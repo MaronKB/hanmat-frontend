@@ -29,7 +29,7 @@ export default function Taste() {
     const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
 
     const getMenus = async () => {
-        const response = await fetch(`http://localhost:8080/hanmat/api/food/${lang}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/food/${lang}`);
         // const response = await fetch(`https://portfolio.mrkb.kr/hanmat/api/food/${lang}`);
         const data = await response.json();
         console.log(data);

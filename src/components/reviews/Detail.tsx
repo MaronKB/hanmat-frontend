@@ -51,7 +51,7 @@ export default function Detail({
 
        try {
          const response = await fetch(
-           `http://localhost:8080/hanmat/api/comment/all?page=1&size=10&sort=id`,
+           `${import.meta.env.VITE_BACKEND_URL}/api/comment/all?page=1&size=10&sort=id`,
            { method: "GET" }
          );
 
@@ -93,7 +93,7 @@ export default function Detail({
      }
 
      try {
-       const response = await fetch(`http://localhost:8080/hanmat/api/comment/add`, {
+       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comment/add`, {
          method: "POST",
          headers: { "Content-Type": "application/json" },
          body: JSON.stringify({

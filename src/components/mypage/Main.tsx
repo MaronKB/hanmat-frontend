@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './Main.module.css';
-import Modal from './Modal';
+// import Modal from './Modal';
 import {AuthData} from "../oauth/GoogleOAuth.tsx";
+// import {Review} from "../reviews/Main.tsx";
 
 const MyPage: React.FC = () => {
     const token = localStorage.getItem('token');
@@ -10,14 +11,14 @@ const MyPage: React.FC = () => {
     const [introduce, setIntroduce] = useState('');
     const [isBuddyVisible, setIsBuddyVisible] = useState(true);
     const [isAutoTranslate, setIsAutoTranslate] = useState(true);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    // const [isDarkMode, setIsDarkMode] = useState(false);
     const [radius, setRadius] = useState('5km');
     const [favoriteStores, setFavoriteStores] = useState(['식당 1', '식당 2', '식당 3', '식당 4']);
-    const [myReviews, setMyReviews] = useState<any[]>([]); // 리뷰 데이터 상태
-    const [showOnlyMyReviews, setShowOnlyMyReviews] = useState<boolean>(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentReview, setCurrentReview] = useState<string>("");
-    const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
+    // const [myReviews, setMyReviews] = useState<Review[]>([]); // 리뷰 데이터 상태
+    // const [showOnlyMyReviews, setShowOnlyMyReviews] = useState<boolean>(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [currentReview, setCurrentReview] = useState<string>("");
+    // const [currentReviewIndex, setCurrentReviewIndex] = useState<number | null>(null);
     const [username, setUsername] = useState('Guest');
     const [email, setEmail] = useState(''); // 사용자 이메일 가져오기
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,30 +37,30 @@ const MyPage: React.FC = () => {
         setIntroduce(e.target.value);
     const toggleBuddyVisibility = () => setIsBuddyVisible(!isBuddyVisible);
     const toggleAutoTranslate = () => setIsAutoTranslate(!isAutoTranslate);
-    const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+    // const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
     const handleRadiusChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
         setRadius(e.target.value);
     const removeFavoriteStore = (index: number) =>
         setFavoriteStores(favoriteStores.filter((_, i) => i !== index));
+    //
+    // const editReview = (index: number) => {
+    //     setCurrentReview(myReviews[index]);
+    //     setCurrentReviewIndex(index);
+    //     setIsModalOpen(true);
+    // };
 
-    const editReview = (index: number) => {
-        setCurrentReview(myReviews[index]);
-        setCurrentReviewIndex(index);
-        setIsModalOpen(true);
-    };
-
-    const saveEditedReview = () => {
-            if (currentReviewIndex !== null) {
-                const updatedReviews = [...myReviews];
-                updatedReviews[currentReviewIndex] = {
-                    ...updatedReviews[currentReviewIndex],
-                    POST_CONTENT: currentReview,
-                };
-                setMyReviews(updatedReviews);
-                setIsModalOpen(false);
-                setCurrentReviewIndex(null);
-            }
-        };
+    // const saveEditedReview = () => {
+    //         if (currentReviewIndex !== null) {
+    //             const updatedReviews = [...myReviews];
+    //             updatedReviews[currentReviewIndex] = {
+    //                 ...updatedReviews[currentReviewIndex],
+    //                 // POST_CONTENT: currentReview,
+    //             };
+    //             setMyReviews(updatedReviews);
+    //             setIsModalOpen(false);
+    //             setCurrentReviewIndex(null);
+    //         }
+    //     };
 
     const handleWithdrawal = () => {
         if (window.confirm('탈퇴하시겠습니까?')) {
@@ -89,7 +90,7 @@ const MyPage: React.FC = () => {
     }
 
     return (
-        <main className={`${styles['mypage-container']} ${isDarkMode ? styles.dark : ''}`}>
+        <main className={`${styles['mypage-container']}`}>
             {/* 이미지 업로드 */}
             <div className={styles.section}>
                 <div
@@ -179,28 +180,28 @@ const MyPage: React.FC = () => {
             {/* 리뷰 */}
             <div className={styles.section}>
                 <h3>나의 리뷰 목록</h3>
-                {myReviews.length > 0 ? (
-                <ul>
-                    {myReviews.map((review, index) => (
-                        <li key={index}>
-                            <h4>{review.POST_TITLE}</h4>
-                            <p>{review.POST_CONTENT}</p>
-                            <button
-                                className={styles['fix-btn']}
-                                onClick={() => {
-                                    setCurrentReview(review.POST_CONTENT); // 수정할 리뷰 내용 설정
-                                    setCurrentReviewIndex(index); // 수정할 리뷰 인덱스 설정
-                                    setIsModalOpen(true); // 모달 열기
-                                }}
-                            >
-                                수정
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>작성한 리뷰가 없습니다.</p>
-            )}
+            {/*    {myReviews.length > 0 ? (*/}
+            {/*    <ul>*/}
+            {/*        {myReviews.map((review, index) => (*/}
+            {/*            <li key={index}>*/}
+            {/*                <h4>{review.title}</h4>*/}
+            {/*                <p>{review.content}</p>*/}
+            {/*                <button*/}
+            {/*                    className={styles['fix-btn']}*/}
+            {/*                    onClick={() => {*/}
+            {/*                        setCurrentReview(review.content); // 수정할 리뷰 내용 설정*/}
+            {/*                        setCurrentReviewIndex(index); // 수정할 리뷰 인덱스 설정*/}
+            {/*                        setIsModalOpen(true); // 모달 열기*/}
+            {/*                    }}*/}
+            {/*                >*/}
+            {/*                    수정*/}
+            {/*                </button>*/}
+            {/*            </li>*/}
+            {/*        ))}*/}
+            {/*    </ul>*/}
+            {/*) : (*/}
+            {/*    <p>작성한 리뷰가 없습니다.</p>*/}
+            {/*)}*/}
             </div>
 
             <button className={styles['withdraw-btn']} onClick={handleWithdrawal}>
@@ -208,15 +209,15 @@ const MyPage: React.FC = () => {
             </button>
 
             {/* 모달 창 */}
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <h3>리뷰 수정</h3>
-                <input
-                    type="text"
-                    value={currentReview}
-                    onChange={(e) => setCurrentReview(e.target.value)}
-                />
-                <button onClick={saveEditedReview}>저장</button>
-            </Modal>
+            {/*<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>*/}
+            {/*    <h3>리뷰 수정</h3>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        value={currentReview}*/}
+            {/*        onChange={(e) => setCurrentReview(e.target.value)}*/}
+            {/*    />*/}
+            {/*    <button onClick={saveEditedReview}>저장</button>*/}
+            {/*</Modal>*/}
         </main>
     );
 };

@@ -8,7 +8,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 
 export default function Main() {
-    // const socket: Socket = io('ws://localhost:3000');
     const socket: Socket = io('wss://portfolio.mrkb.kr');
 
     const [targetUser, setTargetUser] = useState<string>('');

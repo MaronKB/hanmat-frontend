@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './AdminReviews.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
@@ -36,7 +36,7 @@ const AdminReviews: React.FC = () => {
         id: 0,
         restaurantId: '',
         author: '',
-        rating: '',
+        rating: 0,
         title: '',
         content: '',
         imageUrl: '',
@@ -50,8 +50,8 @@ const AdminReviews: React.FC = () => {
     const fetchReviews = async (category: string, keyword: string, page: number) => {
         const endpoint =
             keyword.trim()
-                ? `http://localhost:8080/hanmat/api/post/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
-                : `http://localhost:8080/hanmat/api/post/all?page=${page}&size=${rowsPerPage}`;
+                ? `${import.meta.env.VITE_BACKEND_URL}/api/post/search?category=${category}&keyword=${keyword}&page=${page}&size=${rowsPerPage}`
+                : `${import.meta.env.VITE_BACKEND_URL}/api/post/all?page=${page}&size=${rowsPerPage}`;
 
         try {
             const response = await fetch(endpoint);
@@ -136,7 +136,7 @@ const AdminReviews: React.FC = () => {
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch('http://localhost:8080/hanmat/api/post/delete', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/delete`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(selectedReviews),
@@ -164,7 +164,7 @@ const AdminReviews: React.FC = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/hanmat/api/post/update', {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/update`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
@@ -192,7 +192,7 @@ const AdminReviews: React.FC = () => {
             id: 0,
             restaurantId: '',
             author: '',
-            rating: '',
+            rating: 0,
             title: '',
             content: '',
             imageUrl: '',
@@ -203,7 +203,7 @@ const AdminReviews: React.FC = () => {
         setIsAddModalOpen(false);
     };
 
-    const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setNewReview({
             ...newReview,
@@ -230,7 +230,7 @@ const AdminReviews: React.FC = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/hanmat/api/post/add", {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/add`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

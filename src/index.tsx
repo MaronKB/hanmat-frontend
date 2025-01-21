@@ -15,7 +15,7 @@ import "./locales/i18n.ts";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 createRoot(document.getElementById('root')!).render(
-    <BrowserRouter>
+    <BrowserRouter basename={"/hanmat"}>
         <Routes>
             <Route element={<Nav alwaysNarrow={true} />}>
                 <Route path="/find" element={<Find />} />
