@@ -9,18 +9,25 @@ import homeEn from "./en/home.json";
 import homeKo from "./ko/home.json";
 import homeJp from "./jp/home.json";
 
+import reviewsEn from "./en/reviews.json";
+import reviewsKo from "./ko/reviews.json";
+import reviewsJp from "./jp/reviews.json";
+
 const resources: Resource = {
     en: {
         header: { ...headerEn },
-        home: { ...homeEn }
+        home: { ...homeEn },
+        reviews: { ...reviewsEn }
     },
     ko: {
         header: { ...headerKo },
-        home: { ...homeKo }
+        home: { ...homeKo },
+        reviews: { ...reviewsKo }
     },
     jp: {
         header: { ...headerJp },
-        home: { ...homeJp }
+        home: { ...homeJp },
+        reviews: { ...reviewsJp }
     },
 } as const;
 

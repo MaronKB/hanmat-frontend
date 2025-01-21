@@ -36,6 +36,7 @@
 }
 
 .text-area {
+    max-width: 600px;
     z-index: 1;
 }
 .review-title {
@@ -43,6 +44,7 @@
     margin: 0 0 10px 0;
 }
 .sub-title {
+    word-break: keep-all;
 }
 
 .review-section {
@@ -50,7 +52,8 @@
     justify-content: left;
     align-items: center;
     gap: 10px;
-    margin: 20px 0;
+    padding: 20px 0 0 0;
+    margin: auto 0 0 0;
     z-index: 1;
 }
 .review-button {

@@ -8,6 +8,7 @@ import Detail from './Detail.tsx';
 import reviewImg from '../../assets/images/reviewimg.png';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowDownWideShort, faBook, faPencil} from "@fortawesome/free-solid-svg-icons";
+import {useTranslation} from "react-i18next";
 
 
 export type Review = {
@@ -26,6 +27,7 @@ const Main: React.FC = () => {
     const PAGE_SIZE = 12;
     const token = localStorage.getItem('token');
     const user = useRef<AuthData>(JSON.parse(token || '{}'));
+    const {t} = useTranslation();
 
     const [sortOption, setSortOption] = useState<string>('NEW');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -117,19 +119,15 @@ const Main: React.FC = () => {
             <div className={styles['review-background']}>
                 <img className={styles['review-image']} src={reviewImg} alt={"review-image"}/>
                 <div className={styles['text-area']}>
-                    <h2 className={styles['review-title']}>Hanmat Reviews</h2>
-                    <p className={styles['sub-title']}>Hanmat Reviews is a reliable platform for sharing honest<br />
-                        opinions about Korean cuisine. Users can explore reviews<br />
-                        on dishes, restaurants, and unique flavors across  Korea.<br />
-                        Each review includes details on taste, spice level, and overall <br />dining experience. Join the community to share your thoughts<br />
-                        and discover hidden culinary gems!</p>
+                    <h2 className={styles['review-title']}>{t("reviews:title")}</h2>
+                    <p className={styles['sub-title']}>{t("reviews:description")}</p>
                 </div>
 
                 <div className={styles['review-section']}>
-                    <button className={styles['review-button']}>best review</button>
+                    <button className={styles['review-button']}>{t("reviews:best")}</button>
                     <button className={styles['review-button']} onClick={() => setNewModalOpened(true)}>
                         <FontAwesomeIcon icon={faPencil}/>
-                        <span>Create New</span>
+                        <span>{t("reviews:createNew")}</span>
                     </button>
                     {/*<button className={styles['review-button']}>Click</button>*/}
                 </div>
@@ -139,31 +137,16 @@ const Main: React.FC = () => {
                 <div className={styles['select-buttons']}>
                     <div className={`${styles['sort-buttons']}`}>
                         <FontAwesomeIcon icon={faArrowDownWideShort}/>
-                        <button
-                            className={`${styles['button-nw']} ${sortOption === 'new' ? styles['active'] : ''}`}
-                            onClick={() => handleSortChange('new')}
-                        >
-                            New
-                        </button>
-                        <button
-                            className={`${styles['button-od']} ${sortOption === 'old' ? styles['active'] : ''}`}
-                            onClick={() => handleSortChange('old')}
-                        >
-                            Old
-                        </button>
-                        <button
-                            className={`${styles['button-rg']} ${sortOption === 'rating' ? styles['active'] : ''}`}
-                            onClick={() => handleSortChange('rating')}
-                        >
-                            Rating
-                        </button>
+                        <button className={`${styles['button-nw']} ${sortOption === 'new' ? styles['active'] : ''}`} onClick={() => handleSortChange('new')}>{t("reviews:new")}</button>
+                        <button className={`${styles['button-od']} ${sortOption === 'old' ? styles['active'] : ''}`} onClick={() => handleSortChange('old')}>{t("reviews:old")}</button>
+                        <button className={`${styles['button-rg']} ${sortOption === 'rating' ? styles['active'] : ''}`} onClick={() => handleSortChange('rating')}>{t("reviews:rating")}</button>
                     </div>
                     <button
                         className={styles['button-rv']}
                         onClick={() => setShowOnlyMyReviews(!showOnlyMyReviews)}
                     >
                         <FontAwesomeIcon icon={faBook}/>
-                        {showOnlyMyReviews ? 'All Reviews' : 'My Reviews'}
+                        {showOnlyMyReviews ? t("reviews:allReviews") : t("reviews:myReviews")}
                     </button>
                 </div>
             </div>

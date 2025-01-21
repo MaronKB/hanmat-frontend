@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useRef} from "react";
 import styles from "./Detail.module.css";
 import { Review } from "./Main.tsx";
 import Modal from "../common/Modal.tsx";
+import {AuthData} from "../oauth/GoogleOAuth.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {faStar, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import {useTranslation} from "react-i18next";
 
 interface Comment {
   id: number;
@@ -22,6 +24,10 @@ export default function Detail({
   isOpened: boolean;
   closeModal: () => void;
 }) {
+    const token = localStorage.getItem("token");
+    const user = useRef<AuthData | null>(token ? JSON.parse(token) : null);
+    const {t} = useTranslation("reviews");
+
   const [images, setImages] = useState<string[]>([]);
   const [comments, setComments] = useState<Comment[]>([]); // 기존 댓글 리스트
   const [newComment, setNewComment] = useState<string>(""); // 새로
@@ -36,28 +42,6 @@ export default function Detail({
     );
     setImages(filteredImages);
   }, [review]);
-
-  useEffect(() => {
-    const regBy = sessionStorage.getItem("userEmail");
-
-    if (!regBy || regBy.trim() === "") {
-      alert("로그인이 필요합니다.");
-
-    } else {
-      console.log("현재 로그인된 사용자:", regBy);
-    }
-  }, []);
-
- // 로그인 사용자의 세션 확인
-   useEffect(() => {
-     const regBy = sessionStorage.getItem("userEmail");
-
-     if (!regBy || regBy.trim() === "") {
-       alert("로그인이 필요합니다.");
-     } else {
-       console.log("현재 로그인된 사용자:", regBy);
-     }
-   }, []);
 
    // 댓글 목록 불러오기
    useEffect(() => {
@@ -81,7 +65,7 @@ export default function Detail({
          } else {
            throw new Error(result.message || "댓글 가져오기 실패");
          }
-       } catch (error) {
+       } catch (error: any) {
          console.error("댓글 가져오기 오류:", error);
          setError(error.message || "댓글 불러오는 중 에러가 발생했습니다.");
        } finally {
@@ -94,7 +78,7 @@ export default function Detail({
 
    // 댓글 추가 기능
    const addComment = async () => {
-     const regBy = sessionStorage.getItem("userEmail");
+     const regBy = user.current?.email;
 
      console.log("현재 sessionStorage 값:", regBy);
 
@@ -177,8 +161,7 @@ export default function Detail({
         <h2 className={styles.title}>{review.title}</h2>
         <div className={styles.ratingAndRecommend}>
           <div className={styles.stars}>{renderStars(review.rating)}</div>
-          <div>이 리뷰를</div>
-          <button className={styles.recommendButton}>추천</button>
+          <button className={styles.recommendButton}><FontAwesomeIcon icon={faThumbsUp}/></button>
         </div>
       </div>
       {/* 본문 및 이미지 */}
@@ -202,7 +185,7 @@ export default function Detail({
       </div>
       {/* 댓글 */}
       <div className={styles.commentsSection}>
-        <h3>댓글</h3>
+        <h3>{t("reviews:comments")}</h3>
         <div className={styles.comments}>
           {comments.map((comment) => (
             <div key={comment.id} className={styles.commentContainer}>
@@ -226,13 +209,11 @@ export default function Detail({
         </div>
         <textarea
           className={styles.commentInput}
-          placeholder="댓글을 입력하세요..."
+          placeholder={t("reviews:writeComment")}
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button className={styles.addCommentButton} onClick={addComment}>
-          등록
-        </button>
+        <button className={styles.addCommentButton} onClick={addComment}>{t("reviews:submitComment")}</button>
       </div>
       {selectedImage && (
         <div className={styles.imageModal} onClick={(e) => e.stopPropagation()}>
@@ -244,12 +225,7 @@ export default function Detail({
               className={styles.largeImage}
             />
             {/* 닫기 버튼 */}
-            <button
-              className={styles.imageCloseButton}
-              onClick={() => setSelectedImage(null)}
-            >
-              닫기
-            </button>
+            <button className={styles.imageCloseButton} onClick={() => setSelectedImage(null)}>{t("reviews:close")}</button>
           </div>
         </div>
       )}

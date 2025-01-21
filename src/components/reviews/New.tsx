@@ -16,6 +16,7 @@ import React, {FormEvent, useEffect, useState} from "react";
 import Modal from "../common/Modal.tsx";
 import {KeyboardEvent} from "react";
 import {Restaurant} from "../find/Main.tsx";
+import {useTranslation} from "react-i18next";
 
 type ReviewFormData = {
     title: string;
@@ -26,6 +27,7 @@ type ReviewFormData = {
 export default function New({isOpened, open}: { isOpened: boolean, open: (open: boolean) => void }) {
     const token = localStorage.getItem('token');
     const user = JSON.parse(token || '{}') as AuthData;
+    const {t} = useTranslation();
 
     const [rating, setRating] = useState<number>(0);
     const [hoverRating, setHoverRating] = useState<number | null>(null);
@@ -218,13 +220,13 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
     }, [hoverRating, rating]);
 
     return (
-        <Modal title={"새 리뷰"} isOpened={isOpened} close={() => open(false)}>
+        <Modal title={t("reviews:newReview")} isOpened={isOpened} close={() => open(false)}>
             <form id="new-review" className={styles.content} onSubmit={(ev) => addReview(ev)}>
                 <div className={styles.restaurant + (selectedRestaurant ? (" " + styles.active) : "")}>
                     <input type={"hidden"} name={"restaurantId"} value={selectedRestaurant?.id ?? ""}/>
                     <div className={styles["restaurant-header"]}>
                         <FontAwesomeIcon icon={faUtensils}/>
-                        <h3>{selectedRestaurant?.name ?? "Please Select Restaurant"}</h3>
+                        <h3>{selectedRestaurant?.name ?? t("reviews:selectRestaurant")}</h3>
                         {selectedRestaurant &&
                             <button type={"button"} onClick={() => setSelectedRestaurant(null)}><FontAwesomeIcon
                                 icon={faRotate}/></button>}
@@ -234,7 +236,7 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
                         <FontAwesomeIcon icon={faSearch}/>
                         <input
                             type="text"
-                            placeholder="Search Restaurant By Title..."
+                            placeholder={t("reviews:searchRestaurant")}
                             className={styles["search-input"]}
                             onInput={(ev) => getRestaurants(ev.currentTarget.value)}
                             onFocus={() => setSearchResultsOpen(true)}
@@ -254,10 +256,10 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
                     <div className={styles["restaurant-body"]}>
                         <p>{selectedRestaurant?.description ?? "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"}</p>
                         <p><FontAwesomeIcon
-                            icon={faMapLocationDot}/>{selectedRestaurant?.lmmAddr ?? "Restaurant is not selected or lmm address of this restaurant does not exist"}
+                            icon={faMapLocationDot}/>{selectedRestaurant?.lmmAddr ?? t("reviews:addressNotExists")}
                         </p>
                         <p><FontAwesomeIcon
-                            icon={faMapLocation}/>{selectedRestaurant?.roadAddr ?? "Restaurant is not selected or road address of this restaurant does not exist"}
+                            icon={faMapLocation}/>{selectedRestaurant?.roadAddr ?? t("reviews:addressNotExists")}
                         </p>
                     </div>
                     <div className={styles["restaurant-footer"]}/>
@@ -279,7 +281,7 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
                     <span className={styles["rating-instruction"]}>
                         {rating > 0
                             ? `You selected ${rating} star${rating > 1 ? 's' : ''}!`
-                            : 'Please select a rating!'
+                            : t("reviews:selectRating")
                         }
                     </span>
                 </div>
@@ -312,11 +314,11 @@ export default function New({isOpened, open}: { isOpened: boolean, open: (open: 
                 <textarea
                     name={"content"}
                     className={styles.textarea}
-                    placeholder="Write your review here..."
+                    placeholder={t("reviews:writeReview")}
                 />
                 <div className={styles.buttons}>
-                    <button type={"button"} onClick={() => open(false)}>Cancel</button>
-                    <button type={"submit"}>Submit</button>
+                    <button type={"button"} onClick={() => open(false)}>{t("reviews:cancel")}</button>
+                    <button type={"submit"}>{t("reviews:submit")}</button>
                 </div>
             </form>
         </Modal>
