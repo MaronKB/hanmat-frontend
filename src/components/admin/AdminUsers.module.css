@@ -251,9 +251,9 @@
 
 .controls {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 8px;
+    flex-direction: column; /* 위아래로 정렬 */
+    align-items: center; /* 가운데 정렬 */
+    width: 100%; /* 전체 넓이 사용 */
 }
 
 .buttons {
@@ -298,4 +298,42 @@
     background-color: #606c71;
     font-weight: bold;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.addBtn {
+    padding: 10px 20px;
+    background-color: #4267b2; /* 파란색 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    margin-right: 10px; /* 삭제 버튼과 간격 */
+}
+
+.addBtn:hover {
+    background-color: #365899; /* 더 어두운 파란색 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 5px; /* 버튼 간 간격 */
+    justify-content: flex-end; /* 오른쪽 끝 정렬 */
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px; /* 페이지네이션과 간격 */
+    width: 100%; /* 전체 영역 사용 */
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-top: 10px; /* 버튼 그룹과 간격 */
+    margin-bottom: 20px; /* 하단 여백 */
+    width: 100%; /* 전체 영역 사용 */
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './AdminUsers.module.css';
 
 interface UserDTO {
@@ -30,6 +30,16 @@ const AdminUsers: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
     const [editUser, setEditUser] = useState<User | null>(null);
+    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const [newUser, setNewUser] = useState<User>({
+        id: 0,
+        email: '',
+        nickname: '',
+        profileImageUrl: '',
+        introduction: '',
+        registrationDate: '',
+        isDeleted: false,
+    });
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -43,32 +53,26 @@ const AdminUsers: React.FC = () => {
                 const response = await fetch('http://localhost:8080/hanmat/api/user/all');
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Raw data from backend:', data);
                     setTotalPages(data.data.totalPages);
 
                     const userDTOs: UserDTO[] = data.data.items;
 
-                    const transformedUsers: User[] = userDTOs.map(
-                        (dto) => ({
-                            id: dto.id,
-                            email: dto.email,
-                            nickname: dto.nickname,
-                            profileImageUrl: dto.profileImageUrl,
-                            introduction: dto.introduction,
-                            registrationDate: dto.registrationDate,
-                            isDeleted: dto.isDeleted,
-                        })
-                    );
-                    console.log('Transformed data:', transformedUsers);
+                    const transformedUsers: User[] = userDTOs.map((dto) => ({
+                        id: dto.id,
+                        email: dto.email,
+                        nickname: dto.nickname,
+                        profileImageUrl: dto.profileImageUrl,
+                        introduction: dto.introduction,
+                        registrationDate: dto.registrationDate,
+                        isDeleted: dto.isDeleted,
+                    }));
 
                     setUsers(transformedUsers);
                     setTotalPages(Math.ceil(transformedUsers.length / rowsPerPage));
                 } else {
-                    console.error('Failed to fetch users');
                     setError('데이터를 불러오는데 실패했습니다.');
                 }
             } catch (error) {
-                console.error('Error fetching users:', error);
                 setError('데이터를 불러오는 중 오류가 발생했습니다.');
             } finally {
                 setIsLoading(false);
@@ -77,7 +81,6 @@ const AdminUsers: React.FC = () => {
 
         fetchUsers();
     }, []);
-
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>, userId: number) => {
         if (event.target.checked) {
@@ -155,6 +158,21 @@ const AdminUsers: React.FC = () => {
         );
         setUsers(updatedUsers);
         handleCloseModal();
+    };
+
+    const handleNewInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewUser({ ...newUser, [name]: value });
+    };
+
+    const handleAddUser = () => {
+        if (!newUser.email || !newUser.nickname) {
+            alert('필수 정보를 입력해주세요.');
+            return;
+        }
+
+        setUsers([...users, { ...newUser, id: users.length + 1 }]);
+        setShowAddModal(false);
     };
 
     const getCurrentPageUsers = () => {
@@ -259,14 +277,20 @@ const AdminUsers: React.FC = () => {
                                 onChange={(e) => handleCheckboxChange(e, user.id)}
                             />
                         </td>
-                        <td className={styles.idCell}>{user.id}</td>
-                        <td className={styles.emailCell}>{user.email}</td>
-                        <td className={styles.nicknameCell}>{user.nickname}</td>
-                        <td className={styles.profileCell}><img src={user.profileImageUrl} alt="프로필" className={styles.profileImage}/></td>
-                        <td className={styles.introductionCell}>{user.introduction}</td>
-                        <td className={styles.regDateCell}>{user.registrationDate}</td>
-                        <td className={styles.deletedCell}>{user.isDeleted ? '탈퇴' : '정상'}</td>
-                        <td className={styles.editCell}>
+                        <td>{user.id}</td>
+                        <td>{user.email}</td>
+                        <td>{user.nickname}</td>
+                        <td>
+                            <img
+                                src={user.profileImageUrl}
+                                alt="프로필"
+                                className={styles.profileImage}
+                            />
+                        </td>
+                        <td>{user.introduction}</td>
+                        <td>{user.registrationDate}</td>
+                        <td>{user.isDeleted ? '탈퇴' : '정상'}</td>
+                        <td>
                             <button
                                 onClick={() => handleEdit(user)}
                                 className={styles.editBtn}
@@ -280,10 +304,15 @@ const AdminUsers: React.FC = () => {
             </table>
 
             <div className={styles.controls}>
-                <div className={styles.pagination}>{createPagination()}</div>
-                <button onClick={handleDelete} className={styles.deleteBtn}>
-                    삭제
-                </button>
+                <div className={styles.buttonGroup}>
+                    <button onClick={() => setShowAddModal(true)} className={styles.addBtn}>
+                        추가
+                    </button>
+                    <button onClick={handleDelete} className={styles.deleteBtn}>
+                        삭제
+                    </button>
+                </div>
+                <div className={styles.paginationContainer}>{createPagination()}</div>
             </div>
 
             {showModal && editUser && (
@@ -305,7 +334,7 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.nickname}
                                 onChange={(e) =>
-                                    setEditUser({...editUser, nickname: e.target.value})
+                                    setEditUser({ ...editUser, nickname: e.target.value })
                                 }
                                 className={styles.inputBox}
                             />
@@ -316,7 +345,10 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.profileImageUrl}
                                 onChange={(e) =>
-                                    setEditUser({...editUser, profileImageUrl: e.target.value})
+                                    setEditUser({
+                                        ...editUser,
+                                        profileImageUrl: e.target.value,
+                                    })
                                 }
                                 className={styles.inputBox}
                             />
@@ -327,7 +359,10 @@ const AdminUsers: React.FC = () => {
                                 type="text"
                                 value={editUser.introduction}
                                 onChange={(e) =>
-                                    setEditUser({...editUser, introduction: e.target.value})
+                                    setEditUser({
+                                        ...editUser,
+                                        introduction: e.target.value,
+                                    })
                                 }
                                 className={styles.inputBox}
                             />
@@ -367,10 +402,66 @@ const AdminUsers: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            )}
 
+            {showAddModal && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <h2 className={styles.modalTitle}>사용자 추가</h2>
+                        <label className={styles.modalLabel}>
+                            이메일:
+                            <input
+                                type="text"
+                                name="email"
+                                value={newUser.email}
+                                onChange={handleNewInputChange}
+                                className={styles.inputBox}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            닉네임:
+                            <input
+                                type="text"
+                                name="nickname"
+                                value={newUser.nickname}
+                                onChange={handleNewInputChange}
+                                className={styles.inputBox}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            프로필 사진 URL:
+                            <input
+                                type="text"
+                                name="profileImageUrl"
+                                value={newUser.profileImageUrl}
+                                onChange={handleNewInputChange}
+                                className={styles.inputBox}
+                            />
+                        </label>
+                        <label className={styles.modalLabel}>
+                            소개:
+                            <input
+                                type="text"
+                                name="introduction"
+                                value={newUser.introduction}
+                                onChange={handleNewInputChange}
+                                className={styles.inputBox}
+                            />
+                        </label>
+                        <div className={styles.modalButtons}>
+                            <button onClick={handleAddUser} className={styles.saveBtn}>
+                                저장
+                            </button>
+                            <button onClick={() => setShowAddModal(false)} className={styles.closeBtn}>
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
 };
 
 export default AdminUsers;
+
